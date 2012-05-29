@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+set -o nounset
+. ${ODISEE_OS_LIB}/odienv
+
+#
+#
+#
+os_start_ramdisk() {
+    # Calculate size in sectors
+    ramfs_size_sectors=$((${ODISEE_TMP_RAMDISK_MB} * 1024 * 1024 / 512))
+    # Initialize RAM disk
+    ramdisk_dev=$(hdiutil attach -nomount ram://${ramfs_size_sectors})
+    diskutil eraseVolume HFS+ OdiseeVarTmp ${ramdisk_dev}
+    ##newfs_hfs -v 'ODISEE_VAR_RAMDISK' ${ramdisk_dev}
+    # Mount ramdisk
+    diskutil unmount ${ramdisk_dev}
+    diskutil mount -mountPoint ${ODISEE_TMP} ${ramdisk_dev}
+    ##mount -o ${ODISEE_TMP_MOUNT_OPT} -t hfs ${ramdisk_dev} ${ODISEE_TMP}
+}
+
+#
+#
+#
+os_stop_ramdisk() {
+    ramdisk_dev=$(mount | grep ${ODISEE_TMP} | awk '{print $1}')
+    umount ${ODISEE_TMP}
+    diskutil eject ${ramdisk_dev}
+}

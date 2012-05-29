@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Odisee-build-classpaths">
+    <!--
+    
+        Classpaths.
+    
+    -->
+    <!-- Groovy -->
+    <path id="groovy.src.classpath">
+        <fileset dir="${groovy.home}/embeddable"/>
+        <!--fileset dir="${lib.dir}/slf4j/1.6.4"/-->
+        <fileset dir="${lib.dir}/apachepoi"/>
+        <fileset dir="${lib.dir}/odftoolkit"/>
+        <fileset dir="${lib.dir}/openoffice"/>
+    </path>
+    <path id="groovy.test.classpath">
+        <fileset dir="${groovy.home}/embeddable"/>
+        <fileset dir="${groovy.home}/lib">
+            <include name="junit-**.jar"/>
+        </fileset>
+        <fileset dir="${lib.dir}/apachepoi"/>
+        <fileset dir="${lib.dir}/odftoolkit"/>
+        <fileset dir="${lib.dir}/openoffice"/>
+    </path>
+</project>

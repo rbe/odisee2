@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+ODISEE_TMP_MOUNT_OPT="size=${ODISEE_TMP_RAMDISK_MB}M,mode=1770,async,noatime,nodiratime,noexec,nosuid,nodev,uid=odisee,gid=odisee"

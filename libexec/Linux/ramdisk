@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+#
+# Odisee(R)
+# Copyright (C) 2005-2010 Informationssysteme Ralf Bensmann.
+# Copyright (C) 2011-2012 art of coding UG (haftungsbeschränkt).
+#
+# Alle Rechte vorbehalten. Nutzung unterliegt Lizenzbedingungen.
+# All rights reserved. Use is subject to license terms.
+#
+
+set -o nounset
+. ${ODISEE_OS_LIB}/odienv
+
+#
+#
+#
+os_start_ramdisk() {
+    # Mount ramdisk
+    mkdir -p ${ODISEE_TMP}
+    mkdir -p ${ODISEE_BACKUP_RAMDISK}
+    sudo mount -t tmpfs -o ${ODISEE_TMP_MOUNT_OPT} tmpfs ${ODISEE_TMP}
+}
+
+#
+#
+#
+os_stop_ramdisk() {
+    sudo umount ${ODISEE_TMP}
+}

@@ -1,0 +1,89 @@
+/*
+ * Odisee(R)
+ * Copyright (C) 2005-2010 Informationssysteme Ralf Bensmann.
+ * Copyright (C) 2011-2012 art of coding UG (haftungsbeschränkt).
+ *
+ * Alle Rechte vorbehalten. Nutzung unterliegt Lizenzbedingungen.
+ * All rights reserved. Use is subject to license terms.
+ */
+
+body {
+    font-family: 'Myriad Pro', 'Arial';
+    color: #000;
+}
+
+table {
+    border-width: thin;
+    border-spacing:;
+    border-style: none;
+    border-color: #000;
+    border-collapse: separate;
+}
+
+table th {
+    font-family: Harabara, 'Myriad Pro';
+    color: #000;
+    padding: 1px;
+    border-width: thin;
+    border-style: none none solid none;
+    border-color: #000;
+    -moz-border-radius:;
+}
+
+table td {
+    font-family: 'Gill Sans', 'Myriad Pro', 'Arial';
+    padding: 5px; /* top right bottom left */
+    border-width: thin; /* top right bottom left */
+    border-style: none none solid none;
+    border-color: #000;
+    -moz-border-radius:;
+}
+
+.odisee-gray {
+    color: #5b5a5a;
+}
+
+.odisee-blue {
+    color: #295ba3;
+}
+
+.normal {
+    background-color: #fff;
+}
+
+/*
+* Links
+*/
+#content a {
+    color: #295ba3;
+    text-decoration: none;
+}
+
+#content a:hover {
+    color: #295ba3;
+    text-decoration: underline;
+}
+
+table a {
+    color: #295ba3;
+    text-decoration: none;
+}
+
+table a:hover, .highlight {
+    background-color: #295ba3;
+    color: #fff;
+    text-decoration: none;
+}
+
+#footer {
+    color: #295ba3;
+    font-size: 8px;
+    font-family: Verdana, Geneva, Arial, sans-serif;
+    background-color: #fff;
+    text-align: left;
+    position: absolute;
+    bottom: 0px;
+    left: 10px;
+    width: 98%;
+    height: 65px
+}

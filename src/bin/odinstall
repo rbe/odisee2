@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# 
+# Odisee(R)
+# Copyright (C) 2005-2010 Informationssysteme Ralf Bensmann.
+# Copyright (C) 2011-2012 art of coding UG (haftungsbeschränkt).
+#
+# Alle Rechte vorbehalten. Nutzung unterliegt Lizenzbedingungen.
+# All rights reserved. Use is subject to license terms.
+# 
+# Created by: rbe
+# 
+
+# Determine script directory
+case $0 in
+	./*) SCRIPT_DIR=${PWD} ;;
+	/*) SCRIPT_DIR=${0%/*} ;;
+	*/*) SCRIPT_DIR=${PWD}/${0%/*} ;;
+	*) SCRIPT_DIR=${PWD} ;;
+esac
+# Read configuration
+. ${SCRIPT_DIR}/../etc/odienv
+# Odisee library
+. ${ODISEE_LIBEXEC}/odisee/odilib
+
+set -o nounset
+
+#
+# Compile bash 4.
+#
+install_bash_4() {
+    wget ftp://ftp.cwru.edu/pub/bash/bash-4.2.tar.gz
+    tar xzf bash-4.2.tar.gz
+    cd bash-4.2
+    ./configure --prefix=$ODISEE_HOME/libexec/$(uname -s) --enable-coprocesses --enable-readline
+    make
+    make install clean
+}

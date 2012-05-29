@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    A default build.xml.
+    Copy it to a specific extension, you can also add a custom build process.
+
+-->
+<project name="my-odisee-extension" default="world">
+    <!-- Environment -->
+    <property environment="env"/>
+    <!--
+    
+        Include Odisee build.xml.
+    
+    -->
+    <import file="${env.ODISEE_EXT}/ant/odisee-ext-main-build.xml"/>
+    <!--
+    
+        Local project settings.
+    
+    -->
+    <!--
+    
+        Project specific tasks.
+    
+    -->
+</project>

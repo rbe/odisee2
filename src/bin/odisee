@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+# 
+# Odisee
+# Copyright (C) 2005-2010 Informationssysteme Ralf Bensmann.
+# Copyright (C) 2011-2012 art of coding UG (haftungsbeschränkt).
+#
+# Alle Rechte vorbehalten. Use is subject to license terms.
+# 
+# Created by: rbe
+# 
+
+# chkconfig: 5 99 80
+# description: Manages Odisee.
+
+set -o nounset
+
+#
+# Start Odisee
+#
+start_odisee() {
+    odictl -q start
+}
+
+#
+# Stop Odisee
+#
+stop_odisee() {
+    odictl -q stop
+}
+
+case "$1" in
+    start)
+        odictl -q start
+    ;;
+    stop)
+        odictl -q stop
+    ;;
+    restart)
+        odictl -q restart
+    ;;
+    redhat)
+        ln -s ${SCRIPT} /etc/init.d
+        chkconfig --add ooosvc
+        chkconfig --list ooosvc
+    ;;
+    *)
+        echo "usage: $0 { deploy | start | stop | restart | redhat }"
+    ;;
+esac
+
+exit 0

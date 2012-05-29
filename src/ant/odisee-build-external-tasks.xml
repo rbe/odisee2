@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Odisee-build-external-tasks">
+    <!--
+    
+        Ant libraries.
+    
+    -->
+    <!-- Ant contrib -->
+    <taskdef resource="net/sf/antcontrib/antlib.xml">
+        <classpath>
+            <pathelement location="${antlib.dir}/ant-contrib-1.0b3.jar"/>
+        </classpath>
+    </taskdef>
+    <!-- XMLTask -->
+    <taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask">
+        <classpath>
+            <pathelement location="${antlib.dir}/xmltask-1.16.1.jar"/>
+        </classpath>
+    </taskdef>
+    <!-- groovyc Task -->
+    <taskdef name="groovyc" classname="org.codehaus.groovy.ant.Groovyc" classpathref="groovy.src.classpath"/>
+</project>

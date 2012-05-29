@@ -1,0 +1,213 @@
+#!/usr/bin/env bash
+# 
+# Odisee(R)
+# Copyright (C) 2005-2010 Informationssysteme Ralf Bensmann.
+# Copyright (C) 2011-2012 art of coding UG (haftungsbeschränkt).
+#
+# Alle Rechte vorbehalten. Nutzung unterliegt Lizenzbedingungen.
+# All rights reserved. Use is subject to license terms.
+# 
+# Created by: rbe
+# 
+
+# Determine script directory
+case "$0" in
+    ./*) SCRIPT_DIR=${PWD} ;;
+    /*) SCRIPT_DIR=${0%/*} ;;
+    */*) SCRIPT_DIR=${PWD}/${0%/*} ;;
+    *) SCRIPT_DIR=${PWD} ;;
+esac
+# Read configuration
+. ${SCRIPT_DIR}/../etc/odienv
+# Odisee library
+. ${ODISEE_LIBEXEC}/odisee/odilib
+
+set -o nounset
+
+# ---------------------------------------------------------------------------
+#
+# Run Java or Groovy program with correct settings for OpenOffice instance.
+#
+# ---------------------------------------------------------------------------
+
+#
+# Copy JARs of OpenOffice instance into a directory.
+#
+copy_jars() {
+    local inst=$1
+    local dest=$2
+    get_inst_cfg ${inst}
+    setup_inst ${inst}
+    echo "Copying all OpenOffice libraries to ${dest}"
+    IFS=:
+    for lib in ${INST_CP}
+    do
+        echo "  ${lib}"
+        mkdir -p ${dest} 2>/dev/null
+        cp ${lib} ${dest}
+    done
+    echo "done"
+}
+
+#
+# Run Java.
+#
+run_java() {
+    # Start in 32 bit mode, http://www.openoffice.org/issues/show_bug.cgi?id=111555
+    local inst=$1
+    local prg=$2
+    get_inst_cfg ${inst}
+    setup_inst ${inst}
+    java -d32 -cp ${INST_CP} -Djava.library.path=${OOOL} ${prg} "$@"
+}
+
+#
+# Run Groovy.
+#
+run_groovy() {
+    # Start in 32 bit mode, http://www.openoffice.org/issues/show_bug.cgi?id=111555
+    local inst=$1
+    local prg=$2
+    get_inst_cfg ${inst}
+    setup_inst ${inst}
+    for i in ${!INSTCFG[*]}
+    do
+        echo "$i: ${INSTCFG[$i]}"
+    done
+    # Shift $1=instance
+    shift
+    groovy -cp "${INST_CP}" -Djava.library.path=${OOOL} ${prg} -d32 "$@"
+}
+
+# ---------------------------------------------------------------------------
+#
+# Command Line.
+#
+# ---------------------------------------------------------------------------
+
+#
+# Execute a command.
+#
+exec_cmdopt() {
+    # Run application
+    if [ x"$(is_cmdopt i)" = x"true" ]
+    then
+        if [ x"$(is_cmdopt j)" = x"true" ]
+        then
+            run_java ${cmdopt[i]} ${cmdopt[j]}
+        elif [ x"$(is_cmdopt g)" = x"true" ]
+        then
+            run_groovy ${cmdopt[i]} ${cmdopt[g]}
+        fi
+    fi
+}
+
+#
+# Execute commands local.
+#
+_exec_local() {
+    if [ ${#cmdopt[*]} -gt 0 ]
+    then
+        check_cmdopt
+        if [ $BADENV = false -a $CMDOK = true ]
+        then
+            exec_cmdopt
+            cleanup
+        fi
+    elif [ $BADENV = false ]
+    then
+        show_help
+    fi
+}
+
+# ---------------------------------------------------------------------------
+#
+# Help.
+#
+# ---------------------------------------------------------------------------
+
+#
+# Show help
+#
+show_help() {
+    show_copyr
+    cat <<EOF
+Run a Java application with OpenOffice libraries.
+  -g <class name>                       Run Groovy application.
+  -j <class name>                       Run Java application.
+  -i <instance>                         Use libraries from instance(s).
+
+Common options
+  -h                                    Show help.
+
+EOF
+}
+
+# ---------------------------------------------------------------------------
+#
+# Main.
+#
+# ---------------------------------------------------------------------------
+
+cleanup() {
+    exit 0
+}
+
+trap cleanup 1 2 3 5 9 15
+ORIG_CMD="$(basename ${0%%.sh}) $*"
+
+#
+# DECLARATIONS
+#
+
+# Operating system
+declare OS=$(uname -s)
+
+# Bad environment?
+declare BADENV=false
+# cmdopt is an array holding options from command line
+declare -A cmdopt
+# Command line option dependencies
+declare -A CMD_DEPENDENCY_AND
+CMD_DEPENDENCY_AND[g]="i"
+CMD_DEPENDENCY_AND[j]="i"
+# Command line option no-goes
+declare -A CMD_DEPENDENCY_OR
+CMD_DEPENDENCY_OR[i]="g j"
+# Command line option no-goes
+declare -A CMD_NOGO
+#
+CMDOK=true
+
+# Parse command line
+while getopts ":g:i:hj:" opt
+do
+    case "${opt}" in
+        h) show_help; exit 0 ;;
+        g) _acceptopt g $OPTARG ;;
+        i) _acceptopt i $OPTARG ;;
+        j) _acceptopt j $OPTARG ;;
+        \?)
+            echo "ODI-xxxx: Unknown option -$OPTARG"
+        ;;
+        :)
+            case $OPTARG in
+                g|j)
+                    echo "ODI-xxxx: Option -$OPTARG needs a class name as argument."
+                    echo "ODI-xxxx: e.g. $ORIG_CMD <java class name>"
+                ;;
+                i)
+                    echo "ODI-xxxx: Option -$OPTARG needs an instance name as argument."
+                    echo "ODI-xxxx: e.g. $ORIG_CMD odi1"
+                ;;
+                *)
+                    echo "ODI-xxxx: Option -$OPTARG needs an argument."
+                ;;
+            esac
+            exit 1
+        ;;
+    esac
+done
+
+_exec_local
+exit 0

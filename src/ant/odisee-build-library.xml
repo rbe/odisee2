@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Odisee-library">
+    <property environment="env"/>
+    <!--
+    
+        Odisee Library.
+    
+    -->
+    <!-- Build properties -->
+    <property name="odisee-library-build.properties" value="${src.ant.dir}/odisee-library-build.properties"/>
+    <loadproperties srcFile="${odisee-library-build.properties}" prefix="library-buildprop"/>
+    <!--
+    
+        Cleanup.
+    
+    -->
+    <target name="clean-library">
+        <!-- Clean classes.dir -->
+        <delete verbose="${library-buildprop.odisee.build.verbose}" dir="${classes.dir}"/>
+        <!-- Clean build.dir -->
+        <delete verbose="${library-buildprop.odisee.build.verbose}" dir="${build.dir}"/>
+    </target>
+    <!--
+    
+        Build.
+    
+    -->
+    <!-- Increase major version number, reset all other to zero -->
+    <target name="library-inc-major-version">
+        <propertyfile file="${odisee-library-build.properties}">
+            <!-- Set status to 'alpha' -->
+            <entry key="odisee.library.release.status" type="int" value="0"/>
+            <!-- Set minor number to zero -->
+            <entry key="odisee.library.release.minor" type="int" value="0"/>
+            <!-- Increase major number -->
+            <entry key="odisee-library.release.major" type="int" operation="+"/>
+            <!-- Set build number to zero -->
+            <entry key="odisee.library.release.build" type="int" value="0"/>
+        </propertyfile>
+    </target>
+    <!-- Increase minor version number, reset status to zero -->
+    <target name="library-inc-minor-version">
+        <propertyfile file="${odisee-library-build.properties}">
+            <!-- Set status to 'alpha' -->
+            <entry key="odisee.library.release.status" type="int" value="0"/>
+            <!-- Increase major number -->
+            <entry key="odisee.library.release.minor" type="int" operation="+"/>
+        </propertyfile>
+    </target>
+    <!-- Set release status to 'alpha' -->
+    <target name="library-set-alpha-status">
+        <propertyfile file="${odisee-library-build.properties}">
+            <!-- Set status to 'alpha' -->
+            <entry key="odisee.library.release.status" type="int" value="0"/>
+        </propertyfile>
+    </target>
+    <!-- Set release status to 'beta' -->
+    <target name="library-set-beta-status">
+        <propertyfile file="${odisee-library-build.properties}">
+            <!-- Set status to 'alpha' -->
+            <entry key="odisee.library.release.status" type="int" value="1"/>
+        </propertyfile>
+    </target>
+    <!-- Set release status to 'rc/release candidate' -->
+    <target name="library-set-rc-status">
+        <propertyfile file="${odisee-library-build.properties}">
+            <!-- Set status to 'alpha' -->
+            <entry key="odisee.library.release.status" type="int" value="2"/>
+        </propertyfile>
+    </target>
+    <!-- Set release status to 'final' -->
+    <target name="library-set-final-status">
+        <propertyfile file="${odisee-library-build.properties}">
+            <!-- Set status to 'alpha' -->
+            <entry key="odisee.library.release.status" type="int" value="3"/>
+        </propertyfile>
+    </target>
+    <!-- Increase build number. -->
+    <target name="library-inc-buildnumber">
+        <propertyfile file="${odisee-library-build.properties}">
+            <!-- Increase build number -->
+            <entry key="odisee.library.release.build" type="int" default="0" operation="+"/>
+            <!-- Set build date in build.properties -->
+            <entry key="odisee.library.release.date" type="date" value="now" pattern="yyyyMMdd-HHmmss"/>
+        </propertyfile>
+    </target>
+    <!-- Set version properties -->
+    <target name="library-set-version-props">
+        <!-- Version number -->
+        <property name="library.version.number" value="${library-buildprop.odisee.library.release.major}.${library-buildprop.odisee.library.release.minor}.${library-buildprop.odisee.library.release.status}.${library-buildprop.odisee.library.release.build}"/>
+        <!-- Name of Odisee library jar -->
+        <property name="odisee.library.jar" value="${dist.dir}/odisee-${library.version.number}.jar"/>
+    </target>
+    <!--
+    
+        Compile libraries:
+        clean up, set version properties and compile Odisee library.
+    
+    -->
+    <target name="compile-lib" depends="clean-library,library-set-version-props">
+        <property environment="env"/>
+        <mkdir dir="${classes.dir}"/>
+        <!-- Compile Groovy sources -->
+        <groovyc srcdir="${groovy.src.dir}" destdir="${classes.dir}" verbose="true" classpathref="groovy.src.classpath">
+
+        </groovyc>
+        <groovyc srcdir="${groovy.test.src.dir}" destdir="${classes.dir}" verbose="true" classpathref="groovy.test.classpath">
+            <classpath path="${classes.dir}"/>
+        </groovyc>
+    </target>
+    <!--
+    
+        Build jar:
+        increment build number, compile and create jar.
+    
+    -->
+    <target name="build-lib" depends="library-inc-buildnumber,compile-lib">
+        <!-- Create jar -->
+        <jar destfile="${odisee.library.jar}" basedir="${classes.dir}"/>
+    </target>
+    <!--
+    
+        Copy OpenOffice/LibreOffice libraries.
+    
+    -->
+    <target name="copy-openoffice-libraries">
+        <copy verbose="${library-buildprop.odisee.library.build.verbose}" todir="${webservice.lib.dir}">
+            <fileset dir="${odisee.openoffice.jar.dir}"/>
+        </copy>
+    </target>
+    <target name="copy-libreoffice-libraries">
+        <copy verbose="${library-buildprop.odisee.library.build.verbose}" todir="${webservice.lib.dir}">
+            <fileset dir="${odisee.libreoffice.jar.dir}"/>
+        </copy>
+    </target>
+    <!--
+    
+       Run tests.
+    
+    -->
+    <target name="run-lib-tests" depends="compile-lib">
+        <property environment="env"/>
+        <mkdir dir="${groovy.test.report.dir}/data"/>
+        <delete verbose="true">
+            <fileset dir="${groovy.test.report.dir}/data" includes="**"/>
+        </delete>
+        <!-- Run tests, produce XML files -->
+        <mkdir dir="${groovy.test.report.dir}/xml"/>
+        <delete verbose="true">
+            <fileset dir="${groovy.test.report.dir}/xml" includes="**"/>
+        </delete>
+        <junit printsummary="withOutAndErr" haltonerror="no" haltonfailure="no" fork="yes">
+            <formatter type="xml"/>
+            <!-- Execute all tests -->
+            <batchtest todir="${groovy.test.report.dir}/xml">
+                <fileset dir="${classes.dir}" includes="**/*TestCase.class"/>
+            </batchtest>
+            <!-- Add groovy.test.classpath and classes directory to classpath -->
+            <classpath refid="groovy.test.classpath"/>
+            <classpath>
+                <pathelement path="${classes.dir}"/>
+            </classpath>
+        </junit>
+        <!-- Generate HTML reports -->
+        <mkdir dir="${groovy.test.report.dir}/html"/>
+        <delete verbose="true">
+            <fileset dir="${groovy.test.report.dir}/html" includes="**"/>
+        </delete>
+        <junitreport todir="${groovy.test.report.dir}">
+            <fileset dir="${groovy.test.report.dir}/xml">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${groovy.test.report.dir}/html"/>
+        </junitreport>
+    </target>
+</project>
