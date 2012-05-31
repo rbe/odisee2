@@ -9,6 +9,7 @@
 package eu.artofcoding.odisee.ooo.server
 
 import eu.artofcoding.odisee.helper.JvmHelper
+import eu.artofcoding.odisee.OdiseePath
 
 /**
  * Created by IntelliJ IDEA.
@@ -45,20 +46,19 @@ class OOoInstallation {
     List<File> findOOoInstallation() {
         List<File> result
         // Check environment variable OOO_HOME
-        String OOO_HOME = System.getenv('OOO_HOME')
-        if (OOO_HOME) {
+        if (OdiseePath.OOO_HOME) {
             switch (OS_NAME) {
             // MacOS X: Don't use program link
             // http://www.openoffice.org/issues/show_bug.cgi?id=101203
                 case { it ==~ JvmHelper.OS_DARWIN }:
-                    File file = new File(OOO_HOME, OS_MAC_OS)
+                    File file = new File(OdiseePath.OOO_HOME, OS_MAC_OS)
                     if (file.exists()) {
                         result = [file]
                     }
                     break
             // All other
                 default:
-                    File file = new File(OOO_HOME, SOFFICE_PROGRAM_DIR)
+                    File file = new File(OdiseePath.OOO_HOME, SOFFICE_PROGRAM_DIR)
                     if (file.exists()) {
                         result = [file]
                     }

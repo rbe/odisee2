@@ -26,6 +26,12 @@ class OdiseePath {
      */
     static final Boolean ODISEE_DEBUG = Boolean.valueOf(System.getenv('ODISEE_DEBUG') ?: 'false')
 
+    /**
+     * Home: installation path of OpenOffice.
+     */
+    static final String OOO_HOME = System.getenv('OOO_HOME')
+
+    /**
      * Base directory for Odisee.
      */
     static final File ODISEE_HOME
