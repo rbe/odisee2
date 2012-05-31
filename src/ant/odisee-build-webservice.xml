@@ -161,6 +161,7 @@
             <env key="GRAILS_HOME" value="${grails.home}"/>
             <env key="PATH" path="${GRAILS_HOME}/bin:${GROOVY_HOME}/bin:${env.PATH}"/>
             <arg value="${grails.home}/bin/grails"/>
+            <arg value="prod"/>
             <arg value="war"/>
             <arg value="target/odisee.war"/>
         </exec>
@@ -178,7 +179,8 @@
             <env key="GRAILS_HOME" value="${grails.home}"/>
             <env key="PATH" path="${GRAILS_HOME}/bin:${GROOVY_HOME}/bin:${env.PATH}"/>
             <arg value="${grails.home}/bin/grails"/>
-            <arg value="-Dgrails.project.war.file=target/odisee.war"/>
+            <!--arg value="-Dgrails.project.war.file=target/odisee.war"/-->
+            <arg value="prod"/>
             <arg value="war"/>
             <arg value="target/odisee.war"/>
             <arg value="--nojars"/>
