@@ -30,6 +30,12 @@ if (ODISEE_HOME) {
             }
         }
     }
+    // Version
+    odisee.version = "Version unknown"
+    File versionFile = new File(ODISEE_HOME, 'etc/version')
+    if (versionFile.exists()) {
+        odisee.version = versionFile.text?.trim()
+    }
 } else {
     println "ODI-xxxx: Please set ODISEE_HOME."
 }

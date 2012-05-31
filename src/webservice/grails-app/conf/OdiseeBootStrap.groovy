@@ -14,6 +14,8 @@ import eu.artofcoding.odisee.document.MimeType
  */
 class OdiseeBootStrap {
 
+    def grailsApplication
+
     /**
      * Mime types. See OdiseeConstant.
      */
@@ -87,7 +89,7 @@ class OdiseeBootStrap {
            _ \\      |_)               
           |   |  _` | |  __|  _ \\  _ \\
           |   | (   | |\\__ \\  __/  __/
-         \\___/ \\__,_|_|____/\\___|\\___|
+         \\___/ \\__,_|_|____/\\___|\\___| ${grailsApplication.config.odisee.version}
          
          Server initialized.
          
@@ -103,7 +105,7 @@ class OdiseeBootStrap {
           / __ \\____/ (_)_______  ___ 
          / / / / __  / / ___/ _ \\/ _ \\
         / /_/ / /_/ / (__  )  __/  __/
-        \\____/\\__,_/_/____/\\___/\\___/ 
+        \\____/\\__,_/_/____/\\___/\\___/ ${grailsApplication.config.odisee.version}
          
          Server stopped.
          
