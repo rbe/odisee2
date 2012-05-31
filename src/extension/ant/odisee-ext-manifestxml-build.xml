@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Odisee-ext-manifestxml">
+    <!--
+    
+        Generate META-INF/manifest.xml.
+    
+    -->
+    <property name="manifestxmlbuf" value="file://${build.dir}/manifestxml.buffer"/>
+    <!-- -->
+    <target name="make-manifestxml">
+        <!-- Does the Odisee Basic library exist in the ext/basic directory? -->
+        <!--
+        <available file="${ext.basic.dir}/Odisee" property="available.basic.odisee"/>
+        <equals arg1="${include.odisee.ext}" arg2="true"/>
+        -->
+        <!-- Build empty manifest.xml -->
+        <antcall target="-create-empty-manifest"/>
+        <!-- Add basic libraries to manifest.xml -->
+        <if>
+            <available file="${ext.basic.dir}" type="dir"/>
+            <then>
+                <foreach maxThreads="1" target="-add-basiclibrary-to-manifest" param="f">
+                    <path>
+                        <dirset dir="${ext.basic.dir}" casesensitive="yes">
+                            <include name="*"/>
+                        </dirset>
+                    </path>
+                </foreach>
+            </then>
+        </if>
+        <!-- Addons.xcu -->
+        <if>
+            <available file="${ext.etc.dir}/Addons.xcu"/>
+            <then>
+                <antcall target="-add-addonsxcu-to-manifest" inheritRefs="true"/>
+            </then>
+        </if>
+        <!-- Paths.xcu -->
+        <if>
+            <available file="${ext.dir}/Paths.xcu"/>
+            <then>
+                <antcall target="-add-pathsxcu-to-manifest"/>
+            </then>
+        </if>
+        <!-- registrymodifications.xcu -->
+        <if>
+            <available file="${ext.etc.dir}/registrymodifications.xcu"/>
+            <then>
+                <antcall target="-add-registrymodificationsxcu-to-manifest"/>
+            </then>
+        </if>
+        <!-- pkg-description.txt -->
+        <if>
+            <available file="${ext.etc.dir}/pkg-description.txt"/>
+            <then>
+                <antcall target="-add-pkgdescription-to-manifest"/>
+            </then>
+        </if>
+        <!-- Write META-INF/manifest.xml -->
+        <xmltask dest="${build.ext.metainf.dir}/manifest.xml">
+            <paste path="/" buffer="${manifestxmlbuf}"/>
+            <print path="/"/>
+        </xmltask>
+    </target>
+    <!-- manifest.xml helper tasks -->
+    <target name="-create-empty-manifest">
+        <xmltask destbuffer="${manifestxmlbuf}">
+            <insert path="/"><![CDATA[
+                <manifest:manifest xmlns:manifest="http://openoffice.org/2001/manifest"></manifest:manifest>
+            ]]></insert>
+        </xmltask>
+    </target>
+    <target name="-add-addonsxcu-to-manifest">
+        <xmltask sourcebuffer="${manifestxmlbuf}" destbuffer="${manifestxmlbuf}">
+            <insert path="/*[local-name()='manifest']"><![CDATA[
+                <manifest:file-entry manifest:full-path="etc/Addons.xcu" manifest:media-type="application/vnd.sun.star.configuration-data" xmlns:manifest="http://openoffice.org/2001/manifest"/>
+            ]]></insert>
+        </xmltask>
+    </target>
+    <target name="-add-pathsxcu-to-manifest">
+        <xmltask sourcebuffer="${manifestxmlbuf}" destbuffer="${manifestxmlbuf}">
+            <insert path="/*[local-name()='manifest']"><![CDATA[
+                <manifest:file-entry manifest:full-path="Paths.xcu" manifest:media-type="application/vnd.sun.star.configuration-data" xmlns:manifest="http://openoffice.org/2001/manifest"/>
+            ]]></insert>
+        </xmltask>
+    </target>
+    <target name="-add-registrymodifications-to-manifest">
+        <xmltask sourcebuffer="${manifestxmlbuf}" destbuffer="${manifestxmlbuf}">
+            <insert path="/*[local-name()='manifest']"><![CDATA[
+                <manifest:file-entry manifest:full-path="etc/registrymodifications.xcu" manifest:media-type="application/vnd.sun.star.configuration-data" xmlns:manifest="http://openoffice.org/2001/manifest"/>
+            ]]></insert>
+        </xmltask>
+    </target>
+    <target name="-add-pkgdescription-to-manifest">
+        <xmltask sourcebuffer="${manifestxmlbuf}" destbuffer="${manifestxmlbuf}">
+            <insert path="/*[local-name()='manifest']"><![CDATA[
+                <manifest:file-entry manifest:full-path="etc/pkg-description.txt" manifest:media-type="application/vnd.sun.star.package-bundle-description" xmlns:manifest="http://openoffice.org/2001/manifest"/>
+            ]]></insert>
+        </xmltask>
+    </target>
+    <target name="-add-basiclibrary-to-manifest">
+        <!-- Basename -->
+        <basename file="${f}" property="dirname"/>
+        <echo message="${dirname}"/>
+        <xmltask sourcebuffer="${manifestxmlbuf}" destbuffer="${manifestxmlbuf}">
+            <insert path="/*[local-name()='manifest']"><![CDATA[
+                <manifest:file-entry manifest:full-path="basic/${dirname}/" manifest:media-type="application/vnd.sun.star.basic-library" xmlns:manifest="http://openoffice.org/2001/manifest"/>
+            ]]></insert>
+        </xmltask>
+    </target>
+</project>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Odisee-ext-serverxml">
+    <!--
+    
+        Generate server-update.xml.
+    
+    -->
+    <property name="serverupdatexmlbuf" value="file://${build.dir}/serverupdatexml.buffer"/>
+    <!-- server-update.xml helper tasks -->
+    <target name="-create-empty-serverxml">
+        <xmltask destbuffer="${serverupdatexmlbuf}">
+            <insert path="/"><![CDATA[<description xmlns="http://openoffice.org/extensions/update/2006" xmlns:xlink="http://www.w3.org/1999/xlink"></description>]]></insert>
+        </xmltask>
+    </target>
+    <target name="-add-identifier-to-serverxml">
+        <xmltask sourcebuffer="${serverupdatexmlbuf}" destbuffer="${serverupdatexmlbuf}">
+            <insert path="/*[local-name()='description']"><![CDATA[<identifier value="${ext.vendor.prefix}.${ext.name}" xmlns="http://openoffice.org/extensions/update/2006"/>]]></insert>
+        </xmltask>
+    </target>
+    <target name="-add-version-to-serverxml">
+        <xmltask sourcebuffer="${serverupdatexmlbuf}" destbuffer="${serverupdatexmlbuf}">
+            <insert path="/*[local-name()='description']"><![CDATA[<version value="${ext.version.number}" xmlns="http://openoffice.org/extensions/update/2006"/>]]></insert>
+        </xmltask>
+    </target>
+    <target name="-add-updatedownload-to-serverxml">
+        <xmltask sourcebuffer="${serverupdatexmlbuf}" destbuffer="${serverupdatexmlbuf}">
+            <insert path="/*[local-name()='description']"><![CDATA[<update-download xmlns="http://openoffice.org/extensions/update/2006"><src xlink:href="http://files.art-of-coding.eu/aoc/ext/artofcoding.oxt" xmlns:xlink="http://www.w3.org/1999/xlink"/></update-download>]]></insert>
+        </xmltask>
+    </target>
+    <!-- -->
+    <target name="make-serverupdatexml">
+        <antcall target="-create-empty-serverxml"/>
+        <antcall target="-add-identifier-to-serverxml"/>
+        <antcall target="-add-version-to-serverxml"/>
+        <antcall target="-add-updatedownload-to-serverxml"/>
+        <!-- Write META-INF/manifest.xml -->
+        <xmltask dest="${dist.dir}/${server.update.xml}">
+            <paste path="/" buffer="${serverupdatexmlbuf}"/>
+            <print path="/"/>
+        </xmltask>
+    </target>
+</project>

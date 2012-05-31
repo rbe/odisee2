@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Odisee-ext-addonsxcu">
+    <!--
+    
+        Generate Addons.xcu.
+    
+    -->
+    <property name="addonsxcubuf" value="file://${build.dir}/addonsxcu.buffer"/>
+    <property name="addonsxcu-menubar-id" value="${ext.name}.OfficeMenuBar"/>
+    <!-- Addons.xcu helper tasks -->
+    <target name="-create-empty-addonsxcu">
+        <xmltask destbuffer="${addonsxcubuf}">
+            <insert path="/"><![CDATA[<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="Addons" oor:package="org.openoffice.Office"></oor:component-data>]]></insert>
+        </xmltask>
+    </target>
+    <target name="-add-addonui-to-addonsxcu">
+        <xmltask sourcebuffer="${addonsxcubuf}" destbuffer="${addonsxcubuf}">
+            <insert path="/*[local-name()='component-data']"><![CDATA[
+        <node oor:name="AddonUI" xmlns:oor="http://openoffice.org/2001/registry">
+        </node> <!-- oor:name="AddonUI" -->
+        ]]></insert>
+        </xmltask>
+    </target>
+    <!--
+        Add OfficeMenuBar.
+        @param title
+    -->
+    <target name="-add-officemenubar-to-addonsxcu">
+        <xmltask sourcebuffer="${addonsxcubuf}" destbuffer="${addonsxcubuf}">
+            <insert path="//*[local-name()='node'][@oor:name='AddonUI']"><![CDATA[
+        <node oor:name="OfficeMenuBar" xmlns:oor="http://openoffice.org/2001/registry">
+            <node oor:name="${addonsxcu-menubar-id}" oor:op="replace">
+                <prop oor:name="Title" oor:type="xs:string">
+                    <value>${title}</value>
+                </prop>
+            </node>
+        </node> <!-- oor:name="OfficeMenuBar" -->
+        ]]></insert>
+        </xmltask>
+    </target>
+    <target name="-add-submenu-to-addonsxcu">
+        <xmltask sourcebuffer="${addonsxcubuf}" destbuffer="${addonsxcubuf}">
+            <insert path="//*[local-name()='node'][@oor:name='${addonsxcu-menubar-id}']"><![CDATA[
+        <node oor:name="Submenu" xmlns:oor="http://openoffice.org/2001/registry">
+        </node> <!-- oor:name="Submenu" -->
+        ]]></insert>
+        </xmltask>
+    </target>
+    <!--
+        Add menu separator.
+        @param id
+    -->
+    <target name="-add-submenuseparator-to-addonsxcu">
+        <xmltask sourcebuffer="${addonsxcubuf}" destbuffer="${addonsxcubuf}">
+            <insert path="//*[local-name()='node'][@oor:name='Submenu']"><![CDATA[
+        <node oor:name="${id}" oor:op="replace" xmlns:oor="http://openoffice.org/2001/registry">
+            <prop oor:name="URL" oor:type="xs:string" xmlns:oor="http://openoffice.org/2001/registry">
+                <value xmlns:oor="http://openoffice.org/2001/registry">private:separator</value>
+            </prop>
+        </node> <!-- oor:name="${id}" -->
+        ]]></insert>
+        </xmltask>
+    </target>
+    <!--
+        Add menu item.
+        @param id
+        @param url
+        @param title
+        @param target
+    -->
+    <target name="-add-menuitem-to-addonsxcu">
+        <!-- Basename -->
+        <basename file="${f}" property="filename"/>
+        <!-- functionName: Replace spaces and dashes with underscore -->
+        <propertyregex override="true" property="functionName" input="${filename}" regexp="[ -]" replace="_" global="true"/>
+        <!-- functionName: Remove extension -->
+        <propertyregex override="true" property="functionName" input="${functionName}" regexp=".o\wt$" replace="" global="true"/>
+        <!-- title: Remove extension -->
+        <propertyregex override="true" property="title" input="${filename}" regexp=".o\wt$" replace="" global="true"/>
+        <!-- id -->
+        <property name="id" value="m${functionName}"/>
+        <!-- url -->
+        <property name="url.type" value="vnd.sun.star.script"/>
+        <property name="url.function" value="${ext.name}._Menu.${functionName}"/>
+        <property name="url.language" value="Basic"/>
+        <property name="url.location" value="application"/>
+        <!-- target -->
+        <property name="target" value="_self"/>
+        <!-- -->
+        <xmltask sourcebuffer="${addonsxcubuf}" destbuffer="${addonsxcubuf}">
+            <insert path="//*[local-name()='node'][@oor:name='Submenu']"><![CDATA[
+        <node oor:name="${id}" oor:op="replace" xmlns:oor="http://openoffice.org/2001/registry">
+            <prop oor:name="URL" oor:type="xs:string" xmlns:oor="http://openoffice.org/2001/registry">
+                <value xmlns:oor="http://openoffice.org/2001/registry">${url.type}:${url.function}?language=${url.language}&amp;location=${url.location}</value>
+            </prop>
+            <prop oor:name="Title" oor:type="xs:string" xmlns:oor="http://openoffice.org/2001/registry">
+                <value xmlns:oor="http://openoffice.org/2001/registry">${title}</value>
+            </prop>
+            <prop oor:name="Target" oor:type="xs:string" xmlns:oor="http://openoffice.org/2001/registry">
+                <value xmlns:oor="http://openoffice.org/2001/registry">${target}</value>
+            </prop>
+        </node> <!-- oor:name="${id}" -->
+        ]]></insert>
+        </xmltask>
+    </target>
+    <!-- -->
+    <target name="make-addonsxcu">
+        <!-- When an Addons.xcu file was provided and property odisee.override.addonsxcu is not set, copy it, otherwise create a new one -->
+        <if>
+            <and>
+                <available file="${ext.etc.dir}/Addons.xcu"/>
+                <not>
+                    <!-- ant -Dodisee.override.addonsxcu=t -->
+                    <isset property="odisee.override.addonsxcu"/>
+                </not>
+            </and>
+            <then>
+                <echo message="Addons.xcu provided by user, won't create one."/>
+                <!--copy/-->
+            </then>
+            <else>
+                <!-- Create empty Addons.xcu -->
+                <antcall target="-create-empty-addonsxcu"/>
+                <!-- Add AddonUI -->
+                <antcall target="-add-addonui-to-addonsxcu"/>
+                <!-- Add OfficeMenuBar -->
+                <antcall target="-add-officemenubar-to-addonsxcu">
+                    <param name="title" value="${ext.name}"/>
+                </antcall>
+                <!-- Add Submenu -->
+                <antcall target="-add-submenu-to-addonsxcu"/>
+                <!-- Add menu items for templates included in extension -->
+                <if>
+                    <available file="${ext.templates.dir}" type="dir"/>
+                    <then>
+                        <foreach maxThreads="1" target="-add-menuitem-to-addonsxcu" param="f">
+                            <path>
+                                <fileset dir="${ext.templates.dir}" casesensitive="yes">
+                                    <include name="**/*.o**"/>
+                                </fileset>
+                            </path>
+                        </foreach>
+                    </then>
+                </if>
+                <!-- Add separator and about box -->
+                <antcall target="-add-submenuseparator-to-addonsxcu">
+                    <param name="id" value="sepAboutBox"/>
+                </antcall>
+                <!-- Write META-INF/manifest.xml -->
+                <xmltask dest="${build.ext.dir}/Addons.xcu">
+                    <paste path="/" buffer="${addonsxcubuf}"/>
+                    <print path="/"/>
+                </xmltask>
+            </else>
+        </if>
+    </target>
+</project>

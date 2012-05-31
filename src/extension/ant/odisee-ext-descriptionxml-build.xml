@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Odisee-ext-descriptionxml">
+    <!--
+    
+        Generate description.xml.
+    
+    -->
+    <property name="descriptionxmlbuf" value="file://${build.dir}/description.buffer"/>
+    <!-- description.xml helper tasks -->
+    <target name="-create-empty-description">
+        <xmltask destbuffer="${descriptionxmlbuf}">
+            <insert path="/"><![CDATA[
+                <description xmlns="http://openoffice.org/extensions/description/2006" xmlns:dep="http://openoffice.org/extensions/description/2006" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+            ]]></insert>
+        </xmltask>
+    </target>
+    <target name="-add-identifier-to-description">
+        <xmltask sourcebuffer="${descriptionxmlbuf}" destbuffer="${descriptionxmlbuf}">
+            <insert path="/*[local-name()='description']"><![CDATA[
+                <identifier value="${ext.vendor.prefix}.${ext.name}" xmlns="http://openoffice.org/extensions/description/2006"/>
+            ]]></insert>
+        </xmltask>
+    </target>
+    <target name="-add-version-to-description">
+        <xmltask sourcebuffer="${descriptionxmlbuf}" destbuffer="${descriptionxmlbuf}">
+            <insert path="/*[local-name()='description']"><![CDATA[
+                <version value="${ext.version.number}" xmlns="http://openoffice.org/extensions/description/2006"/>
+            ]]></insert>
+        </xmltask>
+    </target>
+    <target name="-add-dependencies-to-description">
+        <xmltask sourcebuffer="${descriptionxmlbuf}" destbuffer="${descriptionxmlbuf}">
+            <insert path="/*[local-name()='description']"><![CDATA[
+                <dependencies xmlns="http://openoffice.org/extensions/description/2006"/>
+            ]]></insert>
+        </xmltask>
+    </target>
+    <target name="-add-ooominimalversion-to-description">
+        <xmltask sourcebuffer="${descriptionxmlbuf}" destbuffer="${descriptionxmlbuf}">
+            <insert path="//*[local-name()='dependencies']"><![CDATA[
+                <OpenOffice.org-minimal-version value="${prop.ext.ooo.minver}" dep:name="OpenOffice.org ${prop.ext.ooo.minver}"
+                    xmlns="http://openoffice.org/extensions/description/2006" xmlns:dep="http://openoffice.org/extensions/description/2006"/>
+            ]]></insert>
+        </xmltask>
+    </target>
+    <target name="-add-displayname-to-description">
+        <xmltask sourcebuffer="${descriptionxmlbuf}" destbuffer="${descriptionxmlbuf}">
+            <insert path="/*[local-name()='description']"><![CDATA[
+                <display-name xmlns="http://openoffice.org/extensions/description/2006">
+                    <name lang="en">${prop.ext.name}</name>
+                    <name lang="de">${prop.ext.name}</name>
+                </display-name>
+            ]]></insert>
+        </xmltask>
+    </target>
+    <target name="-add-publisher-to-description">
+        <xmltask sourcebuffer="${descriptionxmlbuf}" destbuffer="${descriptionxmlbuf}">
+            <insert path="/*[local-name()='description']"><![CDATA[
+                <publisher xmlns="http://openoffice.org/extensions/description/2006">
+                    <name xlink:href="${prop.ext.vendor.url}" lang="en" xmlns:xlink="http://www.w3.org/1999/xlink">${prop.ext.vendor.name}</name>
+                </publisher>
+            ]]></insert>
+        </xmltask>
+    </target>
+    <target name="-add-icon-to-description">
+        <xmltask sourcebuffer="${descriptionxmlbuf}" destbuffer="${descriptionxmlbuf}">
+            <insert path="/*[local-name()='description']"><![CDATA[
+                <icon xmlns="http://openoffice.org/extensions/description/2006">
+                    <default xlink:href="${prop.ext.icon}" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+                </icon>
+            ]]></insert>
+        </xmltask>
+    </target>
+    <target name="-add-updateinformation-to-description">
+        <xmltask sourcebuffer="${descriptionxmlbuf}" destbuffer="${descriptionxmlbuf}">
+            <insert path="/*[local-name()='description']"><![CDATA[
+                <update-information xmlns="http://openoffice.org/extensions/description/2006">
+                    <src xlink:href="${prop.ext.update.url.prefix}/${server.update.xml}" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+                </update-information>
+            ]]></insert>
+        </xmltask>
+    </target>
+    <target name="-add-registration-to-description">
+        <xmltask sourcebuffer="${descriptionxmlbuf}" destbuffer="${descriptionxmlbuf}">
+            <insert path="/*[local-name()='description']"><![CDATA[
+                <registration xmlns="http://openoffice.org/extensions/description/2006"/>
+            ]]></insert>
+        </xmltask>
+    </target>
+    <target name="-add-licensetxt-to-description">
+        <xmltask sourcebuffer="${descriptionxmlbuf}" destbuffer="${descriptionxmlbuf}">
+            <insert path="//*[local-name()='registration']"><![CDATA[
+                <simple-license accept-by="admin" default-license-id="ID0" suppress-on-update="true" xmlns="http://openoffice.org/extensions/description/2006">
+                    <license-text xlink:href="etc/LICENSE.txt" lang="en" license-id="ID0" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+                </simple-license>
+            ]]></insert>
+        </xmltask>
+    </target>
+    <!-- -->
+    <target name="make-descriptionxml">
+        <antcall target="-create-empty-description"/>
+        <antcall target="-add-identifier-to-description"/>
+        <antcall target="-add-version-to-description"/>
+        <antcall target="-add-dependencies-to-description"/>
+        <antcall target="-add-ooominimalversion-to-description"/>
+        <antcall target="-add-displayname-to-description"/>
+        <antcall target="-add-publisher-to-description"/>
+        <antcall target="-add-icon-to-description"/>
+        <antcall target="-add-updateinformation-to-description"/>
+        <if>
+            <available file="${ext.etc.dir}/LICENSE.txt"/>
+            <then>
+                <antcall target="-add-registration-to-description"/>
+                <antcall target="-add-licensetxt-to-description"/>
+            </then>
+        </if>
+        <!-- Write META-INF/manifest.xml -->
+        <xmltask dest="${build.ext.dir}/description.xml">
+            <paste path="/" buffer="${descriptionxmlbuf}"/>
+            <print path="/"/>
+        </xmltask>
+    </target>
+</project>

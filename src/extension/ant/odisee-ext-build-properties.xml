@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Odisee-ext-build-properties">
+    <!--
+    
+        Global project settings.
+    
+    -->
+    <!-- Include Odisee in extension? -->
+    <property name="include.odisee.ext" value="false"/>
+    <!-- Base directory -->
+    <property name="global.base.dir" value="${env.ODISEE_HOME}"/>
+    <!-- Additional Ant libraries -->
+    <property name="antlib.dir" value="${global.base.dir}/lib/ant"/>
+    <!-- Project base directory -->
+    <property name="base.dir" value="."/>
+    <!-- Project etc directory -->
+    <property name="etc.dir" value="${base.dir}/etc"/>
+    <!--
+    
+        Ant libraries.
+    
+    -->
+    <!-- Ant contrib -->
+    <taskdef resource="net/sf/antcontrib/antlib.xml">
+        <classpath>
+            <pathelement location="${antlib.dir}/ant-contrib-1.0b3.jar"/>
+        </classpath>
+    </taskdef>
+    <!-- XMLTask -->
+    <taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask">
+        <classpath>
+            <pathelement location="${antlib.dir}/xmltask-1.16.1.jar"/>
+        </classpath>
+    </taskdef>
+    <!--
+    
+        Directories.
+    
+    -->
+    <!-- etc -->
+    <property name="etc.dir" value="${basedir}/etc"/>
+    <!-- Binaries -->
+    <property name="bin.dir" value="${basedir}/bin"/>
+    <!-- Build -->
+    <property name="build.dir" value="${basedir}/build"/>
+    <!-- Distribution -->
+    <property name="dist.dir" value="${basedir}/dist"/>
+    <!--
+    
+        Build settings.
+    
+    -->
+    <!-- Name of extension: default is name of directory, can be overridden in build.properties -->
+    <basename property="ext.name" file="${base.dir}"/>
+    <loadproperties srcFile="${base.dir}/build.properties" prefix="prop"/>
+    <!--
+    
+        Odisee OpenOffice Extension
+    
+    -->
+    <!-- ext.name: Remove spaces and dashes -->
+    <propertyregex override="true" property="ext.name" input="${prop.ext.name}" regexp="[ -]" replace="" global="true"/>
+    <!-- Vendor prefix -->
+    <property name="ext.vendor.prefix" value="vnd.artofcoding.odisee"/>
+    <!-- Name of server-update.xml -->
+    <property name="server.update.xml" value="${prop.ext.name}-update.xml"/>
+    <!-- Version number -->
+    <property name="ext.version.number" value="${prop.ext.release.major}.${prop.ext.release.minor}.${prop.ext.release.build}"/>
+    <!--
+    
+        Extension sources
+    
+    -->
+    <!-- Extension source base directory -->
+    <property name="ext.dir" value="${basedir}/ext"/>
+    <!-- Autocorrection -->
+    <property name="ext.autocorr.dir" value="${ext.dir}/autocorr"/>
+    <!-- Autotexts -->
+    <property name="ext.autotexts.dir" value="${ext.dir}/autotexts"/>
+    <!-- Databases -->
+    <property name="ext.databases.dir" value="${ext.dir}/databases"/>
+    <!-- Basic module(s), each in its own subdirectory -->
+    <property name="ext.basic.dir" value="${ext.dir}/basic"/>
+    <!-- User configuration -->
+    <property name="ext.conf.dir" value="${ext.dir}/conf"/>
+    <!-- Extension configuration -->
+    <property name="ext.etc.dir" value="${ext.dir}/etc"/>
+    <!-- Galleries -->
+    <property name="ext.gallery.dir" value="${ext.dir}/gallery"/>
+    <!-- Fonts -->
+    <property name="ext.fonts.dir" value="${ext.dir}/fonts"/>
+    <!-- Images -->
+    <property name="ext.images.dir" value="${ext.dir}/images"/>
+    <!-- Extension metadata -->
+    <property name="ext.metainf.dir" value="${ext.dir}/META-INF"/>
+    <!-- -->
+    <property name="ext.packages.dir" value="${ext.dir}/packages"/>
+    <!-- Templates -->
+    <property name="ext.templates.dir" value="${ext.dir}/templates"/>
+    <!-- Wordbooks -->
+    <property name="ext.wordbooks.dir" value="${ext.dir}/wordbooks"/>
+    <!--
+    
+        Extension build directories
+    
+    -->
+    <property name="build.ext.dir" value="${basedir}/build/ext"/>
+    <property name="build.ext.autocorr.dir" value="${build.ext.dir}/autocorr"/>
+    <property name="build.ext.autotexts.dir" value="${build.ext.dir}/autotexts"/>
+    <property name="build.ext.databases.dir" value="${build.ext.dir}/databases"/>
+    <property name="build.ext.basic.dir" value="${build.ext.dir}/basic"/>
+    <property name="build.ext.conf.dir" value="${build.ext.dir}/conf"/>
+    <property name="build.ext.etc.dir" value="${build.ext.dir}/etc"/>
+    <property name="build.ext.gallery.dir" value="${build.ext.dir}/gallery"/>
+    <property name="build.ext.fonts.dir" value="${build.ext.dir}/fonts"/>
+    <property name="build.ext.images.dir" value="${build.ext.dir}/images"/>
+    <property name="build.ext.metainf.dir" value="${build.ext.dir}/META-INF"/>
+    <property name="build.ext.packages.dir" value="${build.ext.dir}/packages"/>
+    <property name="build.ext.registration.dir" value="${build.ext.dir}/registration"/>
+    <property name="build.ext.templates.dir" value="${build.ext.dir}/templates"/>
+    <property name="build.ext.wordbooks.dir" value="${build.ext.dir}/wordbooks"/>
+</project>

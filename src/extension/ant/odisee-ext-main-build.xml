@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Odisee-ext-main-build" default="help">
+    <!--
+    
+        Import other build.xmls.
+    
+    -->
+    <import file="odisee-ext-build-properties.xml"/>
+    <import file="odisee-ext-manifestxml-build.xml"/>
+    <import file="odisee-ext-descriptionxml-build.xml"/>
+    <import file="odisee-ext-serverxml-build.xml"/>
+    <import file="odisee-ext-addonsxcu-build.xml"/>
+    <!--
+    
+        Help.
+    
+    -->
+    <target name="help">
+        <echo message="Please choose a target manually"/>
+    </target>
+    <!--
+    
+        Cleanup.
+    
+    -->
+    <target name="clean">
+        <property environment="env"/>
+        <!-- Clean build.dir -->
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+        <mkdir dir="${dist.dir}"/>
+    </target>
+    <!--
+    
+        Create extension directory structure.
+    
+    -->
+    <target name="make-ext-dirs">
+        <mkdir dir="${build.ext.dir}"/>
+        <mkdir dir="${build.ext.autocorr.dir}"/>
+        <mkdir dir="${build.ext.autotexts.dir}"/>
+        <mkdir dir="${build.ext.databases.dir}"/>
+        <mkdir dir="${build.ext.basic.dir}"/>
+        <mkdir dir="${build.ext.conf.dir}"/>
+        <mkdir dir="${build.ext.gallery.dir}"/>
+        <mkdir dir="${build.ext.fonts.dir}"/>
+        <mkdir dir="${build.ext.images.dir}"/>
+        <mkdir dir="${build.ext.metainf.dir}"/>
+        <mkdir dir="${build.ext.packages.dir}"/>
+        <mkdir dir="${build.ext.templates.dir}"/>
+        <mkdir dir="${build.ext.wordbooks.dir}"/>
+    </target>
+    <!--
+    
+        Build extension.
+    
+    -->
+    <target name="build" depends="make-ext-dirs,make-manifestxml,make-descriptionxml,make-serverupdatexml">
+        <!-- Create dist directory -->
+        <mkdir dir="${dist.dir}"/>
+        <!-- Copy content of extension folder -->
+        <copy todir="${build.ext.dir}">
+            <fileset dir="${ext.dir}">
+                <include name="**"/>
+            </fileset>
+        </copy>
+        <!-- Copy Basic module(s) -->
+        <if>
+            <available file="${ext.basic.dir}" type="dir"/>
+            <then>
+                <copy todir="${build.ext.basic.dir}">
+                    <fileset dir="${ext.basic.dir}">
+                        <include name="**"/>
+                        <exclude name="Odisee/**"/>
+                    </fileset>
+                </copy>
+            </then>
+        </if>
+        <!-- Set build date in build.properties -->
+        <propertyfile file="build.properties">
+            <entry key="ext.release.date" type="date" value="now" pattern="yyyyMMdd-HHmmss"/>
+        </propertyfile>
+    </target>
+    <!--
+    
+        Increment version numbers.
+    
+    -->
+    <target name="inc-major-version">
+        <propertyfile file="build.properties">
+            <entry key="ext.release.major" type="int" default="0" operation="+" pattern="0"/>
+        </propertyfile>
+    </target>
+    <target name="inc-minor-version">
+        <propertyfile file="build.properties">
+            <entry key="ext.release.minor" type="int" default="0" operation="+" pattern="0"/>
+        </propertyfile>
+    </target>
+    <!-- Increase build number -->
+    <target name="inc-build-number">
+        <propertyfile file="build.properties">
+            <entry key="ext.release.build" type="int" default="0" operation="+" pattern="0"/>
+        </propertyfile>
+        <echo message="Build number is ${prop.ext.release.build}"/>
+    </target>
+    <!--
+    
+        Make a distribution for development.
+    
+    -->
+    <target name="world-dev" depends="build">
+        <echo message="Building for development"/>
+        <zip destfile="${dist.dir}/${ext.name}_dev.oxt" whenempty="fail">
+            <zipfileset dir="${build.ext.dir}" includes="**" excludes="bin/**"/>
+            <zipfileset dir="${build.ext.dir}" includes="bin/**" filemode="555"/>
+        </zip>
+    </target>
+    <!--
+    
+        Make distribution for production.
+    
+    -->
+    <target name="world-production" depends="build">
+        <echo message="Building for production"/>
+        <zip destfile="${dist.dir}/${ext.name}.oxt" whenempty="fail">
+            <zipfileset dir="${build.ext.dir}" includes="**" excludes="bin/**"/>
+            <zipfileset dir="${build.ext.dir}" includes="bin/**" filemode="555"/>
+        </zip>
+    </target>
+    <!--
+    
+        Make all distributions.
+    
+    -->
+    <target name="world" depends="clean,inc-build-number,world-dev,world-production">
+        <echo message="Building for development and production"/>
+    </target>
+</project>
