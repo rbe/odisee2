@@ -130,7 +130,7 @@
         <copy verbose="${webservice-buildprop.odisee.library.build.verbose}" todir="${webservice.lib.dir}" file="${odisee.pdfbox-app.library.jar}"/>
         <!-- Copy Odisee library -->
         <copy verbose="${webservice-buildprop.odisee.library.build.verbose}" todir="${webservice.lib.dir}" file="${odisee.library.jar}"/>
-        <!-- Copy OpenOffice libraries
+        <!-- TODO Copy OpenOffice libraries
         <copy verbose="${webservice-buildprop.odisee.library.build.verbose}" todir="${webservice.lib.dir}">
             <fileset dir="${odisee.libreoffice.jar.dir}"/>
         </copy>

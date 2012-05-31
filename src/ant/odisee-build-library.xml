@@ -83,6 +83,8 @@
             <!-- Set build date in build.properties -->
             <entry key="odisee.library.release.date" type="date" value="now" pattern="yyyyMMdd-HHmmss"/>
         </propertyfile>
+        <!-- TODO Update etc/version -->
+        <echo file="${etc.version}">${library.version.number}</echo>
     </target>
     <!-- Set version properties -->
     <target name="library-set-version-props">
