@@ -23,12 +23,17 @@ class PdfService {
      */
     File mergeDocuments(File target, List<File> pdfFiles) {
         PDFMergerUtility merger = new PDFMergerUtility()
-        pdfFiles.each {
-            merger.addSource(it)
+        try {
+            pdfFiles.each {
+                merger.addSource(it)
+            }
+            merger.destinationFileName = target.absolutePath
+            merger.mergeDocuments()
+            target
+        } catch (e) {
+            log.error "Could not merge ${pdfFiles.join(', ')} into ${target}", e
+            null
         }
-        merger.destinationFileName = target.absolutePath
-        merger.mergeDocuments()
-        target
     }
 
 }
