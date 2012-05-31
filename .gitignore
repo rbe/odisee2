@@ -2,6 +2,7 @@
 *.class
 *.h2.db
 *.lock.db
+*Db.*/
 *.log
 etc/odiinst
 src/webservice/lib
@@ -20,3 +21,4 @@ var/
 build/
 target/
 dist/
+test/report/
