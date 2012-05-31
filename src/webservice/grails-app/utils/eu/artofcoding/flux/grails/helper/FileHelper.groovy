@@ -25,13 +25,15 @@ final class FileHelper {
      */
     static Map decomposeFilename(String filename) {
         Map map = [:]
-        if (filename.contains('.')) {
-            String[] split = filename.split('[.]')
-            map[S_NAME] = split[0..-2].join('')
-            map[S_EXT] = split[-1] //.toLowerCase()
-        } else {
-            map[S_NAME] = filename
-            map[S_EXT] = 'xxx'
+        if (filename) {
+            if (filename.contains('.')) {
+                String[] split = filename.split('[.]')
+                map[S_NAME] = split[0..-2].join('')
+                map[S_EXT] = split[-1] //.toLowerCase()
+            } else {
+                map[S_NAME] = filename
+                map[S_EXT] = 'xxx'
+            }
         }
         // Return
         map
@@ -44,7 +46,7 @@ final class FileHelper {
      * @return Map Keys: name, ext.
      */
     static Map decomposeFilename(File file) {
-        decomposeFilename(file.name)
+        decomposeFilename(file?.name)
     }
 
     /**
