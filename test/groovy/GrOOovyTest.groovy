@@ -54,7 +54,7 @@ class GrOOovyTest {
      */
     def static processXML(ocm, num = 0) {
         use(eu.artofcoding.odisee.OdiseeXmlCategory) {
-            def r = new java.io.File("/Users/rbe/project/odisee/var/req.xml")
+            def r = new java.io.File("/Users/rbe/project/odisee/var/odisee_request.xml")
             try {
                 //println "#${num}: starting"
                 def result = r.toDocument(ocm, [id: num])
