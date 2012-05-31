@@ -183,6 +183,7 @@ class DocumentController {
         */
         try {
             // Find document to stream
+            // TODO stream-by-name (e.g. for merged documents or multiple-requests), use <stream/> in request XML to mark resulting document as stream-it-back
             if (document instanceof List && shouldStream) {
                 // Find document by request parameter 'streamtype'
                 oooDocument = document.find {
