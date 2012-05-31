@@ -12,13 +12,13 @@ import java.lang.management.ManagementFactory
 import java.lang.management.ThreadMXBean
 import java.text.DecimalFormat
 import java.text.NumberFormat
+import eu.artofcoding.odisee.OdiseePath
 
 /**
  *
  */
 final class Profile {
 
-    private static final String ODISEE_PROFILE = System.getenv('ODISEE_PROFILE')
     private static final DecimalFormat DECIMAL_FORMAT = (DecimalFormat) DecimalFormat.instance
     private static final int FRACTION_DIGITS = 2
     private static final String DATE_FORMAT = 'dd.MM. HH:mm:ss.SSS'
@@ -33,14 +33,16 @@ final class Profile {
         DECIMAL_FORMAT.minimumFractionDigits = FRACTION_DIGITS
         DECIMAL_FORMAT.maximumFractionDigits = FRACTION_DIGITS
         // Profiling enabled?
-        println "Profile.<init>: Profiling is ${ODISEE_PROFILE == '1' ? 'enabled' : 'disabled'}"
+        if (OdiseePath.ODISEE_DEBUG || OdiseePath.ODISEE_PROFILE) {
+            println "Profile.<init>: Profiling is ${OdiseePath.ODISEE_PROFILE ? 'enabled' : 'disabled'}"
+        }
     }
 
     /**
      * Execute a closure and measure time.
      */
-    static void time = { String text, Closure closure ->
-        if (ODISEE_PROFILE == '1') {
+    static time = { String text, Closure closure ->
+        if (OdiseePath.ODISEE_PROFILE) {
             synchronized(Profile) {
                 counter++
             }

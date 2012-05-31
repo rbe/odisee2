@@ -17,6 +17,10 @@ import eu.artofcoding.odisee.helper.OdiseeConstant
 class OdiseePath {
 
     /**
+     * Profile?
+     */
+    static final Boolean ODISEE_PROFILE = Boolean.valueOf(System.getenv('ODISEE_PROFILE') ?: 'false')
+
     /**
      * Debug?
      */
