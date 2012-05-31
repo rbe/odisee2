@@ -7,26 +7,31 @@
  * All rights reserved. Use is subject to license terms.
  */
 
-// Custom configuration file
+// Odisee home
 String ODISEE_HOME = System.getenv('ODISEE_HOME')
-boolean configFileExists
-File configFile = null
-[
-        "${userHome}/.${appName}-webservice-config.properties",
-        "${userHome}/.${appName}-webservice-config.groovy",
-        "${ODISEE_HOME}/etc/webservice.properties",
-        "${ODISEE_HOME}/etc/webservice.groovy",
-        System.properties["${appName}.config.location"]
-].each { cfg ->
-    if (cfg) {
-        configFile = new File(cfg)
-        configFileExists = configFile.exists()
-        println "ODI-xxxx: Checking configuration file '${configFile}': it ${configFileExists ? 'exists' : 'does not exist, skipping'}"
-        if (configFileExists) {
-            println "ODI-xxxx: Adding configuration file '${configFile}'"
-            grails.config.locations << configFile
+if (ODISEE_HOME) {
+    // Odisee configuration
+    boolean configFileExists
+    File configFile = null
+    [
+            "${userHome}/.${appName}-webservice-config.properties",
+            "${userHome}/.${appName}-webservice-config.groovy",
+            "${ODISEE_HOME}/etc/webservice.properties",
+            "${ODISEE_HOME}/etc/webservice.groovy",
+            System.properties["${appName}.config.location"]
+    ].each { cfg ->
+        if (cfg) {
+            configFile = new File(cfg)
+            configFileExists = configFile.exists()
+            println "ODI-xxxx: Checking configuration file '${configFile}': it ${configFileExists ? 'exists' : 'does not exist, skipping'}"
+            if (configFileExists) {
+                println "ODI-xxxx: Adding configuration file '${configFile}'"
+                grails.config.locations << configFile
+            }
         }
     }
+} else {
+    println "ODI-xxxx: Please set ODISEE_HOME."
 }
 
 grails.project.groupId = "eu.artofcoding.${appName}" // change this to alter the default package name and Maven publishing destination
