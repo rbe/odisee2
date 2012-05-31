@@ -8,14 +8,13 @@
  */
 package eu.artofcoding.odisee.document
 
+import com.sun.org.apache.xerces.internal.dom.DeferredNode
 import eu.artofcoding.flux.grails.helper.FileHelper
+import eu.artofcoding.flux.grails.helper.XmlHelper
 import eu.artofcoding.odisee.OdiseeException
 import eu.artofcoding.odisee.OdiseePath
 import eu.artofcoding.odisee.OdiseeWebserviceConstant
-import groovy.xml.StreamingMarkupBuilder
 import groovy.xml.XmlUtil
-import eu.artofcoding.flux.grails.helper.XmlHelper
-import com.sun.org.apache.xerces.internal.dom.DeferredNode
 
 /**
  *
@@ -37,11 +36,6 @@ class StorageService {
      * GrailsApplication.
      */
     def grailsApplication
-
-    /**
-     * Paths constants.
-     */
-    private static final OdiseePath ODISEE_PATH = OdiseePath.instance
 
     /**
      *
@@ -339,7 +333,7 @@ class StorageService {
         // Template
         arg.templateFile = new File(arg.templateDir, "${arg.template}_rev${arg.revision}.ott")
         // Check local template directory for latest revision of template
-        File localTemplate = new File(ODISEE_PATH.TEMPLATE_DIR, "${arg.template}_rev${arg.revision}.ott")
+        File localTemplate = new File(OdiseePath.TEMPLATE_DIR, "${arg.template}_rev${arg.revision}.ott")
         if (localTemplate.exists()) {
             // Copy it to arg.templateDir
             arg.templateFile << localTemplate.bytes
