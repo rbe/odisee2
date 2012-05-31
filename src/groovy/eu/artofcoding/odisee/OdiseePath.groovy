@@ -62,6 +62,7 @@ class OdiseePath {
             throw new OdiseeException('Please set ODISEE_HOME')
         }
         // Setup path constants
+        // ODISEE_HOME
         ODISEE_HOME = new File(System.getenv(OdiseeConstant.S_ODISEE_HOME)).absoluteFile
         // ODISEE_DEPLOY
         if (System.getenv(OdiseeConstant.S_ODISEE_DEPLOY)) {
@@ -70,22 +71,33 @@ class OdiseePath {
             ODISEE_DEPLOY = new File(ODISEE_HOME, 'var/deploy').absoluteFile
         }
         ODISEE_DEPLOY.mkdirs()
+        // ODISEE_VAR
         if (System.getenv(OdiseeConstant.S_ODISEE_TMP)) {
             ODISEE_VAR = new File(System.getenv(OdiseeConstant.S_ODISEE_TMP)).absoluteFile
         } else {
             ODISEE_VAR = new File(ODISEE_HOME, OdiseeConstant.S_VAR_TMP_RAMDISK).absoluteFile
         }
         ODISEE_VAR.mkdirs()
+        // Templates
         TEMPLATE_DIR = new File(ODISEE_VAR, OdiseeConstant.S_TEMPLATE)
         TEMPLATE_DIR.mkdir()
+        // Documents
         DOCUMENT_DIR = new File(ODISEE_VAR, OdiseeConstant.S_DOCUMENT)
         DOCUMENT_DIR.mkdir()
+        //
+        dumpEnv()
+    }
+
+    static void dumpEnv() {
         // Dump environment to stdout
         println 'Odisee environment variables:'
-        println "  ODISEE_HOME =${ODISEE_HOME}"
-        println "  ODISEE_VAR  =${ODISEE_VAR}"
-        println "  TEMPLATE_DIR=${TEMPLATE_DIR}"
-        println "  DOCUMENT_DIR=${DOCUMENT_DIR}"
+        println "  ODISEE_HOME   =${ODISEE_HOME}"
+        println "  ODISEE_DEPLOY =${ODISEE_DEPLOY}"
+        println "  ODISEE_VAR    =${ODISEE_VAR}"
+        println "  TEMPLATE_DIR  =${TEMPLATE_DIR}"
+        println "  DOCUMENT_DIR  =${DOCUMENT_DIR}"
+        println "  ODISEE_DEBUG  =${ODISEE_DEBUG}"
+        println "  ODISEE_PROFILE=${ODISEE_PROFILE}"
     }
 
 }
