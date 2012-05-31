@@ -27,6 +27,11 @@ class OdiseePath {
     static final File ODISEE_HOME
 
     /**
+     * Deployment directory for Odisee, contains additional files.
+     */
+    static final File ODISEE_DEPLOY
+
+    /**
      * Variable data directory for Odisee.
      */
     static final File ODISEE_VAR
@@ -48,6 +53,13 @@ class OdiseePath {
         }
         // Setup path constants
         ODISEE_HOME = new File(System.getenv(OdiseeConstant.S_ODISEE_HOME)).absoluteFile
+        // ODISEE_DEPLOY
+        if (System.getenv(OdiseeConstant.S_ODISEE_DEPLOY)) {
+            ODISEE_DEPLOY = new File(System.getenv(OdiseeConstant.S_ODISEE_DEPLOY)).absoluteFile
+        } else {
+            ODISEE_DEPLOY = new File(ODISEE_HOME, 'var/deploy').absoluteFile
+        }
+        ODISEE_DEPLOY.mkdirs()
         if (System.getenv(OdiseeConstant.S_ODISEE_TMP)) {
             ODISEE_VAR = new File(System.getenv(OdiseeConstant.S_ODISEE_TMP)).absoluteFile
         } else {

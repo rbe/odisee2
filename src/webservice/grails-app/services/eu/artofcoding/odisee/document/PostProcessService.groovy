@@ -13,6 +13,7 @@ import eu.artofcoding.odisee.image.ImageMagickCategory
 import eu.artofcoding.odisee.image.ImageMagickService
 import org.w3c.dom.Element
 import groovy.xml.dom.DOMCategory
+import eu.artofcoding.odisee.OdiseePath
 
 /**
  *
@@ -63,6 +64,7 @@ class PostProcessService {
                         filename = "${System.getenv('ODISEE_VAR')}/${it.'@file'}"
                     } else {
                         filename = it.'@file'.toString()
+                            filename = "${OdiseePath.ODISEE_DEPLOY}/${it.'@file'}"
                     }
                     pdfFiles << new File(filename)
                 }
