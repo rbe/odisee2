@@ -14,11 +14,6 @@ package eu.artofcoding.odisee.ooo
 class OOoCursorCategory {
 
     /**
-     * Debug?
-     */
-    static final Boolean ODISEE_DEBUG = Boolean.valueOf(System.getenv('ODISEE_DEBUG') ?: 'false')
-
-    /**
      * Get an autotext.
      */
     static com.sun.star.text.XTextCursor getTextCursor(com.sun.star.lang.XComponent component) {

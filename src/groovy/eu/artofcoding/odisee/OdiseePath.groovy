@@ -17,6 +17,11 @@ import eu.artofcoding.odisee.helper.OdiseeConstant
 class OdiseePath {
 
     /**
+    /**
+     * Debug?
+     */
+    static final Boolean ODISEE_DEBUG = Boolean.valueOf(System.getenv('ODISEE_DEBUG') ?: 'false')
+
      * Base directory for Odisee.
      */
     static final File ODISEE_HOME

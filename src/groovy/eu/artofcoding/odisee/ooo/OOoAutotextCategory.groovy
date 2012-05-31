@@ -16,11 +16,6 @@ import eu.artofcoding.odisee.OdiseeException
 class OOoAutotextCategory {
 
     /**
-     * Debug?
-     */
-    static final Boolean ODISEE_DEBUG = Boolean.valueOf(System.getenv('ODISEE_DEBUG') ?: 'false')
-
-    /**
      * Get an autotext.
      */
     static com.sun.star.text.XAutoTextEntry getAutotext(com.sun.star.lang.XComponent component, String autotextGroup, String autotext) {

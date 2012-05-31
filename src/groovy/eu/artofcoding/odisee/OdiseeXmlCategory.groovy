@@ -29,11 +29,6 @@ import eu.artofcoding.odisee.ooo.OOoAutotextCategory
 class OdiseeXmlCategory {
 
     /**
-     * Debug?
-     */
-    private static final Boolean ODISEE_DEBUG = Boolean.valueOf(System.getenv('ODISEE_DEBUG') ?: 'false')
-
-    /**
      * Find latest revision of a file with name following this convention:
      * name_revN.ext
      */

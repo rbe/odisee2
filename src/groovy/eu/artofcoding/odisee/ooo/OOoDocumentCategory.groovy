@@ -24,16 +24,12 @@ import com.sun.star.frame.XFrame
 import com.sun.star.frame.XDispatchProvider
 import com.sun.star.script.provider.XScriptProviderSupplier
 import com.sun.star.script.provider.XScript
+import eu.artofcoding.odisee.OdiseePath
 
 /**
  * Things we can do with any OpenOffice.org document.
  */
 class OOoDocumentCategory {
-
-    /**
-     * Debug?
-     */
-    private static final boolean ODISEE_DEBUG = Boolean.valueOf(System.getenv('ODISEE_DEBUG') ?: 'false')
 
     /**
      * Standard properties for opening a document.
@@ -273,7 +269,7 @@ class OOoDocumentCategory {
             }
             // Ensure a java.lang.String and replace HTML entities
             name = name.toString().replaceAll('&amp;', '&')
-            if (System.getenv('ODISEE_DEBUG') == 1) {
+            if (OdiseePath.ODISEE_DEBUG) {
                 println "ODI-xxxx: Processing macro '${name}'"
             }
             try {

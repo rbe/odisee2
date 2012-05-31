@@ -12,6 +12,7 @@ import eu.artofcoding.odisee.OdiseeException
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.TimeUnit
+import eu.artofcoding.odisee.OdiseePath
 
 /*
 TODO Rework load-balancing:
@@ -81,7 +82,7 @@ class OOoConnectionManager {
      */
     void addOOoConnectionToGroup(group, unoURL) {
         OOoProcess oooProcess = new OOoProcess(oooProgram: oooProgram, oooOptions: oooOptions, unoURL: unoURL)
-        println "${this}.addOOoConnectionToGroup(${group}): Adding connection to '${unoURL}'"
+        if (OdiseePath.ODISEE_DEBUG) println "${this}.addOOoConnectionToGroup(${group}): Adding connection to '${unoURL}'"
         // Put connection into connectionCache
         def conn = new OOoConnection(group: group, oooProcess: oooProcess)
         connectionCache[group] << conn
@@ -170,10 +171,10 @@ class OOoConnectionManager {
             // Connections are in connectionCache after alreadySetup()
             conn = connectionCache[group].poll(5, TimeUnit.SECONDS)
             if (conn) {
-                println "${this}.acquire(${group}): got connection to ${conn.oooProcess}, it is ${conn.unusableSince > 0 ? 'unusable' : 'usable'} (unusableSince=${conn.unusableSince})"
+                if (OdiseePath.ODISEE_DEBUG) println "${this}.acquire(${group}): got connection to ${conn.oooProcess}, it is ${conn.unusableSince > 0 ? 'unusable' : 'usable'} (unusableSince=${conn.unusableSince})"
                 // Move connection into in-use pool
                 connectionsInUse[group] << conn
-                dump group, "acquire(${group}): ${conn.oooProcess} <- ${conn.group}"
+                if (OdiseePath.ODISEE_DEBUG) dump group, "acquire(${group}): ${conn.oooProcess} <- ${conn.group}"
                 try {
                     // Establish connection
                     conn.connect()
@@ -202,7 +203,7 @@ class OOoConnectionManager {
         connectionsInUse[conn.group].remove(conn)
         // Append connection at end of list
         connectionCache[conn.group] << conn
-        dump conn.group, "release: ${conn.oooProcess} -> ${conn.group}"
+        if (OdiseePath.ODISEE_DEBUG) dump conn.group, "release: ${conn.oooProcess} -> ${conn.group}"
     }
 
     /**
