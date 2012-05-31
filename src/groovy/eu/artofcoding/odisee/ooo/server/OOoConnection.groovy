@@ -160,14 +160,14 @@ class OOoConnection implements XEventListener {
                         if (null == xComponentLoader) {
                             throw new OdiseeException('ODI-xxxx: No connection (XComponentLoader)')
                         }
+                        if (OdiseePath.ODISEE_DEBUG) println "${this}.connect: Successfully connected to OOo instance at ${oooProcess.unoURL}"
+                        markConnectionAsUsable()
                     } catch (BridgeExistsException e) {
                         // Connection is reused; the bridge may exist already, assume it's ok
                         if (OdiseePath.ODISEE_DEBUG) println "${this}.connect/catch: XBridge exists: ${e.message}"
                     } finally {
                         if (OdiseePath.ODISEE_DEBUG) println "${this}.connect/finally: XBridge=${xBridge} xOfficeComponentContext=${xOfficeComponentContext} xComponentLoader=${xComponentLoader}"
                     }
-                    println "${this}.connect: Successfully connected to OOo instance at ${oooProcess.unoURL}"
-                    markConnectionAsUsable()
                 } catch (e) {
                     markConnectionAsUnusable()
                     throw new OdiseeException("ODI-xxxx: Cannot connect to ${oooProcess.unoURL}, marked as unusable for ${timeout} seconds", e)
