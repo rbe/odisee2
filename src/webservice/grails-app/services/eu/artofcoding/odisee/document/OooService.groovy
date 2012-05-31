@@ -56,11 +56,6 @@ class OooService implements InitializingBean {
     PostProcessService postProcessService
 
     /**
-     * Paths constants.
-     */
-    private static final OdiseePath ODISEE_PATH = OdiseePath.instance
-
-    /**
      * Initialize Odisee's connection manager.
      * Called after Spring bean was initialized... see org.springframework.beans.factory.InitializingBean.
      */
@@ -80,7 +75,7 @@ class OooService implements InitializingBean {
             Map oooGroup = [:]
             Map ipPortGroup = [:]
             // Try to get etc/odiinst through environment variable ODISEE_HOME
-            File odiinst = new File(ODISEE_PATH.ODISEE_HOME, 'etc/odiinst')
+            File odiinst = new File(OdiseePath.ODISEE_HOME, 'etc/odiinst')
             // Read contents of odiinst
             // odiinst=[odi1, 127.0.0.1, 2001, /Applications/OpenOffice.org.app, /Users/rbe/project/odisee/var/user/odi1, nologo nofirststartwizard norestart nodefault nolockcheck nocrashreport, true]
             List<String> contents = []
@@ -331,7 +326,7 @@ class OooService implements InitializingBean {
         // Generate unique request ID
         arg.uniqueRequestId = UUID.randomUUID()
         // Set request directory
-        arg.requestDir = new File(ODISEE_PATH.DOCUMENT_DIR, arg.uniqueRequestId.toString())
+        arg.requestDir = new File(OdiseePath.DOCUMENT_DIR, arg.uniqueRequestId.toString())
         arg.requestDir.mkdirs()
         // Save XML request
         storageService.saveRequestToDisk(arg, OdiseeWebserviceConstant.MINUS_ONE)
