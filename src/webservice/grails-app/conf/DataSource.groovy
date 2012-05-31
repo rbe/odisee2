@@ -40,7 +40,7 @@ environments {
     production {
         dataSource {
             dbCreate = 'update'
-            url = 'jdbc:h2:file:testDb'
+            url = 'jdbc:h2:file:prodDb'
         }
     }
 }
