@@ -57,8 +57,8 @@ class OdiseePath {
     static final File DOCUMENT_DIR
 
     static {
-        String odiseeHome = System.getenv(OdiseeConstant.S_ODISEE_HOME)
-        if (!odiseeHome) {
+        // Is Odisee home set?
+        if (!System.getenv(OdiseeConstant.S_ODISEE_HOME)) {
             throw new OdiseeException('Please set ODISEE_HOME')
         }
         // Setup path constants
