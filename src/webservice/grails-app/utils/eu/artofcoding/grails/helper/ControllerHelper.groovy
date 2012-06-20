@@ -6,7 +6,7 @@
  * Alle Rechte vorbehalten. Nutzung unterliegt Lizenzbedingungen.
  * All rights reserved. Use is subject to license terms.
  */
-package eu.artofcoding.odisee
+package eu.artofcoding.grails.helper
 
 import eu.artofcoding.odisee.document.OooDocument
 import java.security.SecureRandom

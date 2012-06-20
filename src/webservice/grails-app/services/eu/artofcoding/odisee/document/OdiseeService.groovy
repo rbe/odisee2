@@ -8,8 +8,8 @@
  */
 package eu.artofcoding.odisee.document
 
-import eu.artofcoding.flux.grails.helper.XmlHelper
-import groovy.xml.StreamingMarkupBuilder
+import eu.artofcoding.grails.helper.XmlHelper
+
 import org.w3c.dom.Element
 
 /**

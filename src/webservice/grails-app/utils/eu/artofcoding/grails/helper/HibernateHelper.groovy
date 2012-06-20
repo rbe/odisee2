@@ -6,7 +6,7 @@
  * Alle Rechte vorbehalten. Nutzung unterliegt Lizenzbedingungen.
  * All rights reserved. Use is subject to license terms.
  */
-package eu.artofcoding.flux.grails.helper
+package eu.artofcoding.grails.helper
 
 import org.hibernate.Hibernate
 

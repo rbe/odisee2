@@ -8,9 +8,8 @@
  */
 package eu.artofcoding.odisee.document
 
-import eu.artofcoding.flux.grails.helper.FileHelper
-import eu.artofcoding.odisee.image.ImageMagickCategory
-import eu.artofcoding.odisee.image.ImageMagickService
+import eu.artofcoding.grails.helper.FileHelper
+
 import org.w3c.dom.Element
 import groovy.xml.dom.DOMCategory
 import eu.artofcoding.odisee.OdiseePath

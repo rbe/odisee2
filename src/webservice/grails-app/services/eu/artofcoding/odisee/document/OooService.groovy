@@ -8,7 +8,7 @@
  */
 package eu.artofcoding.odisee.document
 
-import eu.artofcoding.flux.grails.helper.NameHelper
+import eu.artofcoding.grails.helper.NameHelper
 import eu.artofcoding.odisee.OdiseeException
 import eu.artofcoding.odisee.OdiseePath
 import eu.artofcoding.odisee.OdiseeWebserviceConstant

@@ -9,8 +9,8 @@
 package eu.artofcoding.odisee.document
 
 import com.sun.org.apache.xerces.internal.dom.DeferredNode
-import eu.artofcoding.flux.grails.helper.FileHelper
-import eu.artofcoding.flux.grails.helper.XmlHelper
+import eu.artofcoding.grails.helper.FileHelper
+import eu.artofcoding.grails.helper.XmlHelper
 import eu.artofcoding.odisee.OdiseeException
 import eu.artofcoding.odisee.OdiseePath
 import eu.artofcoding.odisee.OdiseeWebserviceConstant

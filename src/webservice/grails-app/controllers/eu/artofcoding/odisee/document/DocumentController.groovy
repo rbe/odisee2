@@ -8,7 +8,7 @@
  */
 package eu.artofcoding.odisee.document
 
-import eu.artofcoding.odisee.ControllerHelper
+import eu.artofcoding.grails.helper.ControllerHelper
 import eu.artofcoding.odisee.OdiseeException
 import eu.artofcoding.odisee.OdiseeWebserviceConstant
 
