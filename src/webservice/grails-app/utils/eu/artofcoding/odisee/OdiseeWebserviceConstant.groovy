@@ -20,6 +20,6 @@ class OdiseeWebserviceConstant {
     public static final String S_FALSE = 'false'
     public static final String S_PDF = 'pdf'
     public static final String S_NOSTREAM = 'nostream'
-
     public static final int MINUS_ONE = -1
+
 }
