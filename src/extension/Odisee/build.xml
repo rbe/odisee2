@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Odisee-extension" default="world">
+    <!-- Environment -->
+    <property environment="env"/>
+    <!--
+    
+        Include Odisee build.xml.
+    
+    -->
+    <import file="${env.ODISEE_HOME}/src/extension/ant/odisee-ext-main-build.xml"/>
+    <!--
+    
+        Local project settings.
+    
+    -->
+    <!--
+    
+        Project specific tasks.
+    
+    -->
+</project>

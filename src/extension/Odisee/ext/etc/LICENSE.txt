@@ -1,0 +1,4 @@
+Copyright (C) 2011 art of coding UG
+
+Use is subject to license terms.
+See http://files.art-of-coding.eu/aoc/AOCPL_v10_en.txt.
