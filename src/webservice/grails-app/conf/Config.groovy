@@ -10,6 +10,7 @@
 // Odisee home
 String ODISEE_HOME = System.getenv('ODISEE_HOME')
 if (ODISEE_HOME) {
+    /*
     // Odisee configuration
     boolean configFileExists
     File configFile = null
@@ -30,6 +31,7 @@ if (ODISEE_HOME) {
             }
         }
     }
+    */
     // Version
     odisee.version = "Version unknown"
     File versionFile = new File(ODISEE_HOME, 'etc/version')
