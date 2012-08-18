@@ -592,7 +592,8 @@ start_instance() {
         local opts
         for o in ${INSTCFG[options]}
         do
-            opts="${opts} -${o}"
+            # OpenOffice upto 3.4 opts="${opts} -${o}"
+            opts="${opts} --${o}" # LibreOffice
         done
         opts=${opts:1}
         # Setup OpenOffice instance
@@ -613,9 +614,12 @@ start_instance() {
                 cd ${INSTCFG[home]}/program # 1>/dev/null 2>&1
             ;;
         esac
-        if [ -x soffice ]
+	bin=soffice
+        if [ -x ${bin} ]
         then
-            ./soffice -env:UserInstallation="file:///${INSTCFG[data]}" -accept="${sock}" ${opts} &
+            # OpenOffice upto 3.4 ./${bin} -env:UserInstallation="file:///${INSTCFG[data]}" -accept="${sock}" ${opts} &
+	    # LibreOffice
+            ./${bin} -env:UserInstallation="file:///${INSTCFG[data]}" --accept="${sock}" ${opts} &
         else
             echo "ODI-xxxx: Cannot start, soffice executable not found."
         fi
@@ -672,9 +676,7 @@ stop_instance() {
         kill_instance ${inst} false
     elif [[ x"${INSTSTAT[status]}" == xONLINE,* ]]
     then
-        echo "ODI-xxxx: Cannot stop OpenOffice instance '${inst}': wrong instance status. Use -z to force this operation."
-    ## else
-    ##     echo "ODI-xxxx: Cannot stop OpenOffice instance '${inst}': no process id?"
+        echo "ODI-xxxx: Cannot stop OpenOffice instance '${inst}': invalid instance status (${INSTSTAT[status]}). Use -z to force this operation."
     fi
 }
 
