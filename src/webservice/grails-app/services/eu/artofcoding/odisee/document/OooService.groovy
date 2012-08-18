@@ -17,6 +17,7 @@ import eu.artofcoding.odisee.helper.OdiseeConstant
 import eu.artofcoding.odisee.ooo.server.OOoConnectionManager
 import groovy.xml.dom.DOMCategory
 import org.springframework.beans.factory.InitializingBean
+import eu.artofcoding.odisee.server.OfficeConnectionFactory
 
 /**
  * A service that is a client for the OOo service. Provides access to standalone, embedded or webservice
@@ -43,7 +44,8 @@ class OooService implements InitializingBean {
     /**
      * Manager for connections to OpenOffice.
      */
-    OOoConnectionManager oooConnectionManager
+    //OOoConnectionManager oooConnectionManager
+    OfficeConnectionFactory officeConnectionFactory
 
     /**
      * The document service.
@@ -70,7 +72,8 @@ class OooService implements InitializingBean {
      */
     private void setupOooConnectionManager(boolean force = false) {
         // Check state, do not initialize twice
-        if (force || !oooConnectionManager) {
+        //if (force || !oooConnectionManager) {
+        if (force || !officeConnectionFactory) {
             ////def oooProgram
             Map oooGroup = [:]
             Map ipPortGroup = [:]
@@ -100,8 +103,14 @@ class OooService implements InitializingBean {
                 oooGroup[OdiseeConstant.S_GROUP0] = ['127.0.0.1': 2001]
             }
             // Create and return instance of OOo connection manager
-            ////Map p = [oooProgram: oooProgram] + oooGroup
-            oooConnectionManager = new OOoConnectionManager(oooGroup)
+            //oooConnectionManager = new OOoConnectionManager(oooGroup)
+            try {
+                String localhost = contents[0][1]
+                int portbase = 2001
+                officeConnectionFactory = new OfficeConnectionFactory(OdiseeConstant.S_GROUP0, localhost, portbase, contents.size())
+            } catch (e) {
+                throw new IllegalStateException("Cannot setup Office connection factory, please check odiinst")
+            }
         }
     }
 
@@ -193,14 +202,15 @@ class OooService implements InitializingBean {
         // Process request
         use(OdiseeXmlCategory) {
             def request = arg.xml.request[arg.activeIndex]
-            arg.result = requestXMLFile.toDocument(oooConnectionManager, 0) // requestNumber = 0 as file contains only one request
+            //arg.result = requestXMLFile.toDocument(oooConnectionManager, 0) // requestNumber = 0 as file contains only one request
+            arg.result = requestXMLFile.toDocument(officeConnectionFactory, 0) // requestNumber = 0 as file contains only one request
             if (!arg.result) {
                 // This should never happen; except all OOo instances have crashed.
                 String group = '?'
                 try {
                     group = request.ooo[0]?.'@group'
                 } catch (e) {
-                    // Ignore
+                    // ignore
                 }
                 log.error "ODI-xxxx: ${requestXMLFile.name}/${arg.activeIndex}: Got no result, maybe all OpenOffice instance(s) in group '${group}' are unwilling to perform?"
             }
