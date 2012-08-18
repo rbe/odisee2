@@ -71,8 +71,7 @@
                 <include name="ant/**"/>
                 <include name="apachepoi/**"/>
                 <include name="pdfbox/**"/>
-                <include name="libreoffice/**"/>
-                <include name="openoffice/**"/>
+                <include name="libreoffice/3.5/**"/>
                 <include name="odftoolkit/**"/>
                 <include name="simpleodf/**"/>
             </fileset>
