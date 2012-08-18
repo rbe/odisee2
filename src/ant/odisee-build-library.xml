@@ -106,11 +106,12 @@
         <mkdir dir="${classes.dir}"/>
         <!-- Compile Groovy sources -->
         <groovyc srcdir="${groovy.src.dir}" destdir="${classes.dir}" verbose="true" classpathref="groovy.src.classpath">
-
         </groovyc>
         <groovyc srcdir="${groovy.test.src.dir}" destdir="${classes.dir}" verbose="true" classpathref="groovy.test.classpath">
             <classpath path="${classes.dir}"/>
         </groovyc>
+        <javac srcdir="src/java" destdir="${classes.dir}" verbose="true" classpathref="groovy.src.classpath">
+        </javac>
     </target>
     <!--
     
