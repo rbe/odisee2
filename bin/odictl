@@ -238,9 +238,8 @@ Maintenance
   OpenOffice instance(s)
   -q <operation>                        Execute maintenance command.
        findooo                          Try to guess and find an installation home.
-       start                            Start one or more instance(s) given with -i.
-                                        If no instances are given, starts all with
-                                        option autostart=true.
+       start                            Start one or more instance(s) given with -i. If no
+                                        instances are given, starts all with option autostart=true.
        stop                             Same as above, but stops instance(s).
        restart                          Restart instance(s).
        updateoxt                        Update extensions under extensions/ and (re-)install them.
