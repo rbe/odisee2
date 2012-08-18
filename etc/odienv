@@ -32,10 +32,6 @@ then
 fi
 
 # Odisee
-##pushd ${SCRIPT_DIR}/.. 1>/dev/null
-##ODISEE_BASE=$(pwd)
-##ODISEE_HOME=${ODISEE_BASE}
-##popd 1>/dev/null
 ODISEE_LIBEXEC=${ODISEE_HOME}/libexec
 ODISEE_CONF=${ODISEE_HOME}/etc
 ODISEE_INST=${ODISEE_CONF}/odiinst
