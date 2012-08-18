@@ -116,8 +116,11 @@ class XmlHelper {
      * @return
      */
     static String asString(DeferredNode requestXML) {
-        String h = XmlUtil.serialize(requestXML).split(S_NEWLINE)[1..-1].join(S_NEWLINE)
-        String xml = new StreamingMarkupBuilder().bind {
+        //String h = XmlUtil.serialize(requestXML).split(S_NEWLINE)[0..-1].join(S_NEWLINE)
+        String h = XmlUtil.serialize(requestXML) -~ '<\\?xml.*?>'
+        def builder = new StreamingMarkupBuilder()
+        //builder.encoding = 'UTF-8'
+        String xml = builder.bind {
             odisee { mkp.yieldUnescaped h }
         }.toString()
         xml
