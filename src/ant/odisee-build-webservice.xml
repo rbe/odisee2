@@ -165,6 +165,7 @@
             <arg value="war"/>
             <arg value="target/odisee.war"/>
         </exec>
+        <copy verbose="${webservice-buildprop.odisee.library.build.verbose}" todir="${dist.dir}" file="${odisee.pdfbox-app.library.jar}"/>
     </target>
     <!--
     
@@ -185,5 +186,6 @@
             <arg value="target/odisee.war"/>
             <arg value="--nojars"/>
         </exec>
+        <copy verbose="${webservice-buildprop.odisee.library.build.verbose}" todir="${dist.dir}" file="${odisee.pdfbox-app.library.jar}"/>
     </target>
 </project>
