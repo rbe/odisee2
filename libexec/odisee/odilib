@@ -436,10 +436,10 @@ setup_inst() {
     ##[ ! -d ${HOME} ] && mkdir -p ${HOME}
     ##export HOME
     # Copy juh.jar into program folder: http://user.services.openoffice.org/en/forum/viewtopic.php?f=44&t=10825
-    if [ -n "${OOO_PROGRAM}" -a ! -e ${OOO_PROGRAM}/juh.jar ]; then
-        echo "Copying juh.jar to ${OOO_PROGRAM}"
-        sudo cp ${OOOJ}/juh.jar ${OOO_PROGRAM}
-    fi
+    #if [ -n "${OOO_PROGRAM}" -a ! -e ${OOO_PROGRAM}/juh.jar ]; then
+        #echo "Copying juh.jar to ${OOO_PROGRAM}"
+        #sudo cp ${OOOJ}/juh.jar ${OOO_PROGRAM}
+    #fi
     # Make classpath (for certain OOo instance) with JARs for Java.
     INST_CP=${OOO_PROGRAM}/juh.jar:${OOOJ}/jurt.jar:${OOOJ}/ridl.jar:${OOOU}/unoil.jar
 }
