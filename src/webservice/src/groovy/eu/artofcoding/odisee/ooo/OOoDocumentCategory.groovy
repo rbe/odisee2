@@ -25,6 +25,7 @@ import com.sun.star.frame.XDispatchProvider
 import com.sun.star.script.provider.XScriptProviderSupplier
 import com.sun.star.script.provider.XScript
 import eu.artofcoding.odisee.OdiseePath
+import eu.artofcoding.odisee.server.OfficeConnection
 
 /**
  * Things we can do with any OpenOffice.org document.
@@ -60,7 +61,7 @@ class OOoDocumentCategory {
      * Ensure proper file URL.
      */
     static String getFileURL(File file) {
-        'file://' + ((file.toURL() as String) - 'file:')
+        'file:///' + ((file.toURL() as String) - 'file:')
     }
 
     /**
@@ -73,7 +74,8 @@ class OOoDocumentCategory {
     /**
      * Open an OpenOffice.org document.
      */
-    static XComponent open(File file, OOoConnection oooConnection, props = null) {
+    //static XComponent open(File file, OOoConnection oooConnection, props = null) {
+    static XComponent open(File file, OfficeConnection oooConnection, props = null) {
         // Add connection to template's File object
         file.metaClass._oooConnection = oooConnection
         file.metaClass.getOooConnection = {-> _oooConnection }
@@ -107,10 +109,12 @@ class OOoDocumentCategory {
             sURL = getFileURL(file)
         }
         // Open document
-        if (!oooConnection.xComponentLoader) {
+        //if (!oooConnection.xComponentLoader) {
+        if (!oooConnection.getXComponentLoader()) {
             throw new OdiseeException('No XComponentLoader!')
         }
-        XComponent xComponent = oooConnection.xComponentLoader.loadComponentFromURL(sURL, '_blank', 0, (properties ?: null) as com.sun.star.beans.PropertyValue[])
+        //XComponent xComponent = oooConnection.xComponentLoader.loadComponentFromURL(sURL, '_blank', 0, (properties ?: null) as com.sun.star.beans.PropertyValue[])
+        XComponent xComponent = oooConnection.getXComponentLoader().loadComponentFromURL(sURL, '_blank', 0, (properties ?: null) as com.sun.star.beans.PropertyValue[])
         // Add OOoConnection to XComponent
         xComponent.metaClass._oooConnection = oooConnection
         xComponent.metaClass.getOooConnection = {-> _oooConnection }

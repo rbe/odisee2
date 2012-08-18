@@ -11,14 +11,13 @@ package eu.artofcoding.odisee
 import com.sun.star.lang.XComponent
 import eu.artofcoding.odisee.helper.OdiseeConstant
 import eu.artofcoding.odisee.helper.Profile
-import eu.artofcoding.odisee.ooo.OOoBookmarkCategory
-import eu.artofcoding.odisee.ooo.OOoDocumentCategory
-import eu.artofcoding.odisee.ooo.OOoFieldCategory
-import eu.artofcoding.odisee.ooo.OOoTextTableCategory
-import eu.artofcoding.odisee.ooo.server.OOoConnection
-import eu.artofcoding.odisee.ooo.server.OOoConnectionManager
+import eu.artofcoding.odisee.server.OfficeConnection
+import eu.artofcoding.odisee.server.OfficeConnectionFactory
+
 import java.util.concurrent.TimeUnit
-import eu.artofcoding.odisee.ooo.OOoAutotextCategory
+
+import eu.artofcoding.odisee.ooo.*
+import java.nio.charset.Charset
 
 /**
  * Apply values and instructions from a simple XML file to generate an OpenOffice document.
@@ -40,8 +39,8 @@ class OdiseeXmlCategory {
         // TODO NullPointer when cN == directory
         fs.inject fs[0], { File o, File n ->
             // Strip extension and find _rev in filename
-            def c1 = (o.name -~ OdiseeConstant.WRITER_EXT_REGEX).split(OdiseeConstant.S_UNDERSCORE).find { it ==~ OdiseeConstant.REVISION_REGEX }
-            def c2 = (n.name -~ OdiseeConstant.WRITER_EXT_REGEX).split(OdiseeConstant.S_UNDERSCORE).find { it ==~ OdiseeConstant.REVISION_REGEX }
+            def c1 = (o.name - ~OdiseeConstant.WRITER_EXT_REGEX).split(OdiseeConstant.S_UNDERSCORE).find { it ==~ OdiseeConstant.REVISION_REGEX }
+            def c2 = (n.name - ~OdiseeConstant.WRITER_EXT_REGEX).split(OdiseeConstant.S_UNDERSCORE).find { it ==~ OdiseeConstant.REVISION_REGEX }
             c2.compareTo(c1) == 1 ? n : o
         }
     }
@@ -214,7 +213,7 @@ class OdiseeXmlCategory {
         // Get File reference to certain or latest revision of template
         arg.template = OdiseeXmlCategory.findTemplate(request.template)
         // Set revision from found template
-        arg.revision = (arg.template.name -~ OdiseeConstant.WRITER_EXT_REGEX).split('_rev').last()
+        arg.revision = (arg.template.name - ~OdiseeConstant.WRITER_EXT_REGEX).split('_rev').last()
         // Return map
         arg
     }
@@ -226,7 +225,8 @@ class OdiseeXmlCategory {
      * @param oooConnection
      * @return
      */
-    static List<File> processTemplate(Map arg, OOoConnection oooConnection) {
+    //static List<File> processTemplate(Map arg, OOoConnection oooConnection) {
+    static List<File> processTemplate(Map arg, OfficeConnection oooConnection) {
         // Result is one or more document(s)
         List<File> output = []
         // Get XML request element
@@ -237,6 +237,8 @@ class OdiseeXmlCategory {
         String documentBasename = null
         if (request.'@name') {
             documentBasename = request.'@name'.toString()
+            byte[] requestNameAsUTF8 = request.'@name'.getBytes('UTF-8')
+            documentBasename = new String(requestNameAsUTF8, Charset.forName('UTF-8'))
         } else {
             documentBasename = "${arg.template.name.split('\\.')[0..-2].join('.')}-id${arg.id}"
         }
@@ -308,7 +310,8 @@ class OdiseeXmlCategory {
      * @param requestOverride
      * @return Map
      */
-    static Map toDocument(File file, OOoConnectionManager oooConnectionManager, int requestNumber, requestOverride = null) {
+    //static Map toDocument(File file, OOoConnectionManager oooConnectionManager, int requestNumber, requestOverride = null) {
+    static Map toDocument(File file, OfficeConnectionFactory officeConnectionFactory, int requestNumber, requestOverride = null) {
         long start = System.nanoTime()
         // Read XML from file
         Map arg = readRequest(file, requestNumber)
@@ -320,16 +323,18 @@ class OdiseeXmlCategory {
             arg += requestOverride
         }
         // The connection
-        OOoConnection oooConnection = null
+        //OOoConnection oooConnection = null
+        OfficeConnection oooConnection = null
         List<File> output = null
         // Our return value is a map with timing and output information
         Map result = [output: [], retries: 0, wallTime: -1]
         // Try until: we got a result or have it tried some times
-        while (!output && result.retries < 3) {
+//        while (!output && result.retries < 3) {
             try {
                 // Get connection to OpenOffice
                 String group = request.ooo.'@group'.toString()
-                oooConnection = oooConnectionManager.acquire(group)
+                //oooConnection = oooConnectionManager.acquire(group)
+                oooConnection = officeConnectionFactory.fetchConnection(false)
                 if (!oooConnection) {
                     throw new OdiseeException("Could not acquire connection from group '${group}'")
                 }
@@ -341,10 +346,14 @@ class OdiseeXmlCategory {
                 // Wall clock time
                 result.wallTime += TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start)
                 // Check result
-                if (!output/*result.output.size() == 0*/) {
+                if (output?.size() == 0) {
+                    oooConnection.setFaulted(true)
                     throw new OdiseeException('We did not produce a document?!')
                 }
             } catch (e) {
+                oooConnection.setFaulted(true)
+                throw new OdiseeException('We did not produce a document?!', e)
+                /*
                 // Increase retry counter
                 result.retries++
                 // No result? Spin... try again.
@@ -352,11 +361,16 @@ class OdiseeXmlCategory {
                     Thread.sleep(OdiseeConstant.SPIN_TIMEOUT)
                 } catch (e2) {
                 }
+                */
             } finally {
                 // Release connection to pool
-                oooConnectionManager.release(oooConnection)
+                //oooConnectionManager.release(oooConnection)
+                if (oooConnection) {
+                    println 'here we go'
+                    officeConnectionFactory.repositConnection(oooConnection)
+                }
             }
-        }
+//        }
         result
     }
 

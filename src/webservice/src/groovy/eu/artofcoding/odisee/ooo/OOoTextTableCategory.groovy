@@ -9,8 +9,10 @@
 package eu.artofcoding.odisee.ooo
 
 import com.sun.star.beans.XPropertySet
+import com.sun.star.container.XNamed
 import com.sun.star.lang.XComponent
 import com.sun.star.table.XCell
+import com.sun.star.table.XCellRange
 import com.sun.star.table.XTableRows
 import com.sun.star.text.XText
 import com.sun.star.text.XTextTable
@@ -18,8 +20,7 @@ import com.sun.star.text.XTextTablesSupplier
 import eu.artofcoding.odisee.OdiseeException
 import eu.artofcoding.odisee.helper.Coordinate
 import eu.artofcoding.odisee.helper.Profile
-import com.sun.star.container.XNamed
-import com.sun.star.table.XCellRange
+import com.sun.star.uno.Any
 
 /**
  * Work with Writer's text tables.
@@ -56,14 +57,17 @@ class OOoTextTableCategory {
     static XTextTable getTextTable(XComponent component, String name) {
         Profile.time "OOoTextTableCategory.getTextTable(name=$name)", {
 //            if (component.hasTextTable(name)) {
-            XTextTablesSupplier xTextTablesSupplier = (XTextTablesSupplier) textTablesSupplier(component)
-            xTextTablesSupplier?.textTables?.getByName(name)
-            /*
-            // com.sun.star.uno.Any
-            def any = component.textTablesSupplier()?.textTables?.getByName(name) ?: null
-            any ? (XTextTable) any.object : null
-            */
+            use(UnoCategory) {
+                XTextTablesSupplier xTextTablesSupplier = (XTextTablesSupplier) component.uno(XTextTablesSupplier)
+                Any any = xTextTablesSupplier?.textTables?.getByName(name)
+                (XTextTable) any.object
+                /*
+                // com.sun.star.uno.Any
+                def any = component.textTablesSupplier()?.textTables?.getByName(name) ?: null
+                any ? (XTextTable) any.object : null
+                */
 //            }
+            }
         }
     }
 
@@ -259,10 +263,8 @@ class OOoTextTableCategory {
     /**
      * Get content of a TextTable cell by using:
      * <pre>
-     * use (OOoTextTableCategory) {
-     *     odt["tablename!rowCol"]
-     * }
-     * </pre>
+     * use (OOoTextTableCategory) {*     odt["tablename!rowCol"]
+     *}* </pre>
      */
     static Object get(XTextTable textTable, String name) {
         Profile.time "OOoTextTableCategory.get(textTable=$textTable, name=$name)", {
@@ -290,13 +292,11 @@ class OOoTextTableCategory {
 
     /**
      * <pre>
-     * use (OOoTextTableCategory) {
-     *     table["$row$col"] = "value"
+     * use (OOoTextTableCategory) {*     table["$row$col"] = "value"
      *     table["tablename"] = String[][], List or Map:
      *           [["A1", "A2"], ["B1", "B2"]]
      *           [A1: "a1", A2: "a2", B1: "b1", B2: "B2"]
-     * }
-     * </pre>
+     *}* </pre>
      */
     static void set(XTextTable textTable, String name, Object value) {
         Profile.time "OOoTextTableCategory.set(textTable=$textTable, name=$name, value=$value)", {
@@ -331,6 +331,7 @@ class OOoTextTableCategory {
                 set(xTextTable, name, value)
             } catch (e) {
                 // Ignore
+                e.printStackTrace()
             }
         }
     }

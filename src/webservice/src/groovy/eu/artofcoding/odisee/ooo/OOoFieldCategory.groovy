@@ -9,6 +9,17 @@
 package eu.artofcoding.odisee.ooo
 
 import eu.artofcoding.odisee.helper.Profile
+import org.apache.tools.ant.taskdefs.Get
+import com.sun.star.text.XTextFieldsSupplier
+
+import static com.sun.star.uno.UnoRuntime.queryInterface
+import com.sun.star.text.XBookmarksSupplier
+
+import static com.sun.star.uno.UnoRuntime.queryInterface
+import com.sun.star.container.XNameAccess
+import com.sun.star.container.XEnumerationAccess
+import com.sun.star.util.XRefreshable
+import java.nio.charset.Charset
 
 /**
  * Category for working with Writer fields: userfields, set expressions.
@@ -135,7 +146,7 @@ class OOoFieldCategory {
                     def uf = component.getUserField(name)
                     //println "ODI-xxxx: OOoFieldCategory.setUserFieldContent($name): uf=${uf} content='${content}'"
                     //uf.uno(com.sun.star.beans.XPropertySet)
-                    uf?.setPropertyValue("Content", (content ?: '') as String)
+                    uf?.setPropertyValue('Content', content ?: '' as String)
                     //println "ODI-xxxx: OOoFieldCategory.setUserFieldContent($name): content='${component.getUserFieldContent(name)}'"
                 } catch (com.sun.star.beans.UnknownPropertyException upe) {
                     // If that failed with an UnknownPropertyException
@@ -195,7 +206,19 @@ class OOoFieldCategory {
         Profile.time "OOoFieldCategory.refreshTextFields", {
             use(UnoCategory) {
                 //println "OOoFieldCategory.refreshTextFields: ${component}"
-                component.textFieldsSupplier().textFields.uno(com.sun.star.util.XRefreshable).refresh()
+                def supplier = component.textFieldsSupplier()
+                def textfields = supplier.textFields
+                def xRefreshable = textfields.uno(com.sun.star.util.XRefreshable)
+                xRefreshable.refresh()
+                /*
+                // Get XTextFieldsSupplier interface
+                XTextFieldsSupplier xTextFieldsSupplier = queryInterface(XTextFieldsSupplier.class, component);
+                // Access the TextFieldMasters collections
+                XEnumerationAccess xEnumeratedFields = xTextFieldsSupplier.getTextFields();
+                // Afterwards we must refresh the textfields collection
+                XRefreshable xRefreshable = queryInterface(XRefreshable.class, xEnumeratedFields);
+                xRefreshable.refresh();
+                */
             }
         }
     }
