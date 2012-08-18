@@ -77,6 +77,15 @@ _check_exeutable ${SED}
 _check_exeutable ${RSYNC}
 
 #
+# Check .fonts directory
+#
+fonts=$HOME/.fonts
+if [ ! -e "${fonts}" ] # does not exist
+then
+    ln -s ${ODISEE_HOME}/var/deploy/font ${fonts} 
+fi
+
+#
 # Java
 #
 
