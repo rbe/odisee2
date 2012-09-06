@@ -139,7 +139,7 @@ class StorageService {
         if (document) {
             // Revision: lookup if we have a document with same name and filename
             List<OooDocument> existingTemplates = OooDocument.findAllByNameAndFilename(document.name, document.filename)
-            int highestRevisionNumber = (int) existingTemplates.inject(0) { int o, OooDocument n ->
+            long highestRevisionNumber = (long) existingTemplates.inject(0) { long o, OooDocument n ->
                 n.revision > o ? n.revision : o
             }
             document.revision = highestRevisionNumber + 1
