@@ -63,18 +63,27 @@ esac
 # Any OS
 SED=${SED:-$(which sed)}
 RSYNC=${RSYNC:-$(which rsync)}
+SUDO=${SUDO:-$(which sudo)}
 
 # Check needed executables
 _check_exeutable() {
-    local e=$1
-    if [ -z "${e}" -o ! -x ${e} ]
+    local n=$1
+    local e=$2
+    local msg=""
+    if [ -n "${e}" ]
     then
-        echo "Needed executable ${e} not found or not executable by $(whoami)."
-        exit 1
+        if [ ! -x ${e} ]
+        then
+            msg="ODI-xxx: Needed executable '${n}' not executable by $(whoami)."
+        fi
+    else
+        msg="ODI-xxx: Needed executable '${n}' not found"
     fi
+    [ -n "${msg}" ] && echo ${msg}
 }
-_check_exeutable ${SED}
-_check_exeutable ${RSYNC}
+_check_exeutable sed ${SED}
+_check_exeutable rsync ${RSYNC}
+_check_exeutable sudo ${SUDO}
 
 #
 # Check .fonts directory
