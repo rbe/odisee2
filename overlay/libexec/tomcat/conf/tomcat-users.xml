@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
+<tomcat-users>
+    <user username="odisee" password="odisee" roles="odisee,tomcat,manager,manager-gui,admin-gui"/>
+</tomcat-users>
