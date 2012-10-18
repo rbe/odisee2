@@ -415,12 +415,12 @@ setup_inst() {
         ;;
     esac
     OOO_UNOPKG=${OOO_PROGRAM}/unopkg
-    #
-    OOOJ=${OOO_HOME}/basis-link/ure-link/share/java
-    [ ! -d ${OOOJ} ] && echo "ODI-xxxx: Directory ${OOOJ} does not exist."
-    OOOU=${OOO_HOME}/basis-link/program/classes
-    [ ! -d ${OOOU} ] && echo "ODI-xxxx: Directory ${OOOU} does not exist."
-    OOOL=${OOO_HOME}/basis-link/program:${OOO_HOME}/basis-link/program/components:${OOO_HOME}/basis-link/ure-link/lib
+    # TODO Still needed?
+    ####OOOJ=${OOO_HOME}/basis-link/ure-link/share/java
+    ####[ ! -d ${OOOJ} ] && echo "ODI-xxxx: Directory ${OOOJ} does not exist."
+    ####OOOU=${OOO_HOME}/basis-link/program/classes
+    ####[ ! -d ${OOOU} ] && echo "ODI-xxxx: Directory ${OOOU} does not exist."
+    ####OOOL=${OOO_HOME}/basis-link/program:${OOO_HOME}/basis-link/program/components:${OOO_HOME}/basis-link/ure-link/lib
     # TODO Reset IFS
     #    IFS=:
     #    for d in ${OOOL}
@@ -614,11 +614,11 @@ start_instance() {
                 cd ${INSTCFG[home]}/program # 1>/dev/null 2>&1
             ;;
         esac
-	bin=soffice
+        bin=soffice
         if [ -x ${bin} ]
         then
             # OpenOffice upto 3.4 ./${bin} -env:UserInstallation="file:///${INSTCFG[data]}" -accept="${sock}" ${opts} &
-	    # LibreOffice
+            # LibreOffice
             ./${bin} -env:UserInstallation="file:///${INSTCFG[data]}" --accept="${sock}" ${opts} &
         else
             echo "ODI-xxxx: Cannot start, soffice executable not found."
@@ -662,10 +662,10 @@ stop_instance() {
     get_inst_status ${inst}
     echo -n "Stopping OpenOffice instance '${inst}'"
     [ x"${force}" = x"true" ] && echo -n " (FORCED)"
-    echo -n ": "
+    echo -n ":"
     if [ x"${INSTSTAT[status]}" = x"OFFLINE" ]
     then
-        echo "ODI-xxxx: Instance '${inst}' already stopped."
+        echo " ODI-xxxx: Instance '${inst}' already stopped."
         return
     fi
     if [ x"${cmdopt[z]}" =  x"true" ]
@@ -676,7 +676,7 @@ stop_instance() {
         kill_instance ${inst} false
     elif [[ x"${INSTSTAT[status]}" == xONLINE,* ]]
     then
-        echo "ODI-xxxx: Cannot stop OpenOffice instance '${inst}': invalid instance status (${INSTSTAT[status]}). Use -z to force this operation."
+        echo " ODI-xxxx: Cannot stop OpenOffice instance '${inst}': invalid instance status (${INSTSTAT[status]}). Use -z to force this operation."
     fi
 }
 
