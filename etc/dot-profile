@@ -1,5 +1,5 @@
 # Set Odisee home
-# Use $HOME or /opt/odisee (Linux), /usr/local/odisee (*BSD)
+# Use $HOME or e.g. /opt/odisee on Linux, /usr/local/odisee on *BSD
 ODISEE_HOME=$HOME
 export ODISEE_HOME
 # Load environment
