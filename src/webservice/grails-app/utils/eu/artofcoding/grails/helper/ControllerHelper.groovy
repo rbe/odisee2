@@ -22,11 +22,12 @@ class ControllerHelper {
      *
      * @param arg
      */
-    static void error500(arg) {
+    static void sendNothing(arg) {
         try {
             arg.log.error arg.message, arg.exception
             HttpServletResponse response = arg.response
-            response.sendError(500, arg.message)
+            response.reset()
+            //response.sendError(500, arg.message)
         } catch (e) {
             arg.log.error 'ODI-xxxx: Could not send error message to client', e
         }
