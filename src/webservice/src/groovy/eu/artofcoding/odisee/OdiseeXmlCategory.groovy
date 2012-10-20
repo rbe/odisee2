@@ -366,7 +366,6 @@ class OdiseeXmlCategory {
                 // Release connection to pool
                 //oooConnectionManager.release(oooConnection)
                 if (oooConnection) {
-                    println 'here we go'
                     officeConnectionFactory.repositConnection(oooConnection)
                 }
             }
