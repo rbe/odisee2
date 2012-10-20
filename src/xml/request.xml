@@ -1,0 +1,140 @@
+<!--
+  ~ Odisee(R)
+  ~ Copyright (C) 2005-2010 Informationssysteme Ralf Bensmann.
+  ~ Copyright (C) 2011-2012 art of coding UG (haftungsbeschränkt).
+  ~
+  ~ Alle Rechte vorbehalten. Nutzung unterliegt Lizenzbedingungen.
+  ~ All rights reserved. Use is subject to license terms.
+  -->
+<odisee>
+    <!--
+        Process result of all request(s): this are one or more generated documents.
+    -->
+    <post-process>
+        <instructions>
+            <!--
+                Merge result of all requests or previous instruction into one file.
+            -->
+            <action type="merge-results">
+                <output filename=""/>
+            </action>
+            <!--
+                Merge result of all requests or previous instruction with another file (PDF).
+            -->
+            <action type="merge-with">
+                <input filename=""/>
+                <output filename=""/>
+            </action>
+            <!--
+                Mail result of all requests or previous instruction.
+            -->
+            <action type="mail">
+                <subject></subject>
+                <to></to>
+                <to></to>
+                <cc></cc>
+                <body></body>
+            </action>
+            <!--
+                Compress result.
+            -->
+            <action type="compress">
+            </action>
+            <!--
+                Execute program with result of all requests or previous instruction.
+            -->
+            <action type="program">
+            </action>
+        </instructions>
+    </post-process>
+    <!--
+        Name of request, used as filename when sending result back through HTTP.
+    -->
+    <request name="my-request">
+        <!--
+            The Odisee server group.
+            Optional.
+        -->
+        <group name="group0"/>
+        <!--
+             Specify template to use.
+             Mandatory.
+             name:           Its filename w/o extension (.ott).
+             revision:       Use LATEST or certain revision (number).
+             outputFormat:   Save in what format? Specify file extension (odt, pdf, doc).
+             pre-save-macro: Execute macro just before saving file.
+        -->
+        <template name="my-template" revision="LATEST" outputFormat="pdf" pre-save-macro="Library.Module.Name"/>
+        <!--
+            Should we archive the generated document?
+            Optional
+            database: In database as BLOB? Default is false.
+            files:    In filesystem ($ODISEE_HOME/var/tmp/document)? Default is false.
+        -->
+        <archive database="false" files="true"/>
+        <!--
+            Instructions, mandatory.
+            These instructions are executed in order.
+        -->
+        <instructions>
+            <!--
+                Set value in userfield.
+                name:       Name of userfield.
+                post-macro: Execute macro after value was set.
+            -->
+            <userfield name="hello">world</userfield>
+            <!--
+                Insert text in table.
+                name:       Name of table and position of cell: tablename!<column><row>, e.g. tablename!A1.
+                post-macro: Execute macro after value was set.
+            -->
+            <userfield name="Tabelle1!A1" post-macro="">Tabelle 1, Zelle A1</userfield>
+            <!--
+                Set cell column width.
+            -->
+            <userfield name="align_Tabelle1"></userfield>
+            <!--
+                Align table.
+            -->
+            <userfield name="align_Tabelle1"></userfield>
+            <!--
+                Insert text at bookmark.
+                name:       Name of bookmark.
+                post-macro: Execute macro after value was set.
+            -->
+            <bookmark name="Bookmark1">Text bei Bookmark1</bookmark>
+            <!--
+                Insert autotext at (bookmark).
+                group:      Name of autotext group, the container
+                name:       Name of autotext
+                atend:      Insert autotext at end of text/document
+            -->
+            <autotext group="" name="" bookmark="" atend=""/>
+            <!--
+                Execute a macro.
+                name:       Name of the macro including its library, e.g. Standard.Module1.myMacro
+                location:   document, application
+                language:   Basic
+                parameter:  List of parameters, ordered by arity
+            -->
+            <macro name="" location="" language="">
+                <parameter value=""/>
+                <parameter value=""/>
+            </macro>
+        </instructions>
+        <!--
+            Process result/the generated document.
+        -->
+        <post-process>
+            <instructions>
+                <!--
+                    Merge result of request or previous instruction with another file (PDF).
+                -->
+                <action type="merge-with">
+                    <result-placeholder/>
+                    <input filename=""/>
+                </action>
+            </instructions>
+        </post-process>
+    </request>
+</odisee>
