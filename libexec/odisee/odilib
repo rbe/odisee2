@@ -831,8 +831,7 @@ start_appsrv() {
         cd ${ODISEE_LOG}
         # Start Tomcat
         export JAVA_HOME
-        export JAVA_OPTS
-        nohup ${CATALINA_BASE}/bin/startup.sh 1>tomcat.log 2>&1
+        nohup ${CATALINA_BASE}/bin/catalina.sh start 1>tomcat.log 2>&1
     fi
 }
 
@@ -841,7 +840,7 @@ start_appsrv() {
 #
 stop_appsrv() {
     echo "Stopping Odisee Service"
-    ${CATALINA_BASE}/bin/shutdown.sh 1>${ODISEE_LOG}/tomcat.log 2>&1
+    ${CATALINA_BASE}/bin/catalina.sh stop 5 -force 1>${ODISEE_LOG}/tomcat.log 2>&1
 }
 
 #
