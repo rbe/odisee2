@@ -64,6 +64,7 @@ esac
 SED=${SED:-$(which sed)}
 RSYNC=${RSYNC:-$(which rsync)}
 SUDO=${SUDO:-$(which sudo)}
+CURL=${CURL:-$(which curl)}
 
 # Check needed executables
 _check_exeutable() {
@@ -84,6 +85,8 @@ _check_exeutable() {
 _check_exeutable sed ${SED}
 _check_exeutable rsync ${RSYNC}
 _check_exeutable sudo ${SUDO}
+_check_exeutable sudo ${CURL}
+unset -f _check_executable
 
 #
 # Check .fonts directory
