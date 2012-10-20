@@ -326,13 +326,15 @@ class OOoTextTableCategory {
     static void set(XComponent component, String name, Object value) {
         Profile.time "OOoTextTableCategory.set(component=$component, name=$name, value=$value)", {
             Map m = Coordinate.parseCoordinate(name)
-            try {
+            //try {
                 XTextTable xTextTable = getTextTable(component, m.table)
                 set(xTextTable, name, value)
+            /*
             } catch (e) {
                 // Ignore
                 e.printStackTrace()
             }
+            */
         }
     }
 
