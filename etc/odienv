@@ -124,12 +124,6 @@ ANT_HOME=${ANT_HOME:-$ODISEE_LIBEXEC/ant}
 # Apache Tomcat
 CATALINA_BASE=${CATALINA_BASE:-$ODISEE_LIBEXEC/tomcat}
 
-# JVM options
-ODISEE_JVM_MEMORY="-Xms64m -Xmx128m -XX:MaxPermSize=256m"
-ODISEE_JVM_GC="-XX:+CMSClassUnloadingEnabled" # -XX:+CMSPermGenSweepingEnabled
-ODISEE_TOMCAT_OPTS="-Dorg.apache.catalina.loader.WebappClassLoader.ENABLE_CLEAR_REFERENCES=false -Ddisable.auto.recompile=true"
-JAVA_OPTS="-server ${ODISEE_JVM_MEMORY} ${ODISEE_JVM_GC} -Djava.awt.headless=true ${ODISEE_TOMCAT_OPTS}"
-
 #
 # Watchdog.
 #
