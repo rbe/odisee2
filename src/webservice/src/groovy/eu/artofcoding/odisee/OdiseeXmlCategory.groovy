@@ -237,7 +237,7 @@ class OdiseeXmlCategory {
         String documentBasename = null
         if (request.'@name') {
             documentBasename = request.'@name'.toString()
-            byte[] requestNameAsUTF8 = request.'@name'.getBytes('UTF-8')
+            byte[] requestNameAsUTF8 = documentBasename.getBytes('UTF-8')
             documentBasename = new String(requestNameAsUTF8, Charset.forName('UTF-8'))
         } else {
             documentBasename = "${arg.template.name.split('\\.')[0..-2].join('.')}-id${arg.id}"
@@ -332,7 +332,7 @@ class OdiseeXmlCategory {
 //        while (!output && result.retries < 3) {
             try {
                 // Get connection to OpenOffice
-                String group = request.ooo.'@group'.toString()
+                String group = 'group0' // TODO request.ooo.'@group'.toString()
                 //oooConnection = oooConnectionManager.acquire(group)
                 oooConnection = officeConnectionFactory.fetchConnection(false)
                 if (!oooConnection) {
