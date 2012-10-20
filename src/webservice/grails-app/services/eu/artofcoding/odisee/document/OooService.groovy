@@ -14,10 +14,9 @@ import eu.artofcoding.odisee.OdiseePath
 import eu.artofcoding.odisee.OdiseeWebserviceConstant
 import eu.artofcoding.odisee.OdiseeXmlCategory
 import eu.artofcoding.odisee.helper.OdiseeConstant
-import eu.artofcoding.odisee.ooo.server.OOoConnectionManager
+import eu.artofcoding.odisee.server.OfficeConnectionFactory
 import groovy.xml.dom.DOMCategory
 import org.springframework.beans.factory.InitializingBean
-import eu.artofcoding.odisee.server.OfficeConnectionFactory
 
 /**
  * A service that is a client for the OOo service. Provides access to standalone, embedded or webservice
@@ -251,6 +250,7 @@ class OooService implements InitializingBean {
             OooDocument oooDocument = null
             arg.result.output.each { k, v ->
                 try {
+                    // TODO Move feature into enterprise version of Odisee
                     oooDocument = storageService.addDocument(
                             instanceOf: [name: arg.template, revision: arg.revision],
                             filename: k.name,
@@ -328,7 +328,7 @@ class OooService implements InitializingBean {
      * @param arg Map: xml: an XML request (see request.xsd in Odisee).
      * @return List with generated OooDocument instance(s).
      */
-    List<OooDocument> generateDocument(Map arg) {
+    Map generateDocument(Map arg) {
         // We need an Odisee XML request as a DOM
         if (!arg.xml) {
             throw new OdiseeException('There is no XML request!')
@@ -336,12 +336,13 @@ class OooService implements InitializingBean {
         // Generate unique request ID
         arg.uniqueRequestId = UUID.randomUUID()
         // Set request directory
-        arg.requestDir = new File(OdiseePath.DOCUMENT_DIR, arg.uniqueRequestId.toString())
+        arg.requestDir = new File("${OdiseePath.DOCUMENT_DIR}/${arg.principal.name}", arg.uniqueRequestId.toString())
         arg.requestDir.mkdirs()
         // Save XML request
         storageService.saveRequestToDisk(arg, OdiseeWebserviceConstant.MINUS_ONE)
         // The result document(s)
         arg.document = []
+        try {
         // Process request(s)
         use(DOMCategory) {
             arg.xml.request.eachWithIndex { request, i ->
@@ -372,14 +373,19 @@ class OooService implements InitializingBean {
         }
         // TODO Post-process all requests
         //postProcessAll(arg)
+        } catch (e) {
+            log.error 'ODI-xxxx: Exception occured during request processing', e
+        } finally {
         // Clean up working directory
         // TODO Decouple this action from request processing (through a message queue), so this method is not called with every request and does not increase latency
         cleanupWorkingDirectory(arg)
+        }
         // Return result
         if (log.debugEnabled) {
             log.debug "ODI-xxxx: Generated ${arg.document?.size() ?: 0} document(s)"
         }
-        arg.document
+        // arg == Map, document == List<OooDocument>
+        [arg: arg, document: arg.document]
     }
 
 }

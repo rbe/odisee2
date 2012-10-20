@@ -63,7 +63,7 @@ class ControllerHelper {
             def d = document.find {
                 it.mimeType?.name == arg.params.streamtype || it.filename.endsWith(arg.params.streamtype)
             }
-            contentType = d.mimeType.browser
+            //contentType = d.mimeType.browser
             bytes = d.toByteArray()
             contentLength = bytes.length
             contentName = d.filename ?: d.name
@@ -74,6 +74,16 @@ class ControllerHelper {
         }
         // Stream to client
         if (bytes) {
+            switch (contentName) {
+                case { it.endsWith('.odt') }:
+                    contentType = OdiseeWebserviceConstant.MIME_TYPE_ODT
+                    break
+                case { it.endsWith('.pdf') }:
+                    contentType = OdiseeWebserviceConstant.MIME_TYPE_PDF
+                    break
+                default:
+                    contentType = OdiseeWebserviceConstant.MIME_TYPE_OCTET_STREAM
+            }
             // Content type and length
             response.contentType = contentType
             if (contentLength) {

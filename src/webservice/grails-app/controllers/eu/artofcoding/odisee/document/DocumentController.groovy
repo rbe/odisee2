@@ -78,36 +78,19 @@ class DocumentController {
     }
 
     /**
+     * TODO Enterprise feature
      * Add a document to document service.
-     */
-    def add() {
-        if (params.name && params.url) {
-            storageService.addDocument(file: params.name, data: params.url)
-            redirect(action: 'list')
-        } else if (params.file) {
-            def f = request.getFile('file')
+     def add() {if (params.name && params.url) {storageService.addDocument(file: params.name, data: params.url)
+     redirect(action: 'list')} else if (params.file) {def f = request.getFile('file')
             storageService.addDocument(filename: f.originalFilename, data: f.bytes)
-            redirect(action: 'list')
-        }
-    }
+     redirect(action: 'list')}}*/
 
     /**
+     * TODO Enterprise feature
      * Remove a document from document service.
-     */
-    def remove() {
-        // Remove document
-        try {
-            if (params.id) {
-                storageService.remove(id: params.id)
-            } else {
-                log.error "ODI-xxxx: Missing parameter 'id' to remove a document"
-            }
-        } catch (e) {
-            log.error "ODI-xxxx: Cannot remove document #${params.id}", e
-        }
-        // Redirect to list
-        redirect(action: 'index')
-    }
+     def remove() {// Remove document
+     try {if (params.id) {storageService.remove(id: params.id)} else {log.error "ODI-xxxx: Missing parameter 'id' to remove a document"}} catch (e) {log.error "ODI-xxxx: Cannot remove document #${params.id}", e}// Redirect to list
+     redirect(action: 'index')}*/
 
     /**
      * Generate d document with values from XML request and an OpenOffice template.
@@ -120,8 +103,8 @@ class DocumentController {
                 // Stop processing time
                 long startWallTime = System.currentTimeMillis()
                 try {
-                    List<OooDocument> documents = odiseeService.generateWithXml(request.XML)
-                    streamRequestedDocument(params, documents)
+                    Map result = odiseeService.generateWithXml(request.userPrincipal, request.XML)
+                    streamRequestedDocument(params, result)
                 } catch (e) {
                     error.message = 'ODI-xxxx: Document generation failed'
                     error.exception = e

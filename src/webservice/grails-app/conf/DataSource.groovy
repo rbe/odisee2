@@ -26,21 +26,27 @@ hibernate {
 
 environments {
     development {
+        /*
         dataSource {
             dbCreate = 'update' // one of 'create', 'create-drop','update'
-            url = 'jdbc:h2:file:devDb'
+            url = 'jdbc:h2:mem:devDb'
         }
+        */
     }
     test {
+        /*
         dataSource {
             dbCreate = 'update'
-            url = 'jdbc:h2:file:testDb'
+            url = 'jdbc:h2:mem:testDb'
         }
+        */
     }
     production {
+        /*
         dataSource {
             dbCreate = 'update'
-            url = 'jdbc:h2:file:prodDb'
+            url = 'jdbc:h2:mem:prodDb'
         }
+        */
     }
 }

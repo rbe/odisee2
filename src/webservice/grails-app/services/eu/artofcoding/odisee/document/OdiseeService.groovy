@@ -11,6 +11,7 @@ package eu.artofcoding.odisee.document
 import eu.artofcoding.grails.helper.XmlHelper
 
 import org.w3c.dom.Element
+import java.security.Principal
 
 /**
  * A service for Odisee.
@@ -66,10 +67,10 @@ class OdiseeService {
      * @param arg May be a XmlSlurped document (via request.XML) or a String.
      * @return List List with generated documents.
      */
-    List<OooDocument> generateWithXml(arg) {
+    Map generateWithXml(Principal principal, arg) {
         // Build Odisee XML request using StreamingMarkupBuilder
         Element documentElement = XmlHelper.asElement(arg)
-        oooService.generateDocument(xml: documentElement)
+        oooService.generateDocument(principal: principal, xml: documentElement)
     }
 
 }

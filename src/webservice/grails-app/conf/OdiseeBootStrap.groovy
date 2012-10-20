@@ -84,7 +84,8 @@ class OdiseeBootStrap {
      *
      */
     def init = { servletContext ->
-        createMimeTypes()
+        // TODO Move feature into enterprise version of Odisee
+        //createMimeTypes()
         println """
            _ \\      |_)               
           |   |  _` | |  __|  _ \\  _ \\
