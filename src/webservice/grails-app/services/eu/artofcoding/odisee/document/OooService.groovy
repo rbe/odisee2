@@ -207,7 +207,7 @@ class OooService implements InitializingBean {
                 // This should never happen; except all OOo instances have crashed.
                 String group = '?'
                 try {
-                    group = request.ooo[0]?.'@group'
+                    group = 'group0' // TODO request.ooo[0]?.'@group'
                 } catch (e) {
                     // ignore
                 }
@@ -343,42 +343,42 @@ class OooService implements InitializingBean {
         // The result document(s)
         arg.document = []
         try {
-        // Process request(s)
-        use(DOMCategory) {
-            arg.xml.request.eachWithIndex { request, i ->
-                // TODO Process requests asnychronously
-                // Remember which request should be processed now
-                arg.activeIndex = i
-                if (i > 0) {
-                    // Reset all request-specific map keys
-                    [
-                            OdiseeWebserviceConstant.S_ID, OdiseeWebserviceConstant.S_TEMPLATE, OdiseeWebserviceConstant.S_REVISION,
-                            'documentName',
-                            'templateDir', 'documentDir',
-                            'templateFile'
-                    ].each {
-                        arg.remove(it)
+            // Process request(s)
+            use(DOMCategory) {
+                arg.xml.request.eachWithIndex { request, i ->
+                    // TODO Process requests asnychronously
+                    // Remember which request should be processed now
+                    arg.activeIndex = i
+                    if (i > 0) {
+                        // Reset all request-specific map keys
+                        [
+                                OdiseeWebserviceConstant.S_ID, OdiseeWebserviceConstant.S_TEMPLATE, OdiseeWebserviceConstant.S_REVISION,
+                                'documentName',
+                                'templateDir', 'documentDir',
+                                'templateFile'
+                        ].each {
+                            arg.remove(it)
+                        }
                     }
+                    //
+                    prepareArg(arg)
+                    // Save template to disk
+                    storageService.saveTemplate(arg)
+                    // Check values for template
+                    checkPaths(arg)
+                    // Process request and result
+                    processSingleRequest(arg)
+                    processSingleResult(arg)
                 }
-                //
-                prepareArg(arg)
-                // Save template to disk
-                storageService.saveTemplate(arg)
-                // Check values for template
-                checkPaths(arg)
-                // Process request and result
-                processSingleRequest(arg)
-                processSingleResult(arg)
             }
-        }
-        // TODO Post-process all requests
-        //postProcessAll(arg)
+            // TODO Post-process all requests
+            //postProcessAll(arg)
         } catch (e) {
             log.error 'ODI-xxxx: Exception occured during request processing', e
         } finally {
-        // Clean up working directory
-        // TODO Decouple this action from request processing (through a message queue), so this method is not called with every request and does not increase latency
-        cleanupWorkingDirectory(arg)
+            // Clean up working directory
+            // TODO Decouple this action from request processing (through a message queue), so this method is not called with every request and does not increase latency
+            cleanupWorkingDirectory(arg)
         }
         // Return result
         if (log.debugEnabled) {
