@@ -25,3 +25,6 @@ build/
 target/
 dist/
 test/report/
+src/webservice/src/templates/scaffolding
+src/webservice/src/templates/testing
+src/webservice/src/templates/artifacts
