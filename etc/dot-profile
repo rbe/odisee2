@@ -1,7 +1,0 @@
-# Set Odisee home
-# Use $HOME or e.g. /opt/odisee on Linux, /usr/local/odisee on *BSD
-ODISEE_HOME=$HOME
-export ODISEE_HOME
-# Load environment
-# For local settings edit $ODISEE_HOME/etc/local.odienv
-. ${ODISEE_HOME}/etc/odienv
