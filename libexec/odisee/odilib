@@ -955,8 +955,8 @@ sync_from_ramdisk() {
 show_copyr() {
     echo "Odisee(R)"
     echo ""
-    echo "Copyright (C) 2005-2010 Informationssysteme Ralf Bensmann."
     echo "Copyright (C) 2011-2012 art of coding UG (haftungsbeschränkt)."
+    echo "Copyright (C) 2005-2010 Informationssysteme Ralf Bensmann."
     echo ""
     echo "Alle Rechte vorbehalten. Nutzung unterliegt Lizenzbedingungen."
     echo "All rights reserved. Use is subject to license terms."
