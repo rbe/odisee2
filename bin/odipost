@@ -1,0 +1,97 @@
+#!/usr/bin/env bash
+# 
+# Odisee(R)
+# Copyright (C) 2005-2010 Informationssysteme Ralf Bensmann.
+# Copyright (C) 2011-2012 art of coding UG (haftungsbeschränkt).
+#
+# Alle Rechte vorbehalten. Nutzung unterliegt Lizenzbedingungen.
+# All rights reserved. Use is subject to license terms.
+# 
+# Created by: rbe
+# 
+
+# Determine script directory
+case $0 in
+    ./*) SCRIPT_DIR=${PWD} ;;
+    /*) SCRIPT_DIR=${0%/*} ;;
+    */*) SCRIPT_DIR=${PWD}/${0%/*} ;;
+    *) SCRIPT_DIR=${PWD} ;;
+esac
+# Read configuration
+. ${SCRIPT_DIR}/../etc/odienv
+# Odisee library
+. ${ODISEE_LIBEXEC}/odisee/odilib
+
+set -o nounset
+
+declare curlrv
+declare requestfile
+declare tracefile
+declare outputfile
+declare host
+declare port
+declare user
+declare trace
+
+odi_post() {
+    # curl options
+    local curlopts
+    curlopts="-s"
+    # Trace file
+    if [ "${trace}" = "true" ]
+    then
+        tracefile="output/${requestfile}_trace.log"
+        curlopts="${curlopts} --trace-ascii ${tracefile}"
+    fi
+    # Request XML file
+    [ -n "${requestfile}" ] && curlopts="${curlopts} -d @${requestfile}"
+    # Output
+    [ -n "${outputfile}" ] && curlopts="${curlopts} -o ${outputfile}"
+    # Host, port, URL, authentication
+    [ -n "${user}" ] && curlopts="${curlopts} -digest -u \"${user}\""
+    local url="${host}:${port}/odisee/document/generate/1"
+    curlopts="${curlopts} -H \"Content-Type: text/xml\" -X POST ${url}"
+    # Execute curl
+    eval curl -v ${curlopts}
+    curlrv=$?
+}
+
+# Defaults
+trace=false
+host=127.0.0.1
+port=80
+user="odisee:odisee"
+requestfile=
+outputfile=
+tracefile=
+
+# Parse command line options
+while getopts ":f:h:o:p:t:u:" opt
+do
+    case "$opt" in
+        f) requestfile=${OPTARG} ;;
+        h) host=${OPTARG} ;;
+        o) outputfile=${OPTARG} ;;
+        p) port=${OPTARG} ;;
+        t) trace=true ;;
+        u) user=${OPTARG} ;;
+    esac
+done
+
+#
+if [ -n "${host}" -a -n "${requestfile}" ]
+then
+    # Output file
+    [ -z "${outputfile}" ] && outputfile="${requestfile}.bin"
+    odi_post
+    exit ${curlrv}
+else
+    echo "usage: $0 [-h <host>] [-p <port>] [-t] [-u <user:password>] -f <requestfile.xml> [-o <outputfile>]"
+    echo "       defaults:"
+    echo "       -h host = 127.0.0.1"
+    echo "       -p port = 80"
+    echo "       -u user = odisee:odisee"
+    echo "       -t trace = false"
+    echo "       -o outputfile = <resultfile.xml>.bin"
+    exit 1
+fi
