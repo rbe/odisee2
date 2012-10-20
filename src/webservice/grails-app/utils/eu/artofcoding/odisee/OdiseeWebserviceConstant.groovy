@@ -21,5 +21,8 @@ class OdiseeWebserviceConstant {
     public static final String S_PDF = 'pdf'
     public static final String S_NOSTREAM = 'nostream'
     public static final int MINUS_ONE = -1
+    public static final String MIME_TYPE_OCTET_STREAM = 'application/octet-stream'
+    public static final String MIME_TYPE_ODT = 'application/vnd.oasis.opendocument.text'
+    public static final String MIME_TYPE_PDF = 'application/pdf'
 
 }

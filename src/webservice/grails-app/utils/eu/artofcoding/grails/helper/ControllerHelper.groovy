@@ -11,16 +11,12 @@ package eu.artofcoding.grails.helper
 import eu.artofcoding.odisee.document.OooDocument
 import java.security.SecureRandom
 import javax.servlet.http.HttpServletResponse
+import eu.artofcoding.odisee.OdiseeWebserviceConstant
 
 /**
  * A helper for controllers.
  */
 class ControllerHelper {
-
-    /**
-     * Send HTTP 500 status and message.
-     */
-    private static final String OCTET_STREAM = 'application/octet-stream'
 
     /**
      *
@@ -49,7 +45,7 @@ class ControllerHelper {
         String contentName
         // OooDocument
         if (document instanceof OooDocument) {
-            contentType = document.mimeType.browser ?: OCTET_STREAM
+            //contentType = document.mimeType.browser ?: OdiseeWebserviceConstant.MIME_TYPE_OCTET_STREAM
             contentLength = document.data?.length() ?: document.bytes?.length
             contentName = document.filename
             if (document.data) {
@@ -58,7 +54,7 @@ class ControllerHelper {
                 bytes = document.bytes
             }
         } else if (document instanceof byte[]) { // byte[]
-            contentType = OCTET_STREAM
+            //contentType = OdiseeWebserviceConstant.MIME_TYPE_OCTET_STREAM
             contentLength = document.length
             contentName = "file_${new SecureRandom().nextInt(System.currentTimeMillis())}"
             bytes = document
