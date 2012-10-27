@@ -48,7 +48,7 @@ odi_post() {
     # Output
     [ -n "${outputfile}" ] && curlopts="${curlopts} -o ${outputfile}"
     # Host, port, URL, authentication
-    [ -n "${user}" ] && curlopts="${curlopts} -digest -u \"${user}\""
+    [ -n "${user}" ] && curlopts="${curlopts} --digest -u \"${user}\""
     local url="${host}:${port}/odisee/document/generate/1"
     curlopts="${curlopts} -H \"Content-Type: text/xml\" -X POST ${url}"
     # Execute curl
