@@ -68,7 +68,7 @@ public class OfficeConnectionFactory {
             } else {
                 officeConnection = connections.take();
             }
-            dumpNextConnection("fetch", officeConnection);
+            //dumpNextConnection("fetch", officeConnection);
         } catch (InterruptedException e) {
             // ignore
         }
@@ -103,7 +103,7 @@ public class OfficeConnectionFactory {
         int i = 0;
         while (i++ < 3 && !connectionWasPutBack) {
             connectionWasPutBack = connections.offer(officeConnection);
-            dumpNextConnection("reposit", officeConnection);
+            //dumpNextConnection("reposit", officeConnection);
         }
         if (!connectionWasPutBack) {
             throw new OdiseeServerException("[group=" + groupname + "] Could not reposit connection, I tried it more than once, sorry.");
