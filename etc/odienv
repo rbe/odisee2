@@ -33,8 +33,8 @@ fi
 
 # Odisee
 ODISEE_LIBEXEC=${ODISEE_HOME}/libexec
-ODISEE_CONF=${ODISEE_HOME}/etc
-ODISEE_INST=${ODISEE_CONF}/odiinst
+ODISEE_ETC=${ODISEE_HOME}/etc
+ODISEE_INST=${ODISEE_ETC}/odiinst
 ODISEE_OS_LIB=${ODISEE_LIBEXEC}/${ODISEE_OS}
 ODISEE_VAR=${ODISEE_HOME}/var
 ODISEE_LOG=${ODISEE_VAR}/log
@@ -143,7 +143,7 @@ ODISEE_EXT_VND="vnd.artofcoding.odisee.Odisee"
 #
 
 # Odisee
-export ODISEE_CONF
+export ODISEE_ETC
 export ODISEE_INST
 export ODISEE_VAR
 export ODISEE_LOG
@@ -162,4 +162,4 @@ PATH=${ODISEE_HOME}/bin:${ODISEE_HOME}/libexec/${ODISEE_OS}/${ODISEE_ARCH}/bin:$
 export PATH
 
 # Include local configuration
-. ${ODISEE_CONF}/local.odienv
+. ${ODISEE_ETC}/local.odienv
