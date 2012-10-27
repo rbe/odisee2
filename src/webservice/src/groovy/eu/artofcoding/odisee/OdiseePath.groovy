@@ -45,7 +45,7 @@ class OdiseePath {
      * Variable data directory for Odisee.
      */
     static final File ODISEE_VAR
-    static final File ODISEE_VAR_TMP
+    static final File ODISEE_TMP
 
     /**
      * Template directory.
@@ -78,22 +78,28 @@ class OdiseePath {
         ODISEE_DEPLOY.mkdirs()
         //
         // ODISEE_VAR
-        String envOdiseeVar = System.getenv(OdiseeConstant.S_ODISEE_TMP)
+        String envOdiseeVar = System.getenv(OdiseeConstant.S_ODISEE_VAR)
         if (envOdiseeVar) {
             ODISEE_VAR = new File(envOdiseeVar).absoluteFile
-            ODISEE_VAR_TMP = new File(envOdiseeVar).absoluteFile
         } else {
             ODISEE_VAR = new File(ODISEE_HOME, OdiseeConstant.S_VAR).absoluteFile
-            ODISEE_VAR_TMP = new File(ODISEE_HOME, OdiseeConstant.S_VAR_TMP).absoluteFile
         }
         ODISEE_VAR.mkdirs()
+        //
+        // ODISEE_TMP
+        String envOdiseeTmp = System.getenv(OdiseeConstant.S_ODISEE_TMP)
+        if (envOdiseeTmp) {
+            ODISEE_TMP = new File(ODISEE_HOME, OdiseeConstant.S_VAR_TMP).absoluteFile
+        } else {
+            ODISEE_TMP = new File(ODISEE_HOME, OdiseeConstant.S_VAR_TMP).absoluteFile
+        }
         //
         // Templates
         TEMPLATE_DIR = new File(ODISEE_VAR, OdiseeConstant.S_TEMPLATE)
         TEMPLATE_DIR.mkdir()
         //
         // Documents
-        DOCUMENT_DIR = new File(ODISEE_VAR_TMP, OdiseeConstant.S_DOCUMENT)
+        DOCUMENT_DIR = new File(ODISEE_VAR, OdiseeConstant.S_DOCUMENT)
         DOCUMENT_DIR.mkdir()
         //
         dumpEnv()
@@ -105,11 +111,15 @@ class OdiseePath {
         println "  ODISEE_HOME   =${ODISEE_HOME}"
         println "  ODISEE_DEPLOY =${ODISEE_DEPLOY}"
         println "  ODISEE_VAR    =${ODISEE_VAR}"
-        println "  ODISEE_TMP    =${ODISEE_VAR_TMP}"
+        println "  ODISEE_TMP    =${ODISEE_TMP}"
         println "  TEMPLATE_DIR  =${TEMPLATE_DIR}"
         println "  DOCUMENT_DIR  =${DOCUMENT_DIR}"
-        println "  ODISEE_DEBUG  =${ODISEE_DEBUG}"
-        println "  ODISEE_PROFILE=${ODISEE_PROFILE}"
+        if (ODISEE_DEBUG) {
+            println "  ODISEE_DEBUG  =${ODISEE_DEBUG}"
+        }
+        if (ODISEE_PROFILE) {
+            println "  ODISEE_PROFILE=${ODISEE_PROFILE}"
+        }
     }
 
 }

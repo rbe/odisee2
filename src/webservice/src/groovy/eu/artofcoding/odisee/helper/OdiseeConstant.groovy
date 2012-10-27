@@ -26,6 +26,7 @@ class OdiseeConstant {
     public static final String S_LATEST = 'LATEST'
     public static final String S_ODISEE_HOME = 'ODISEE_HOME'
     public static final String S_ODISEE_DEPLOY = 'ODISEE_DEPLOY'
+    public static final String S_ODISEE_VAR = 'ODISEE_VAR'
     public static final String S_ODISEE_TMP = 'ODISEE_TMP'
     public static final String S_VAR = 'var'
     public static final String S_VAR_TMP = 'var/tmp'
