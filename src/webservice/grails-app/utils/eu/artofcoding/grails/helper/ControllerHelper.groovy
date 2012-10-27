@@ -24,10 +24,12 @@ class ControllerHelper {
      */
     static void sendNothing(arg) {
         try {
-            arg.log.error arg.message, arg.exception
+            // TODO Enable or disable logging of errors as they already are displayed in HTTP response instead of a document
+            // arg.log.error arg.message, arg.exception
             HttpServletResponse response = arg.response
             response.reset()
-            //response.sendError(500, arg.message)
+            response.outputStream << String.format('Sorry, I have got no document for you, %s%n', arg.message)
+            response.outputStream.flush()
         } catch (e) {
             arg.log.error 'ODI-xxxx: Could not send error message to client', e
         }
