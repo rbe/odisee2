@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+set -o nounset
+. ${ODISEE_OS_LIB}/odienv
+
+#
+#
+#
+os_start_ramdisk() {
+    ## Number of existing md devices
+    ##numdevs=$(mdconfig -l | wc -l)
+    ##numdevs=$((numdevs + 1))
+    ##ramdisk_dev="/dev/md${numdevs}"
+    # Calculate size in sectors
+    ramfs_size_sectors=$((${ODISEE_TMP_RAMDISK_MB} * 1024 * 1024 / 512))
+    # Initialize RAM disk  -u ${numdevs}
+    ramdisk_dev=$(mdconfig -a -t malloc -o ${ODISEE_TMP_MOUNT_OPT} -S ${ramfs_size_sectors})
+    newfs -U ${ramdisk_dev}
+    # Mount ramdisk
+    mount ${ramdisk_dev} ${ODISEE_TMP}
+}
+
+#
+#
+#
+os_stop_ramdisk() {
+    # Find ramdisk mount on ODISEE_TMP
+    ramdisk_dev=$(mount | grep ${ODISEE_TMP} | awk '{print $1}')
+    umount ${ODISEE_TMP}
+    mdconfig -d -u ${ramdisk_dev} -o force
+}
