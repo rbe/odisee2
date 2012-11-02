@@ -39,6 +39,7 @@ import java.util.*;
 
 import static com.sun.star.uno.UnoRuntime.queryInterface;
 
+@SuppressWarnings({"unchecked"})
 public class TextDocumentShowcase {
 
     public static final String TEMPLATE_PATH = "/usr/local/odisee/var"; //"odisee-xml-processor/src/test/java/eu/artofcoding/odisee";
