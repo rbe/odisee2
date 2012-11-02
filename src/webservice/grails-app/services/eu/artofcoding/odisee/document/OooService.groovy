@@ -309,6 +309,7 @@ class OooService implements InitializingBean {
             def request = arg.xml.request[arg.activeIndex]
             def archive = request.archive[0]
             boolean archiveFiles = archive?.'@files' == OdiseeConstant.S_TRUE
+            // TODO Check if we override this setting
             // Delete files when <archive files="false">
             if (!archiveFiles) {
                 try {
