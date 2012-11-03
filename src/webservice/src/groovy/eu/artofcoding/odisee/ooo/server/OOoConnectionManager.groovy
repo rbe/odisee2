@@ -9,10 +9,11 @@
 package eu.artofcoding.odisee.ooo.server
 
 import eu.artofcoding.odisee.OdiseeException
+import eu.artofcoding.odisee.OdiseePath
+
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.TimeUnit
-import eu.artofcoding.odisee.OdiseePath
 
 /*
 TODO Rework load-balancing:

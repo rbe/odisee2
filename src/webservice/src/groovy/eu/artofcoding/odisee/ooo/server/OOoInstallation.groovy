@@ -8,8 +8,8 @@
  */
 package eu.artofcoding.odisee.ooo.server
 
-import eu.artofcoding.odisee.helper.JvmHelper
 import eu.artofcoding.odisee.OdiseePath
+import eu.artofcoding.odisee.helper.JvmHelper
 
 /**
  * Created by IntelliJ IDEA.

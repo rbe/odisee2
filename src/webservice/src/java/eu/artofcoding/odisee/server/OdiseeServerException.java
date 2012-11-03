@@ -30,4 +30,10 @@ public class OdiseeServerException extends Exception {
         super(cause);
     }
 
+/*
+    public OdiseeServerException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
+*/
+
 }

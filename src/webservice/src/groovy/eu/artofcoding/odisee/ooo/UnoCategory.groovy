@@ -8,9 +8,9 @@
  */
 package eu.artofcoding.odisee.ooo
 
-import com.sun.star.uno.UnoRuntime
 import com.sun.star.beans.XPropertySet
 import com.sun.star.container.XIndexAccess
+import com.sun.star.uno.UnoRuntime
 
 /**
  * Basic work with UNO.

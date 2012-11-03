@@ -8,10 +8,9 @@
  */
 package eu.artofcoding.odisee.ooo.server
 
-import eu.artofcoding.odisee.OdiseeException
 import com.sun.star.lib.uno.helper.UnoUrl
 import com.sun.star.lib.util.NativeLibraryLoader
-
+import eu.artofcoding.odisee.OdiseeException
 import eu.artofcoding.odisee.helper.JvmHelper
 
 /*

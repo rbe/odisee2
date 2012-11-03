@@ -24,9 +24,9 @@ import com.sun.star.lang.XEventListener
 import com.sun.star.lang.XMultiComponentFactory
 import com.sun.star.uno.XComponentContext
 import eu.artofcoding.odisee.OdiseeException
+import eu.artofcoding.odisee.OdiseePath
 import eu.artofcoding.odisee.helper.OdiseeConstant
 import eu.artofcoding.odisee.ooo.UnoCategory
-import eu.artofcoding.odisee.OdiseePath
 
 /**
  * Connect to an OpenOffice.org instance.
