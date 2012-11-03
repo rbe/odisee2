@@ -20,13 +20,14 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Provide OfficeConnections, provide a pool for them and act as a watchdog.
  */
 public class OfficeConnectionFactory {
 
-    boolean shuttingDown;
+    private final AtomicBoolean shuttingDown = new AtomicBoolean(false);
 
     private String groupname;
 
@@ -57,7 +58,7 @@ public class OfficeConnectionFactory {
 
     public OfficeConnection fetchConnection(boolean waitForever) throws OdiseeServerException {
         // Check state
-        if (shuttingDown) {
+        if (shuttingDown.get()) {
             throw new OdiseeServerException("Shutdown in progress");
         }
         OfficeConnection officeConnection = null;
@@ -96,7 +97,7 @@ public class OfficeConnectionFactory {
 
     public void repositConnection(OfficeConnection officeConnection) throws OdiseeServerException {
         // Check state
-        if (shuttingDown) {
+        if (shuttingDown.get()) {
             throw new OdiseeServerException("Shutdown in progress");
         }
         boolean connectionWasPutBack = false;
@@ -115,9 +116,7 @@ public class OfficeConnectionFactory {
      * @param cleanup If false, OfficeConnection objects remain in the pool, otherwise they are removed.
      */
     public void shutdown(boolean cleanup) {
-        synchronized (this) {
-            shuttingDown = true;
-        }
+        shuttingDown.getAndSet(true);
         Iterator<OfficeConnection> iter = connections.iterator();
         while (iter.hasNext()) {
             try {
@@ -133,7 +132,7 @@ public class OfficeConnectionFactory {
 
     private synchronized void initializeConnections() {
         // Check state
-        if (null == addresses || (null != addresses && addresses.size() == 0)) {
+        if (null == addresses || addresses.size() == 0) {
             throw new OdiseeServerRuntimeException("Initialization error");
         }
         // Setup queue for connections
