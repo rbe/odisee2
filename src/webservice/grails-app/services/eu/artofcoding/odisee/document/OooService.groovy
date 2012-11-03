@@ -337,7 +337,8 @@ class OooService implements InitializingBean {
         // Generate unique request ID
         arg.uniqueRequestId = UUID.randomUUID()
         // Set request directory
-        arg.requestDir = new File("${OdiseePath.DOCUMENT_DIR}/${arg.principal.name}", arg.uniqueRequestId.toString())
+        //arg.requestDir = new File("${arg.principal.name}/${OdiseePath.DOCUMENT_DIR}", arg.uniqueRequestId.toString())
+        arg.requestDir = new File("${OdiseePath.ODISEE_USER}/${arg.principal.name}/${OdiseeConstant.S_DOCUMENT}", arg.uniqueRequestId.toString())
         arg.requestDir.mkdirs()
         // Save XML request
         storageService.saveRequestToDisk(arg, OdiseeWebserviceConstant.MINUS_ONE)

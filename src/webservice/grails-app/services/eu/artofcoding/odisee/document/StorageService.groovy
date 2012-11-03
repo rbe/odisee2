@@ -14,6 +14,7 @@ import eu.artofcoding.grails.helper.XmlHelper
 import eu.artofcoding.odisee.OdiseeException
 import eu.artofcoding.odisee.OdiseePath
 import eu.artofcoding.odisee.OdiseeWebserviceConstant
+import eu.artofcoding.odisee.helper.OdiseeConstant
 import groovy.xml.XmlUtil
 
 /**
@@ -325,6 +326,7 @@ class StorageService {
         if (requestXMLFile.exists()) {
             throw new OdiseeException("ODI-xxxx: Cannot write request XML file ${requestXMLFile.absolutePath} as it exists already")
         } else {
+            requestXMLFile.parentFile.mkdirs()
             FileHelper.writeUTF8(requestXMLFile, xmlString)
         }
         requestXMLFile
@@ -339,13 +341,15 @@ class StorageService {
         // Set document directory (same as request's working directory)
         arg.documentDir = arg.requestDir
         // Set template directory (same as request's working directory)
-        ////arg.templateDir = arg.requestDir
-        arg.templateDir = new File("${OdiseePath.TEMPLATE_DIR}/${arg.principal.name}")
+        //arg.templateDir = new File("${arg.principal.name}/${OdiseePath.TEMPLATE_DIR}")
+        arg.templateDir = new File("${OdiseePath.ODISEE_USER}/${arg.principal.name}/${OdiseeConstant.S_TEMPLATE}")
         // Template
         arg.revision = 1 // TODO Move feature into enterprise version of Odisee
         // Check local template directory for latest revision of template
-        File localTemplate = new File("${OdiseePath.TEMPLATE_DIR}/${arg.principal.name}", "${arg.template}_rev${arg.revision}.ott")
-        println "ODI-xxx: Trying to access template ${localTemplate}, exists=${localTemplate.exists()}"
+        File localTemplate = new File(arg.templateDir as File, "${arg.template}_rev${arg.revision}.ott")
+        if (OdiseePath.ODISEE_DEBUG) {
+            println "ODI-xxx: ${arg.principal.name} tries to access template ${localTemplate}, exists=${localTemplate.exists()}"
+        }
         if (localTemplate.exists()) {
             /*
             // Copy it to arg.templateDir
@@ -353,7 +357,7 @@ class StorageService {
             arg.templateFile << localTemplate.bytes
             */
             // Point template for this request to local template
-            arg.templateFile = localTemplate 
+            arg.templateFile = localTemplate
         } else {
             /* TODO Move feature into enterprise version of Odisee
             // Get template from StorageService
