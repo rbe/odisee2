@@ -27,9 +27,11 @@ class OdiseeConstant {
     public static final String S_ODISEE_HOME = 'ODISEE_HOME'
     public static final String S_ODISEE_DEPLOY = 'ODISEE_DEPLOY'
     public static final String S_ODISEE_VAR = 'ODISEE_VAR'
+    public static final String S_ODISEE_USER = 'ODISEE_USER'
     public static final String S_ODISEE_TMP = 'ODISEE_TMP'
     public static final String S_VAR = 'var'
     public static final String S_VAR_TMP = 'var/tmp'
+    public static final String S_USER = 'user'
     public static final String S_TEMPLATE = 'template'
     public static final String S_DOCUMENT = 'document'
     public static final String WRITER_EXT_REGEX = /.o\wt$/

@@ -45,6 +45,7 @@ class OdiseePath {
      * Variable data directory for Odisee.
      */
     static final File ODISEE_VAR
+    static final File ODISEE_USER
     static final File ODISEE_TMP
 
     /**
@@ -86,6 +87,15 @@ class OdiseePath {
         }
         ODISEE_VAR.mkdirs()
         //
+        // ODISEE_USER
+        String envOdiseeUser = System.getenv(OdiseeConstant.S_ODISEE_USER)
+        if (envOdiseeUser) {
+            ODISEE_USER = new File(envOdiseeUser).absoluteFile
+        } else {
+            ODISEE_USER = new File(ODISEE_VAR, OdiseeConstant.S_USER).absoluteFile
+        }
+        ODISEE_VAR.mkdirs()
+        //
         // ODISEE_TMP
         String envOdiseeTmp = System.getenv(OdiseeConstant.S_ODISEE_TMP)
         if (envOdiseeTmp) {
@@ -111,9 +121,8 @@ class OdiseePath {
         println "  ODISEE_HOME   =${ODISEE_HOME}"
         println "  ODISEE_DEPLOY =${ODISEE_DEPLOY}"
         println "  ODISEE_VAR    =${ODISEE_VAR}"
+        println "  ODISEE_USER   =${ODISEE_USER}"
         println "  ODISEE_TMP    =${ODISEE_TMP}"
-        println "  TEMPLATE_DIR  =${TEMPLATE_DIR}"
-        println "  DOCUMENT_DIR  =${DOCUMENT_DIR}"
         if (ODISEE_DEBUG) {
             println "  ODISEE_DEBUG  =${ODISEE_DEBUG}"
         }
