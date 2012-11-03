@@ -97,7 +97,7 @@ class OooService implements InitializingBean {
                     oooGroup[OdiseeConstant.S_GROUP0] = m
                 }
             } else {
-                log.error('ODI-xxxx: No odiinst found, using default 127.0.0.1:2001')
+                log.warn('ODI-xxxx: No odiinst found, using default 127.0.0.1:2001')
                 // Setup defaults; port 2001 on localhost
                 oooGroup[OdiseeConstant.S_GROUP0] = ['127.0.0.1': 2001]
             }
