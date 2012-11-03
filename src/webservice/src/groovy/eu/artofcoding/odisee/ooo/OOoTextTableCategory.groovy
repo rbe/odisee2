@@ -263,8 +263,10 @@ class OOoTextTableCategory {
     /**
      * Get content of a TextTable cell by using:
      * <pre>
-     * use (OOoTextTableCategory) {*     odt["tablename!rowCol"]
-     *}* </pre>
+     * use (OOoTextTableCategory) {
+     *     odt["tablename!rowCol"]
+     *}
+     * </pre>
      */
     static Object get(XTextTable textTable, String name) {
         Profile.time "OOoTextTableCategory.get(textTable=$textTable, name=$name)", {
@@ -292,11 +294,13 @@ class OOoTextTableCategory {
 
     /**
      * <pre>
-     * use (OOoTextTableCategory) {*     table["$row$col"] = "value"
+     * use (OOoTextTableCategory) {
+     *     table["$row$col"] = "value"
      *     table["tablename"] = String[][], List or Map:
      *           [["A1", "A2"], ["B1", "B2"]]
      *           [A1: "a1", A2: "a2", B1: "b1", B2: "B2"]
-     *}* </pre>
+     *}
+     * </pre>
      */
     static void set(XTextTable textTable, String name, Object value) {
         Profile.time "OOoTextTableCategory.set(textTable=$textTable, name=$name, value=$value)", {
