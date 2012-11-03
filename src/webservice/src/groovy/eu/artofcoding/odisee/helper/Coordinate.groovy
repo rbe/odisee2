@@ -51,7 +51,7 @@ class Coordinate {
             int colCounter = 0
             int colIdx = col.collect {
                 colCounter++ * 26 + ((Integer) it) - 65
-            }.sum()
+            }.sum() as int
             // Row: find all digits at the end of coordinate
             String row = splitCoordinate[coordArrIdx].inject('') { o, n ->
                 Character.isDigit(n.toCharacter()) ? o + n : o
