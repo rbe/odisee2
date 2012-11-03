@@ -182,7 +182,9 @@ public class OfficeConnection {
     }
 
     public void connect() throws OdiseeServerException {
+        // Check state
         if (isConnected() && initializationCompleted()) {
+            //throw new OdiseeServerRuntimeException("Cannot initialize twice");
             return;
         }
         // Create default local component context
