@@ -111,6 +111,7 @@ then
         ;;
         *)
             JAVA_HOME=$(which java)
+            JAVA_HOME=${JAVA_HOME%/bin/java}
         ;;
     esac
     # Fallback is libexec/os/arch/java
