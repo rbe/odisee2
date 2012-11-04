@@ -349,7 +349,7 @@ get_inst_cfg() {
     # Default data directory
     if [ x"${INSTCFG[data]}" = x"" ]
     then
-        INSTCFG[data]="${ODISEE_OOO_USERINST}/${inst}"
+        INSTCFG[data]="${ODISEE_USER_PROFILE}/${inst}"
     fi
     INSTCFG[options]=$(cat ${ODISEE_INST} | grep "^${inst}|" | awk -F\| '{print $6}')
     INSTCFG[autostart]=$(cat ${ODISEE_INST} | grep "^${inst}|" | awk -F\| '{print $7}')
