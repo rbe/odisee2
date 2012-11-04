@@ -131,7 +131,7 @@ CATALINA_BASE=${CATALINA_BASE:-$ODISEE_LIBEXEC/tomcat}
 #
 
 # Watchdog timeout for checks
-declare -i WD_TIMEOUT=5
+ODISEE_WD_TIMEOUT=5
 
 #
 # Options.
@@ -153,6 +153,7 @@ export ODISEE_TMP
 export ODISEE_BACKUP
 export ODISEE_USER_PROFILE
 export ODISEE_EXT
+export ODISEE_WD_TIMEOUT
 # Java, Groovy, Grails
 export JAVA_HOME
 export ANT_HOME
