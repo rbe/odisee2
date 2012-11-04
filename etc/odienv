@@ -92,7 +92,7 @@ unset -f _check_executable
 #
 # Check .fonts directory
 #
-fonts=$HOME/.fonts
+fonts=${ODISEE_HOME}/.fonts
 if [ ! -h "${fonts}" ] # does not exist
 then
     ln -s ${ODISEE_HOME}/var/deploy/font ${fonts} 
