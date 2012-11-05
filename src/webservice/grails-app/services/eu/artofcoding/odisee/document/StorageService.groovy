@@ -358,8 +358,9 @@ class StorageService {
             */
             // Point template for this request to local template
             arg.templateFile = localTemplate
-        } else {
-            /* TODO Move feature into enterprise version of Odisee
+        }
+        /* TODO Move feature into enterprise version of Odisee
+        else {
             // Get template from StorageService
             // Does the storage service has got the template?
             boolean hasTemplate = hasDocument(name: arg.template, revision: arg.revision)
@@ -383,8 +384,8 @@ class StorageService {
             // Copy it to arg.templateDir
             localTemplate.createNewFile()
             localTemplate << arg.templateFile.bytes
-            */
         }
+        */
         // Check
         if (!arg.templateFile || !arg.templateFile?.exists()) {
             throw new OdiseeException("ODI-xxxx: Template ${arg.templateFile} does not exist")
