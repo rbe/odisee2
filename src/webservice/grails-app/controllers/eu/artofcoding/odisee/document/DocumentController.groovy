@@ -121,9 +121,11 @@ class DocumentController {
                 streamRequestedDocument(params, document)
             }
             */
+            /*
             else {
                 error.message = 'ODI-xxxx: Insufficient parameters'
             }
+            */
         } catch (e) {
             error.message = 'ODI-xxxx: Cannot fulfill request'
             error.exception = e
