@@ -1,0 +1,34 @@
+#!/bin/sh
+#
+
+# PROVIDE: odisee
+# REQUIRE: LOGIN
+# BEFORE:  securelevel
+# KEYWORD: shutdown
+
+# Add the following lines to /etc/rc.conf to enable `odisee':
+#
+# odisee_enable="YES"
+#
+
+. /etc/rc.subr
+export PATH=/usr/local/bin:$PATH
+export ODISEE_HOME=/usr/local/odisee
+
+name="odisee"
+rcvar=odisee_enable
+
+command="/usr/local/odisee/bin/odictl"
+#command_interpreter="/usr/local/bin/bash"
+command_args="-q start"
+#pidfile="/var/run/$name.pid"
+required_files="/usr/local/odisee/etc/odiinst"
+
+# read configuration and set defaults
+load_rc_config "$name"
+: ${odisee_enable="NO"}
+: ${odisee_user="odisee"}
+
+. $ODISEE_HOME/etc/odienv
+
+run_rc_command "$1"
