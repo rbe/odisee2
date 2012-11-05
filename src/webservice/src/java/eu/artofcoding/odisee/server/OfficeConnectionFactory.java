@@ -24,6 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Provide OfficeConnections, provide a pool for them and act as a watchdog.
+ * TODO Singleton?!
  */
 public class OfficeConnectionFactory {
 
