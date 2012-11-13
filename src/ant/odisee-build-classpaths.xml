@@ -12,7 +12,7 @@
         <fileset dir="${lib.dir}/apachepoi"/>
         <fileset dir="${lib.dir}/odftoolkit"/>
         <fileset dir="${lib.dir}/libreoffice/3.5"/>
-        <file file="${lib.dir}/odisee-xml-processor-3.0.0-SNAPSHOT.jar"/>
+        <!--file file="${lib.dir}/odisee-xml-processor-3.0.0-SNAPSHOT.jar"/-->
     </path>
     <path id="groovy.test.classpath">
         <fileset dir="${groovy.home}/embeddable"/>
