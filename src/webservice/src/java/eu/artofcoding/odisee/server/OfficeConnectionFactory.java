@@ -13,6 +13,8 @@
 
 package eu.artofcoding.odisee.server;
 
+import groovy.lang.Singleton;
+
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -24,8 +26,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Provide OfficeConnections, provide a pool for them and act as a watchdog.
- * TODO Singleton?!
  */
+@Singleton
 public class OfficeConnectionFactory {
 
     private final AtomicBoolean shuttingDown = new AtomicBoolean(false);
@@ -33,22 +35,31 @@ public class OfficeConnectionFactory {
     private String groupname;
 
     private final int QUEUE_POLL_TIMEOUT = 5;
+
     private final TimeUnit QUEUE_POLL_TIMEUNIT = TimeUnit.SECONDS;
 
     private List<InetSocketAddress> addresses;
+
     private LinkedBlockingQueue<OfficeConnection> connections;
 
-    public OfficeConnectionFactory(String groupname, List<InetSocketAddress> addresses) {
-        this.groupname = groupname;
-        this.addresses = addresses;
-        initializeConnections();
+    private static final OfficeConnectionFactory OFFICE_CONNECTION_FACTORY = new OfficeConnectionFactory();
+
+    public static OfficeConnectionFactory getInstance(String groupname, List<InetSocketAddress> addresses) {
+        OFFICE_CONNECTION_FACTORY.groupname = groupname;
+        OFFICE_CONNECTION_FACTORY.addresses = addresses;
+        OFFICE_CONNECTION_FACTORY.initializeConnections();
+        return OFFICE_CONNECTION_FACTORY;
     }
 
-    public OfficeConnectionFactory(String groupname, String host, int basePort, int count) {
-        this.groupname = groupname;
-        this.addresses = new ArrayList<InetSocketAddress>();
-        addConnections(host, basePort, count);
-        initializeConnections();
+    public static OfficeConnectionFactory getInstance(String groupname, String host, int basePort, int count) {
+        OFFICE_CONNECTION_FACTORY.groupname = groupname;
+        OFFICE_CONNECTION_FACTORY.addresses = new ArrayList<InetSocketAddress>();
+        OFFICE_CONNECTION_FACTORY.addConnections(host, basePort, count);
+        OFFICE_CONNECTION_FACTORY.initializeConnections();
+        return OFFICE_CONNECTION_FACTORY;
+    }
+
+    private OfficeConnectionFactory() {
     }
 
     public void addConnections(String host, int basePort, int count) {
@@ -83,20 +94,34 @@ public class OfficeConnectionFactory {
         */
         // Check if we could get an OfficeConnection
         if (null == officeConnection) {
-            throw new OdiseeServerException("[group=" + groupname + "] Could not fetch connection from pool, sorry.");
+            throw new OdiseeServerException(String.format("[group=%s] Could not fetch connection from pool, sorry.", groupname));
         }
         try {
             // Connect
             officeConnection.connect();
+            if (officeConnection.isConnected()) {
+                // Return connection
+            } else {
+                // Put connection back into pool, better luck next time
+                repositConnection(officeConnection);
+                // Do not return a connection
+                officeConnection = null;
+            }
         } catch (OdiseeServerException e) {
+            officeConnection.setFaulted(true);
             // Put connection back into pool, better luck next time
             repositConnection(officeConnection);
+            // Do not return a connection
+            officeConnection = null;
         }
         // Return connection
         return officeConnection;
     }
 
     public void repositConnection(OfficeConnection officeConnection) throws OdiseeServerException {
+        if (null == officeConnection) {
+            return;
+        }
         // Check state
         if (shuttingDown.get()) {
             throw new OdiseeServerException("Shutdown in progress");
@@ -108,7 +133,7 @@ public class OfficeConnectionFactory {
             //dumpNextConnection("reposit", officeConnection);
         }
         if (!connectionWasPutBack) {
-            throw new OdiseeServerException("[group=" + groupname + "] Could not reposit connection, I tried it more than once, sorry.");
+            throw new OdiseeServerException(String.format("[group=%s] Could not reposit connection, I tried it more than once, sorry.", groupname));
         }
     }
 
@@ -146,17 +171,17 @@ public class OfficeConnectionFactory {
                 connections.offer(officeConnection);
             } catch (OdiseeServerException e) {
                 // ignore
-                System.err.println("[group=" + groupname + "] Could not bootstrap connection to " + socketAddress + ": " + e.getLocalizedMessage());
+                System.err.printf("[group=%s] Could not bootstrap connection to %s: %s%n", groupname, socketAddress, e.getLocalizedMessage());
             }
         }
     }
 
     private void dumpNextConnection(String action, OfficeConnection officeConnection) {
         try {
-            System.out.println(Thread.currentThread().getName() + " [group=" + groupname + "] " + action + ": " + officeConnection + ", next is " + connections.element() + ", " + connections.size() + " available");
+            System.out.printf("%s [group=%s] %s: %s, next is %s, %d available%n", Thread.currentThread().getName(), groupname, action, officeConnection, connections.element(), connections.size());
         } catch (NoSuchElementException e) {
             // ignore
-            System.out.println(Thread.currentThread().getName() + " [group=" + groupname + "] " + action + ": " + officeConnection + ", no more connections available");
+            System.out.printf("%s [group=%s] %s: %s, no more connections available%n", Thread.currentThread().getName(), groupname, action, officeConnection);
         }
     }
 

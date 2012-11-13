@@ -347,12 +347,14 @@ class OdiseeXmlCategory {
                 result.wallTime += TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start)
                 // Check result
                 if (output?.size() == 0) {
-                    oooConnection.setFaulted(true)
-                    throw new OdiseeException('We did not produce a document?!')
+                    // TODO Should this class decide this?
+                    if (oooConnection) {
+                        oooConnection.setFaulted(true)
+                    }
+                    throw new OdiseeException('No document')
                 }
             } catch (e) {
-                oooConnection.setFaulted(true)
-                throw new OdiseeException('We did not produce a document?!', e)
+                throw e //new OdiseeException('No document', e)
                 /*
                 // Increase retry counter
                 result.retries++

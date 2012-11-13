@@ -59,7 +59,7 @@ public class TextDocumentShowcase {
 
     public static void main(String[] args) throws Exception {
         long start = System.currentTimeMillis();
-        final OfficeConnectionFactory factory = new OfficeConnectionFactory("odi1", "127.0.0.1", 2001, 2);
+        final OfficeConnectionFactory factory = OfficeConnectionFactory.getInstance("odi1", "127.0.0.1", 2001, 2);
         Runnable r = new Runnable() {
             @Override
             public void run() {

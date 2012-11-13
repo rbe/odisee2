@@ -13,8 +13,15 @@ package eu.artofcoding.odisee
  */
 class OdiseeException extends RuntimeException {
 
+    OdiseeException() {
+    }
+
     OdiseeException(Throwable throwable) {
         super(throwable)
+    }
+
+    OdiseeException(String s, Throwable throwable, boolean b, boolean b1) {
+        super(s, throwable, b, b1)
     }
 
     OdiseeException(String message) {
