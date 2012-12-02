@@ -29,3 +29,5 @@ src/webservice/src/templates/scaffolding
 src/webservice/src/templates/testing
 src/webservice/src/templates/artifacts
 overlay/libexec/odisee/webapp
+overlay/libexec/tomcat/lib
+src/webservice/test/report
