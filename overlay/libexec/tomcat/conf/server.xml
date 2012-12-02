@@ -8,10 +8,10 @@
         <Resource name="OdiseeUserDatabase"
                   auth="Container" type="org.apache.catalina.UserDatabase"
                   factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
-                  pathname="../odisee/tomcat-users.xml"/>
+                  pathname="conf/odisee-users.xml"/>
     </GlobalNamingResources>
     <Service name="Catalina">
-        <Connector address="127.0.0.1" port="8080" redirectPort="8443"
+        <Connector address="0.0.0.0" port="8080" redirectPort="8443"
                    protocol="org.apache.coyote.http11.Http11NioProtocol"
                    connectionTimeout="5000"
                    keepAliveTimeout="2500" maxKeepAliveRequests="100"
@@ -19,7 +19,7 @@
                    acceptCount="100" acceptorThreadCount="4"
                    maxHttpHeaderSize="1024"
                    compression="on" compressableMimeType="text/html,text/xml,text/plain,text/css,text/javascript,text/json,application/json"
-                   xpoweredBy="false" server="Odisee Server"/>
+                   xpoweredBy="false" server="Odisee(R) Server"/>
         <Engine name="Catalina" defaultHost="localhost">
             <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="false">
                 <!-- /odisee -->
