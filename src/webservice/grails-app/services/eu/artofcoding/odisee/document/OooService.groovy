@@ -106,7 +106,7 @@ class OooService implements InitializingBean {
                 int portbase = 2001
                 officeConnectionFactory = OfficeConnectionFactory.getInstance(S_GROUP0, localhost, portbase, contents.size())
             } catch (e) {
-                throw new IllegalStateException("Cannot setup Office connection factory, please check odiinst")
+                throw new IllegalStateException('Cannot setup Office connection factory, please check instance configuration', e)
             }
         }
     }
