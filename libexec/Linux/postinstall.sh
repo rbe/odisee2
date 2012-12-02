@@ -1,21 +1,26 @@
 #!/usr/bin/env bash
 
-ODISEE_HOME=/opt/odisee
+ODISEE_HOME=/usr/local/odisee
+
+set -o nounset
 
 # check for sudo
+if [[ ! -x sudo ]]
+then
+    echo "'sudo' missing"
+    exit 1
+fi
 
 # add group and user
 sudo groupadd -n odisee -g 5000
 sudo useradd -n odisee -u 5000 -g odisee -m -d ${ODISEE_HOME}
+mkdir -p ${ODISEE_HOME}
 
 # copy configuration files
-cd ${ODISEE_HOME}
-cp etc/dot-profile .profile
+mv .bash_profile ${ODISEE_HOME}/.bash_profile
+mv * ${ODISEE_HOME} 
 
 # change owner
 chown -R odisee:odisee ${ODISEE_HOME}
-
-# download LibreOffice
-wget http://download.documentfoundation.org/libreoffice/stable/3.6.2/deb/x86_64/LibO_3.6.2_Linux_x86-64_install-deb_en-US.tar.gz
 
 exit 0
