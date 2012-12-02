@@ -10,8 +10,9 @@ package eu.artofcoding.odisee.document
 
 import eu.artofcoding.grails.helper.ControllerHelper
 import eu.artofcoding.odisee.OdiseeException
-import eu.artofcoding.odisee.OdiseeWebserviceConstant
 import groovy.xml.dom.DOMCategory
+
+import static eu.artofcoding.odisee.server.OdiseeConstant.*
 
 /**
  *
@@ -145,7 +146,7 @@ class DocumentController {
      */
     private void streamRequestedDocument(params, result) {
         // Should we stream the result back to client? Default is yes, but user can choose to not get a stream.
-        boolean shouldStream = !Boolean.valueOf(params.remove(OdiseeWebserviceConstant.S_NOSTREAM) ?: OdiseeWebserviceConstant.S_FALSE)
+        boolean shouldStream = !Boolean.valueOf(params.remove(S_NOSTREAM) ?: S_FALSE)
         // Get XML request element
         String outputFormat = ''
         use(DOMCategory) {
@@ -157,7 +158,7 @@ class DocumentController {
             return
         }
         // Check parameter: document type defaults to PDF.
-        params.outputFormat = /*params.*/ outputFormat ?: OdiseeWebserviceConstant.S_PDF
+        params.outputFormat = /*params.*/ outputFormat ?: S_PDF
         ////params.streamtype = params.streamtype ?: params.outputFormat
         /*
         // TODO Multiple requests... watch for tag post-process.

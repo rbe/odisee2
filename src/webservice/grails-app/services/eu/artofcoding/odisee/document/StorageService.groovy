@@ -12,10 +12,13 @@ import com.sun.org.apache.xerces.internal.dom.DeferredNode
 import eu.artofcoding.grails.helper.FileHelper
 import eu.artofcoding.grails.helper.XmlHelper
 import eu.artofcoding.odisee.OdiseeException
-import eu.artofcoding.odisee.OdiseePath
-import eu.artofcoding.odisee.OdiseeWebserviceConstant
-import eu.artofcoding.odisee.helper.OdiseeConstant
 import groovy.xml.XmlUtil
+
+import static eu.artofcoding.odisee.OdiseePath.ODISEE_DEBUG
+import static eu.artofcoding.odisee.OdiseePath.ODISEE_USER
+import static eu.artofcoding.odisee.server.OdiseeConstant.MINUS_ONE
+import static eu.artofcoding.odisee.server.OdiseeConstant.S_DOT
+import static eu.artofcoding.odisee.server.OdiseeConstant.S_TEMPLATE
 
 /**
  *
@@ -43,9 +46,9 @@ class StorageService {
      * @param filename
      * @return
      */
-    private String getName(filename) {
+    private String getName(String filename) {
         String[] s = filename.split('\\.')
-        s[0..s.length - 2].join(OdiseeWebserviceConstant.S_DOT)
+        s[0..s.length - 2].join(S_DOT)
     }
 
     /**
@@ -108,7 +111,7 @@ class StorageService {
                 }
                 if (arg.mimeType) {
                     mimeType {
-                        eq(OdiseeWebserviceConstant.S_NAME, arg.mimeType)
+                        eq(OdiseeConstant.S_NAME, arg.mimeType)
                     }
                 }
             }
@@ -244,7 +247,7 @@ class StorageService {
     OooDocument getDocumentByLatestRevision(Map arg) {
         /* TODO Move feature into enterprise version of Odisee
         try {
-            List<OooDocument> list = OooDocument.findAllByName(arg.name, [sort: OdiseeWebserviceConstant.S_REVISION, order: 'desc'])
+            List<OooDocument> list = OooDocument.findAllByName(arg.name, [sort: OdiseeConstant.S_REVISION, order: 'desc'])
             if (list?.size() > 0) { // TODO Ask database for "latest" revision!?
                 list.first()
             }
@@ -311,14 +314,14 @@ class StorageService {
         File requestXMLFile = null
         String xmlString = null
         // Make XML string
-        if (requestNumber == OdiseeWebserviceConstant.MINUS_ONE) {
-            requestXMLFile = new File(arg.requestDir, "${arg.uniqueRequestId}.xml")
+        if (requestNumber == MINUS_ONE) {
+            requestXMLFile = new File(arg.requestDir as File, "${arg.uniqueRequestId}.xml" as String)
             xmlString = XmlUtil.serialize(arg.xml)
         } else {
             // Just save active request including <odisee> element
             //requestXMLFile = new File(arg.documentDir, "${arg.documentName}.xml")
             String filename = String.format('%s_%04d.xml', arg.uniqueRequestId, requestNumber)
-            requestXMLFile = new File(arg.documentDir, filename)
+            requestXMLFile = new File(arg.documentDir as File, filename as String)
             DeferredNode deferredNode = (DeferredNode) arg.xml.request[requestNumber]
             xmlString = XmlHelper.asString(deferredNode)
         }
@@ -341,21 +344,15 @@ class StorageService {
         // Set document directory (same as request's working directory)
         arg.documentDir = arg.requestDir
         // Set template directory (same as request's working directory)
-        //arg.templateDir = new File("${arg.principal.name}/${OdiseePath.TEMPLATE_DIR}")
-        arg.templateDir = new File("${OdiseePath.ODISEE_USER}/${arg.principal.name}/${OdiseeConstant.S_TEMPLATE}")
+        arg.templateDir = new File("${ODISEE_USER}/${arg.principal.name}", S_TEMPLATE)
         // Template
         arg.revision = 1 // TODO Move feature into enterprise version of Odisee
         // Check local template directory for latest revision of template
         File localTemplate = new File(arg.templateDir as File, "${arg.template}_rev${arg.revision}.ott")
-        if (OdiseePath.ODISEE_DEBUG) {
+        if (ODISEE_DEBUG) {
             println "ODI-xxx: ${arg.principal.name} tries to access template ${localTemplate}, exists=${localTemplate.exists()}"
         }
         if (localTemplate.exists()) {
-            /*
-            // Copy it to arg.templateDir
-            arg.templateFile = new File(arg.templateDir, "${arg.template}_rev${arg.revision}.ott")
-            arg.templateFile << localTemplate.bytes
-            */
             // Point template for this request to local template
             arg.templateFile = localTemplate
         }

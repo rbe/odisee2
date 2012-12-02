@@ -8,100 +8,90 @@
  */
 package eu.artofcoding.odisee
 
-import eu.artofcoding.odisee.helper.OdiseeConstant
+import static eu.artofcoding.odisee.server.OdiseeConstant.*
 
 /**
  * Odisee's paths, built from environment variables.
  */
 @Singleton
-class OdiseePath {
+public class OdiseePath {
 
     /**
      * Profile?
      */
-    static final Boolean ODISEE_PROFILE = Boolean.valueOf(System.getenv('ODISEE_PROFILE') ?: 'false')
+    public static final Boolean ODISEE_PROFILE = Boolean.valueOf(System.getenv(S_ODISEE_PROFILE) ?: S_FALSE)
 
     /**
      * Debug?
      */
-    static final Boolean ODISEE_DEBUG = Boolean.valueOf(System.getenv('ODISEE_DEBUG') ?: 'false')
+    public static final Boolean ODISEE_DEBUG = Boolean.valueOf(System.getenv(S_ODISEE_DEBUG) ?: S_FALSE)
 
     /**
      * Home: installation path of OpenOffice.
      */
-    static final String OOO_HOME = System.getenv('OOO_HOME')
+    public static final String OOO_HOME = System.getenv('OOO_HOME')
 
     /**
      * Base directory for Odisee.
      */
-    static final File ODISEE_HOME
+    public static final File ODISEE_HOME
 
     /**
      * Deployment directory for Odisee, contains additional files.
      */
-    static final File ODISEE_DEPLOY
+    public static final File ODISEE_DEPLOY
 
     /**
      * Variable data directory for Odisee.
      */
-    static final File ODISEE_VAR
-    static final File ODISEE_USER
-    static final File ODISEE_TMP
-
-    /**
-     * Template directory.
-     */
-    static final File TEMPLATE_DIR
-
-    /**
-     * Where to put produced document?
-     */
-    static final File DOCUMENT_DIR
+    public static final File ODISEE_VAR
+    public static final File ODISEE_USER
+    public static final File ODISEE_TMP
 
     static {
         // ODISEE_HOME
         // Is Odisee home set?
-        String envOdiseeHome = System.getenv(OdiseeConstant.S_ODISEE_HOME)
+        String envOdiseeHome = System.getenv(S_ODISEE_HOME)
         if (!envOdiseeHome) {
-            ODISEE_HOME = new File('.').absoluteFile
+            ODISEE_HOME = new File(S_DOT).absoluteFile
             println "Please set ODISEE_HOME, using actual directory ${ODISEE_HOME}"
         } else {
             ODISEE_HOME = new File(envOdiseeHome).absoluteFile
         }
         //
         // ODISEE_DEPLOY
-        String envOdiseeDeploy = System.getenv(OdiseeConstant.S_ODISEE_DEPLOY)
+        String envOdiseeDeploy = System.getenv(S_ODISEE_DEPLOY)
         if (envOdiseeDeploy) {
             ODISEE_DEPLOY = new File(envOdiseeDeploy).absoluteFile
         } else {
-            ODISEE_DEPLOY = new File(ODISEE_HOME, 'var/deploy').absoluteFile
+            ODISEE_DEPLOY = new File(ODISEE_HOME, S_VAR_DEPLOY).absoluteFile
         }
         ODISEE_DEPLOY.mkdirs()
         //
         // ODISEE_VAR
-        String envOdiseeVar = System.getenv(OdiseeConstant.S_ODISEE_VAR)
+        String envOdiseeVar = System.getenv(S_ODISEE_VAR)
         if (envOdiseeVar) {
             ODISEE_VAR = new File(envOdiseeVar).absoluteFile
         } else {
-            ODISEE_VAR = new File(ODISEE_HOME, OdiseeConstant.S_VAR).absoluteFile
+            ODISEE_VAR = new File(ODISEE_HOME, S_VAR).absoluteFile
         }
         ODISEE_VAR.mkdirs()
         //
         // ODISEE_USER
-        String envOdiseeUser = System.getenv(OdiseeConstant.S_ODISEE_USER)
+        String envOdiseeUser = System.getenv(S_ODISEE_USER)
         if (envOdiseeUser) {
             ODISEE_USER = new File(envOdiseeUser).absoluteFile
         } else {
-            ODISEE_USER = new File(ODISEE_VAR, OdiseeConstant.S_USER).absoluteFile
+            ODISEE_USER = new File(ODISEE_VAR, S_USER).absoluteFile
         }
         ODISEE_VAR.mkdirs()
         //
         // ODISEE_TMP
-        String envOdiseeTmp = System.getenv(OdiseeConstant.S_ODISEE_TMP)
+        String envOdiseeTmp = System.getenv(S_ODISEE_TMP)
         if (envOdiseeTmp) {
-            ODISEE_TMP = new File(ODISEE_HOME, OdiseeConstant.S_VAR_TMP).absoluteFile
+            ODISEE_TMP = new File(envOdiseeTmp).absoluteFile
         } else {
-            ODISEE_TMP = new File(ODISEE_HOME, OdiseeConstant.S_VAR_TMP).absoluteFile
+            ODISEE_TMP = new File(ODISEE_HOME, S_VAR_TMP).absoluteFile
         }
         //
         // Templates

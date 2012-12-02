@@ -9,10 +9,11 @@
 package eu.artofcoding.odisee.document
 
 import eu.artofcoding.grails.helper.FileHelper
-import eu.artofcoding.odisee.OdiseePath
 import groovy.xml.dom.DOMCategory
 import org.w3c.dom.Element
-import eu.artofcoding.odisee.helper.OdiseeConstant
+
+import static eu.artofcoding.odisee.OdiseePath.ODISEE_USER
+import static eu.artofcoding.odisee.server.OdiseeConstant.S_PDF
 
 /**
  *

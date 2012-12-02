@@ -9,9 +9,11 @@
 package eu.artofcoding.grails.helper
 
 import eu.artofcoding.odisee.document.OooDocument
-import java.security.SecureRandom
+
 import javax.servlet.http.HttpServletResponse
-import eu.artofcoding.odisee.OdiseeWebserviceConstant
+import java.security.SecureRandom
+
+import static eu.artofcoding.odisee.server.OdiseeConstant.*
 
 /**
  * A helper for controllers.
@@ -48,7 +50,7 @@ class ControllerHelper {
         String contentName
         // OooDocument
         if (document instanceof OooDocument) {
-            //contentType = document.mimeType.browser ?: OdiseeWebserviceConstant.MIME_TYPE_OCTET_STREAM
+            //contentType = document.mimeType.browser ?: OdiseeConstant.MIME_TYPE_OCTET_STREAM
             contentLength = document.data?.length() ?: document.bytes?.length
             contentName = document.filename
             if (document.data) {
@@ -57,7 +59,7 @@ class ControllerHelper {
                 bytes = document.bytes
             }
         } else if (document instanceof byte[]) { // byte[]
-            //contentType = OdiseeWebserviceConstant.MIME_TYPE_OCTET_STREAM
+            //contentType = OdiseeConstant.MIME_TYPE_OCTET_STREAM
             contentLength = document.length
             contentName = "file_${new SecureRandom().nextInt(System.currentTimeMillis())}"
             bytes = document
@@ -79,13 +81,13 @@ class ControllerHelper {
         if (bytes) {
             switch (contentName) {
                 case { it.endsWith('.odt') }:
-                    contentType = OdiseeWebserviceConstant.MIME_TYPE_ODT
+                    contentType = MIME_TYPE_ODT
                     break
                 case { it.endsWith('.pdf') }:
-                    contentType = OdiseeWebserviceConstant.MIME_TYPE_PDF
+                    contentType = MIME_TYPE_PDF
                     break
                 default:
-                    contentType = OdiseeWebserviceConstant.MIME_TYPE_OCTET_STREAM
+                    contentType = MIME_TYPE_OCTET_STREAM
             }
             // Content type and length
             response.contentType = contentType

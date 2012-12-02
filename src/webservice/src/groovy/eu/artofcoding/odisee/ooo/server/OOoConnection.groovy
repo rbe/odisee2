@@ -25,8 +25,10 @@ import com.sun.star.lang.XMultiComponentFactory
 import com.sun.star.uno.XComponentContext
 import eu.artofcoding.odisee.OdiseeException
 import eu.artofcoding.odisee.OdiseePath
-import eu.artofcoding.odisee.helper.OdiseeConstant
 import eu.artofcoding.odisee.ooo.UnoCategory
+
+import static eu.artofcoding.odisee.server.OdiseeConstant.TIMEOUT_1SEC
+import static eu.artofcoding.odisee.server.OdiseeConstant.UNUSABLE_TIMEOUT
 
 /**
  * Connect to an OpenOffice.org instance.
@@ -146,27 +148,37 @@ class OOoConnection implements XEventListener {
             // Connection already established and usable?
             // This would be reset though XEventListener#dispoing(Event)
             if (xOfficeComponentContext) {
-                if (OdiseePath.ODISEE_DEBUG) println "${this}.connect: ${oooProcess.unoURL} still alive"
+                if (OdiseePath.ODISEE_DEBUG) {
+                    println "${this}.connect: ${oooProcess.unoURL} still alive"
+                }
                 return
             } else {
                 // Connect to the instance
                 try {
                     try {
                         xConnect()
-                        if (OdiseePath.ODISEE_DEBUG) println "${this}.connect: Checking connection to OOo instance at ${oooProcess.unoURL}"
+                        if (OdiseePath.ODISEE_DEBUG) {
+                            println "${this}.connect: Checking connection to OOo instance at ${oooProcess.unoURL}"
+                        }
                         if (null == xBridge) {
                             throw new OdiseeException('ODI-xxxx: No connection (XBridge)')
                         }
                         if (null == xComponentLoader) {
                             throw new OdiseeException('ODI-xxxx: No connection (XComponentLoader)')
                         }
-                        if (OdiseePath.ODISEE_DEBUG) println "${this}.connect: Successfully connected to OOo instance at ${oooProcess.unoURL}"
+                        if (OdiseePath.ODISEE_DEBUG) {
+                            println "${this}.connect: Successfully connected to OOo instance at ${oooProcess.unoURL}"
+                        }
                         markConnectionAsUsable()
                     } catch (BridgeExistsException e) {
                         // Connection is reused; the bridge may exist already, assume it's ok
-                        if (OdiseePath.ODISEE_DEBUG) println "${this}.connect/catch: XBridge exists: ${e.message}"
+                        if (OdiseePath.ODISEE_DEBUG) {
+                            println "${this}.connect/catch: XBridge exists: ${e.message}"
+                        }
                     } finally {
-                        if (OdiseePath.ODISEE_DEBUG) println "${this}.connect/finally: XBridge=${xBridge} xOfficeComponentContext=${xOfficeComponentContext} xComponentLoader=${xComponentLoader}"
+                        if (OdiseePath.ODISEE_DEBUG) {
+                            println "${this}.connect/finally: XBridge=${xBridge} xOfficeComponentContext=${xOfficeComponentContext} xComponentLoader=${xComponentLoader}"
+                        }
                     }
                 } catch (e) {
                     markConnectionAsUnusable()
@@ -185,7 +197,7 @@ class OOoConnection implements XEventListener {
         // Set unusable-since-timestamp to 'now'
         unusableSince = System.currentTimeMillis()
         // Don't use this connection for 30 secs
-        timeout = OdiseeConstant.UNUSABLE_TIMEOUT
+        timeout = UNUSABLE_TIMEOUT
         // Clear references to OOo objects
         clearReferences()
     }
@@ -213,10 +225,14 @@ class OOoConnection implements XEventListener {
             long curr = System.currentTimeMillis()
             long diff = reactivateAt - curr
             if (curr < reactivateAt) {
-                if (OdiseePath.ODISEE_DEBUG) println "${this}.connect: ${oooProcess.unoURL}: connection sleeping for ${diff} ms"
+                if (OdiseePath.ODISEE_DEBUG) {
+                    println "${this}.connect: ${oooProcess.unoURL}: connection sleeping for ${diff} ms"
+                }
                 throw new OdiseeException("Connection to ${oooProcess.unoURL} sleeping for additional ${diff}")
             } else {
-                if (OdiseePath.ODISEE_DEBUG) println "${this}.connect: ${oooProcess.unoURL} curr=${curr} unusableSince=${unusableSince} reactivateAt=${reactivateAt} => ${curr < reactivateAt}"
+                if (OdiseePath.ODISEE_DEBUG) {
+                    println "${this}.connect: ${oooProcess.unoURL} curr=${curr} unusableSince=${unusableSince} reactivateAt=${reactivateAt} => ${curr < reactivateAt}"
+                }
                 usable = true
             }
         } else {
@@ -233,7 +249,7 @@ class OOoConnection implements XEventListener {
         // Set unusableSince to give OOo instance chance to recover
         unusableSince = System.currentTimeMillis()
         // Don't use this connection for 1 sec
-        timeout = OdiseeConstant.TIMEOUT_1SEC
+        timeout = TIMEOUT_1SEC
     }
 
     /**

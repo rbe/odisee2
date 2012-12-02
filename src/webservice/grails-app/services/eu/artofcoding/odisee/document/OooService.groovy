@@ -10,13 +10,15 @@ package eu.artofcoding.odisee.document
 
 import eu.artofcoding.grails.helper.NameHelper
 import eu.artofcoding.odisee.OdiseeException
-import eu.artofcoding.odisee.OdiseePath
-import eu.artofcoding.odisee.OdiseeWebserviceConstant
 import eu.artofcoding.odisee.OdiseeXmlCategory
-import eu.artofcoding.odisee.helper.OdiseeConstant
+import eu.artofcoding.odisee.server.OdiseeConstant
 import eu.artofcoding.odisee.server.OfficeConnectionFactory
 import groovy.xml.dom.DOMCategory
 import org.springframework.beans.factory.InitializingBean
+
+import static eu.artofcoding.odisee.OdiseePath.ODISEE_HOME
+import static eu.artofcoding.odisee.OdiseePath.ODISEE_USER
+import static eu.artofcoding.odisee.server.OdiseeConstant.*
 
 /**
  * A service that is a client for the OOo service. Provides access to standalone, embedded or webservice
@@ -77,13 +79,13 @@ class OooService implements InitializingBean {
             Map oooGroup = [:]
             Map ipPortGroup = [:]
             // Try to get etc/odiinst through environment variable ODISEE_HOME
-            File odiinst = new File(OdiseePath.ODISEE_HOME, 'etc/odiinst')
+            File odiinst = new File(ODISEE_HOME, 'etc/odiinst'.intern())
             // Read contents of odiinst
             // odiinst=[odi1, 127.0.0.1, 2001, /Applications/OpenOffice.org.app, /Users/rbe/project/odisee/var/user/odi1, nologo nofirststartwizard norestart nodefault nolockcheck nocrashreport, true]
             List<String> contents = []
             if (odiinst?.exists()) {
                 // odi1|127.0.0.1|2001| ...
-                odiinst.eachLine OdiseeWebserviceConstant.S_UTF8, {
+                odiinst.eachLine S_UTF8, {
                     contents << it.split('[|]')
                 }
                 // Group ports by IP address
@@ -94,19 +96,18 @@ class OooService implements InitializingBean {
                 ipPortGroup.eachWithIndex { it, i ->
                     Map m = [:]
                     m[it.key] = it.value
-                    oooGroup[OdiseeConstant.S_GROUP0] = m
+                    oooGroup[S_GROUP0] = m
                 }
             } else {
                 log.warn('ODI-xxxx: No odiinst found, using default 127.0.0.1:2001')
                 // Setup defaults; port 2001 on localhost
-                oooGroup[OdiseeConstant.S_GROUP0] = ['127.0.0.1': 2001]
+                oooGroup[S_GROUP0] = ['127.0.0.1': 2001]
             }
             // Create and return instance of OOo connection manager
-            //oooConnectionManager = new OOoConnectionManager(oooGroup)
             try {
                 String localhost = contents[0][1]
                 int portbase = 2001
-                officeConnectionFactory = OfficeConnectionFactory.getInstance(OdiseeConstant.S_GROUP0, localhost, portbase, contents.size())
+                officeConnectionFactory = OfficeConnectionFactory.getInstance(S_GROUP0, localhost, portbase, contents.size())
             } catch (e) {
                 throw new IllegalStateException("Cannot setup Office connection factory, please check odiinst")
             }
@@ -124,7 +125,7 @@ class OooService implements InitializingBean {
         Map prop = [id: [value: arg.map.id ?: 0]]
         arg.map.findAll { k, v ->
             // Skip Grails' controller parameters
-            !(k in ['controller', 'action', OdiseeWebserviceConstant.S_TEMPLATE])
+            !(k in ['controller', 'action', OdiseeConstant.S_TEMPLATE])
         }?.each { k, v ->
             prop[k] = [
                     value: v,
@@ -145,7 +146,7 @@ class OooService implements InitializingBean {
             def template = request.template[0]
             // Request ID
             if (!request.'@id') {
-                request.setAttribute(OdiseeWebserviceConstant.S_ID, new Date().format('yyyyMMdd-HHmmss_SSSS'))
+                request.setAttribute(S_ID, new Date().format('yyyyMMdd-HHmmss_SSSS'))
             }
             arg.id = request.'@id'.toString()
             // Name of template
@@ -154,11 +155,11 @@ class OooService implements InitializingBean {
                 throw new OdiseeException('No template in request')
             }
             // Get (latest) revision of template?
-            arg.revision = template.'@revision' ?: OdiseeWebserviceConstant.S_LATEST
-            if (!arg.revision || arg.revision == OdiseeWebserviceConstant.S_LATEST) {
+            arg.revision = template.'@revision' ?: S_LATEST
+            if (!arg.revision || arg.revision == S_LATEST) {
                 arg.revision = storageService.getDocumentsLatestRevision(name: arg.template)
                 // Save in XML request for Odisee
-                template.setAttribute(OdiseeWebserviceConstant.S_REVISION, arg.revision.toString())
+                template.setAttribute(S_REVISION, arg.revision.toString())
             }
         }
         // Check state
@@ -308,7 +309,7 @@ class OooService implements InitializingBean {
         use(DOMCategory) {
             def request = arg.xml.request[arg.activeIndex]
             def archive = request.archive[0]
-            boolean archiveFiles = archive?.'@files' == OdiseeConstant.S_TRUE
+            boolean archiveFiles = archive?.'@files' == S_TRUE
             // TODO Check if we override this setting
             // Delete files when <archive files="false">
             if (!archiveFiles) {
@@ -338,10 +339,10 @@ class OooService implements InitializingBean {
         arg.uniqueRequestId = UUID.randomUUID()
         // Set request directory
         //arg.requestDir = new File("${arg.principal.name}/${OdiseePath.DOCUMENT_DIR}", arg.uniqueRequestId.toString())
-        arg.requestDir = new File("${OdiseePath.ODISEE_USER}/${arg.principal.name}/${OdiseeConstant.S_DOCUMENT}", arg.uniqueRequestId.toString())
+        arg.requestDir = new File("${ODISEE_USER}/${arg.principal.name}/${S_DOCUMENT}", arg.uniqueRequestId.toString())
         arg.requestDir.mkdirs()
         // Save XML request
-        storageService.saveRequestToDisk(arg, OdiseeWebserviceConstant.MINUS_ONE)
+        storageService.saveRequestToDisk(arg, OdiseeConstant.MINUS_ONE)
         // The result document(s)
         arg.document = []
         try {
@@ -354,7 +355,7 @@ class OooService implements InitializingBean {
                     if (i > 0) {
                         // Reset all request-specific map keys
                         [
-                                OdiseeWebserviceConstant.S_ID, OdiseeWebserviceConstant.S_TEMPLATE, OdiseeWebserviceConstant.S_REVISION,
+                                S_ID, OdiseeConstant.S_TEMPLATE, S_REVISION,
                                 'documentName',
                                 'templateDir', 'documentDir',
                                 'templateFile'

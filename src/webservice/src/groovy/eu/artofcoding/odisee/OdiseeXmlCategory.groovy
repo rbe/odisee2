@@ -9,15 +9,15 @@
 package eu.artofcoding.odisee
 
 import com.sun.star.lang.XComponent
-import eu.artofcoding.odisee.helper.OdiseeConstant
 import eu.artofcoding.odisee.helper.Profile
+import eu.artofcoding.odisee.ooo.*
 import eu.artofcoding.odisee.server.OfficeConnection
 import eu.artofcoding.odisee.server.OfficeConnectionFactory
 
+import java.nio.charset.Charset
 import java.util.concurrent.TimeUnit
 
-import eu.artofcoding.odisee.ooo.*
-import java.nio.charset.Charset
+import static eu.artofcoding.odisee.server.OdiseeConstant.*
 
 /**
  * Apply values and instructions from a simple XML file to generate an OpenOffice document.
@@ -39,8 +39,8 @@ class OdiseeXmlCategory {
         // TODO NullPointer when cN == directory
         fs.inject fs[0], { File o, File n ->
             // Strip extension and find _rev in filename
-            def c1 = (o.name - ~OdiseeConstant.WRITER_EXT_REGEX).split(OdiseeConstant.S_UNDERSCORE).find { it ==~ OdiseeConstant.REVISION_REGEX }
-            def c2 = (n.name - ~OdiseeConstant.WRITER_EXT_REGEX).split(OdiseeConstant.S_UNDERSCORE).find { it ==~ OdiseeConstant.REVISION_REGEX }
+            def c1 = (o.name - ~WRITER_EXT_REGEX).split(S_UNDERSCORE).find { it ==~ REVISION_REGEX }
+            def c2 = (n.name - ~WRITER_EXT_REGEX).split(S_UNDERSCORE).find { it ==~ REVISION_REGEX }
             c2.compareTo(c1) == 1 ? n : o
         }
     }
@@ -62,11 +62,11 @@ class OdiseeXmlCategory {
         String revision = xmlTemplate.'@revision'?.toString()?.toUpperCase()
         // Get template
         File template = null
-        if (templatePath && revision != OdiseeConstant.S_LATEST) {
+        if (templatePath && revision != S_LATEST) {
             template = new File(templatePath)
         }
         // Find latest revision of template
-        if (!revision || revision == OdiseeConstant.S_LATEST) {
+        if (!revision || revision == S_LATEST) {
             template = OdiseeXmlCategory.findLatestRevision(new File(template.parentFile, template.name))
         }
         // Does template exist?
@@ -142,7 +142,7 @@ class OdiseeXmlCategory {
         String autotextGroup = autotext.'@group'.toString() ?: 'Standard'
         String autotextName = autotext.'@name'.toString()
         String bookmark = autotext.'@bookmark'.toString()
-        String atend = autotext.'@atend'.toString() == OdiseeConstant.S_TRUE
+        String atend = autotext.'@atend'.toString() == S_TRUE
         //
         OdiseeXmlCategory.processInstruction template, { t ->
             use(OOoAutotextCategory) {
@@ -204,16 +204,16 @@ class OdiseeXmlCategory {
         // Read XML using locally cached DTDs
         xmlSlurper.setEntityResolver(com.bensmann.griffon.CachedDTD.entityResolver)
         */
-        arg.xml = new XmlSlurper().parseText(file.getText(OdiseeConstant.S_UTF8))
+        arg.xml = new XmlSlurper().parseText(file.getText(S_UTF8))
         //
         def request = arg.xml.request[requestNumber]
         // The ID, if none given use actual date and time
         arg.id = request.'@id'?.toString()
-        arg.id ?: (arg.id = new Date().format('yyyyMMdd-HHmmss_SSSS'))
+        arg.id ?: (arg.id = new Date().format(FILE_DATEFORMAT_SSSS))
         // Get File reference to certain or latest revision of template
         arg.template = OdiseeXmlCategory.findTemplate(request.template)
         // Set revision from found template
-        arg.revision = (arg.template.name - ~OdiseeConstant.WRITER_EXT_REGEX).split('_rev').last()
+        arg.revision = (arg.template.name - ~WRITER_EXT_REGEX).split('_rev').last()
         // Return map
         arg
     }
@@ -330,47 +330,47 @@ class OdiseeXmlCategory {
         Map result = [output: [], retries: 0, wallTime: -1]
         // Try until: we got a result or have it tried some times
 //        while (!output && result.retries < 3) {
-            try {
-                // Get connection to OpenOffice
-                String group = 'group0' // TODO request.ooo.'@group'.toString()
-                //oooConnection = oooConnectionManager.acquire(group)
-                oooConnection = officeConnectionFactory.fetchConnection(false)
-                if (!oooConnection) {
-                    throw new OdiseeException("Could not acquire connection from group '${group}'")
-                }
-                // Process template
-                output = OdiseeXmlCategory.processTemplate(arg, oooConnection)
-                if (output) {
-                    result.output += output
-                }
-                // Wall clock time
-                result.wallTime += TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start)
-                // Check result
-                if (output?.size() == 0) {
-                    // TODO Should this class decide this?
-                    if (oooConnection) {
-                        oooConnection.setFaulted(true)
-                    }
-                    throw new OdiseeException('No document')
-                }
-            } catch (e) {
-                throw e //new OdiseeException('No document', e)
-                /*
-                // Increase retry counter
-                result.retries++
-                // No result? Spin... try again.
-                try {
-                    Thread.sleep(OdiseeConstant.SPIN_TIMEOUT)
-                } catch (e2) {
-                }
-                */
-            } finally {
-                // Release connection to pool
-                //oooConnectionManager.release(oooConnection)
-                if (oooConnection) {
-                    officeConnectionFactory.repositConnection(oooConnection)
-                }
+        try {
+            // Get connection to OpenOffice
+            String group = 'group0' // TODO request.ooo.'@group'.toString()
+            //oooConnection = oooConnectionManager.acquire(group)
+            oooConnection = officeConnectionFactory.fetchConnection(false)
+            if (!oooConnection) {
+                throw new OdiseeException("Could not acquire connection from group '${group}'")
             }
+            // Process template
+            output = OdiseeXmlCategory.processTemplate(arg, oooConnection)
+            if (output) {
+                result.output += output
+            }
+            // Wall clock time
+            result.wallTime += TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start)
+            // Check result
+            if (output?.size() == 0) {
+                // TODO Should this class decide this?
+                if (oooConnection) {
+                    oooConnection.setFaulted(true)
+                }
+                throw new OdiseeException('No document')
+            }
+        } catch (e) {
+            throw e //new OdiseeException('No document', e)
+            /*
+            // Increase retry counter
+            result.retries++
+            // No result? Spin... try again.
+            try {
+                Thread.sleep(OdiseeConstant.SPIN_TIMEOUT)
+            } catch (e2) {
+            }
+            */
+        } finally {
+            // Release connection to pool
+            //oooConnectionManager.release(oooConnection)
+            if (oooConnection) {
+                officeConnectionFactory.repositConnection(oooConnection)
+            }
+        }
 //        }
         result
     }
