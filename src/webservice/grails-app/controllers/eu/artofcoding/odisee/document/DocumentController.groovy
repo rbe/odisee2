@@ -177,11 +177,14 @@ class DocumentController {
             if (shouldStream) {
                 // Find document to stream
                 // TODO stream-by-name (e.g. for merged documents or multiple-requests), use <stream/> in request XML to mark resulting document as stream-it-back
-                if (result.document instanceof List) {
+                if (result.document instanceof List && result.document.size() > 0) {
+                    /*
                     // Find document by 'outputFormat'
                     oooDocument = result.document.find {
                         it.mimeType?.name == params.outputFormat || it.filename?.endsWith(params.outputFormat)
                     } as OooDocument
+                    */
+                    oooDocument = result.document.last()
                 }
                 if (null != oooDocument) {
                     if (log.debugEnabled) {

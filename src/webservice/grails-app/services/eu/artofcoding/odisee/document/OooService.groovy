@@ -221,13 +221,56 @@ class OooService implements InitializingBean {
      */
     private void postProcessRequest(Map arg) {
         use(DOMCategory) {
-            def request = arg.xml.request[arg.activeIndex]
+            def postProcess = arg.xml.request[arg.activeIndex].'post-process'
             String methodName = null
-            request.'post-process'.instructions.'*'.eachWithIndex { instr, idx ->
+            postProcess.instructions.'*'.eachWithIndex { instr, idx ->
                 // Construct method name from element name
                 methodName = instr.'@type'[0].toUpperCase() + NameHelper.mapDashToCamelCase(instr.'@type')[1..-1]
                 postProcessService."process${methodName}"(arg, instr)
             }
+        }
+    }
+
+    /**
+     *
+     * @param arg
+     */
+    private void postProcessAll(Map arg) {
+        use(DOMCategory) {
+            def postProcess = arg.xml.'post-process'
+            String methodName = null
+            postProcess.instructions.'*'.eachWithIndex { instr, idx ->
+                // Construct method name from element name
+                methodName = instr.'@type'[0].toUpperCase() + NameHelper.mapDashToCamelCase(instr.'@type')[1..-1]
+                postProcessService."process${methodName}"(arg, instr)
+            }
+        }
+    }
+
+    /**
+     * Process result.
+     * @param arg
+     */
+    private void processSingleResult(Map arg) {
+        if (arg.result) {
+            // Post-process request
+            postProcessRequest(arg)
+            // Archive generated document(s)?
+            use(DOMCategory) {
+                def request = arg.xml.request[arg.activeIndex]
+                def archive = request.archive[0]
+                // Archive in database: request XML as string, generated document as BLOB?
+                if (archive?.'@database' == S_TRUE) {
+                    archive(arg)
+                } else {
+                    // Just create generated document as OooDocument bean.
+                    arg.result.output.each { file ->
+                        arg.document << storageService.createDocument(data: file)
+                    }
+                }
+            }
+        } else {
+            throw new OdiseeException('ODI-xxxx: No result!')
         }
     }
 
@@ -268,33 +311,6 @@ class OooService implements InitializingBean {
                     log.error "ODI-xxxx: Couldn't archive document ${oooDocument}", e
                 }
             }
-        }
-    }
-
-    /**
-     * Process result.
-     * @param arg
-     */
-    private void processSingleResult(Map arg) {
-        if (arg.result) {
-            // Post-process request
-            postProcessRequest(arg)
-            // Archive generated document(s)?
-            use(DOMCategory) {
-                def request = arg.xml.request[arg.activeIndex]
-                def archive = request.archive[0]
-                // Archive in database: request XML as string, generated document as BLOB?
-                if (archive?.'@database' == OdiseeConstant.S_TRUE) {
-                    archive(arg)
-                } else {
-                    // Just create generated document as OooDocument bean.
-                    arg.result.output.each { file ->
-                        arg.document << storageService.createDocument(data: file)
-                    }
-                }
-            }
-        } else {
-            throw new OdiseeException('ODI-xxxx: No result!')
         }
     }
 
@@ -372,7 +388,7 @@ class OooService implements InitializingBean {
                 }
             }
             // TODO Post-process all requests
-            //postProcessAll(arg)
+            postProcessAll(arg)
         } catch (e) {
             log.error 'ODI-xxxx: Exception occured during request processing', e
         } finally {
