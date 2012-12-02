@@ -1,5 +1,8 @@
 package eu.artofcoding.odisee.server;
 
+/**
+ * TODO Use Beetlejuice.MimeType
+ */
 public class OdiseeMime {
 
     /**
