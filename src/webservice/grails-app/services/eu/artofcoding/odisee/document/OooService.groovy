@@ -45,7 +45,6 @@ class OooService implements InitializingBean {
     /**
      * Manager for connections to OpenOffice.
      */
-    //OOoConnectionManager oooConnectionManager
     OfficeConnectionFactory officeConnectionFactory
 
     /**
@@ -73,9 +72,7 @@ class OooService implements InitializingBean {
      */
     private void setupOooConnectionManager(boolean force = false) {
         // Check state, do not initialize twice
-        //if (force || !oooConnectionManager) {
         if (force || !officeConnectionFactory) {
-            ////def oooProgram
             Map oooGroup = [:]
             Map ipPortGroup = [:]
             // Try to get etc/odiinst through environment variable ODISEE_HOME
