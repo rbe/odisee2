@@ -84,7 +84,7 @@ public class OdiseePath {
         } else {
             ODISEE_USER = new File(ODISEE_VAR, S_USER).absoluteFile
         }
-        ODISEE_VAR.mkdirs()
+        ODISEE_USER.mkdirs()
         //
         // ODISEE_TMP
         String envOdiseeTmp = System.getenv(S_ODISEE_TMP)
@@ -93,14 +93,7 @@ public class OdiseePath {
         } else {
             ODISEE_TMP = new File(ODISEE_HOME, S_VAR_TMP).absoluteFile
         }
-        //
-        // Templates
-        TEMPLATE_DIR = new File(ODISEE_VAR, OdiseeConstant.S_TEMPLATE)
-        TEMPLATE_DIR.mkdir()
-        //
-        // Documents
-        DOCUMENT_DIR = new File(ODISEE_VAR, OdiseeConstant.S_DOCUMENT)
-        DOCUMENT_DIR.mkdir()
+        ODISEE_TMP.mkdirs()
         //
         dumpEnv()
     }
