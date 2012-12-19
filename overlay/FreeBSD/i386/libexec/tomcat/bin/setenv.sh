@@ -9,7 +9,7 @@ TOMCAT_OPTS="-Dorg.apache.catalina.loader.WebappClassLoader.ENABLE_CLEAR_REFEREN
 MEM_OPTS="-Xms512m -Xmx512m"
 # Young generation
 # -XX:NewSize= -XX:MaxNewSize=
-YOUNGEN_OPTS="-Xmn256m"
+YOUNGEN_OPTS="-Xmn128m"
 # Permanent generation
 PERMGEN_OPTS="-XX:PermSize=64m -XX:MaxPermSize=64m"
 # Stack size

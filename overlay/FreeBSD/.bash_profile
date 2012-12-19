@@ -3,7 +3,7 @@
 #
 
 # Set Odisee home directory
-# Use $HOME or e.g. /opt/odisee
+# Use $HOME or /usr/local/odisee
 ODISEE_HOME=$HOME
 export ODISEE_HOME
 

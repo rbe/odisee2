@@ -8,7 +8,7 @@
         <Resource name="OdiseeUserDatabase"
                   auth="Container" type="org.apache.catalina.UserDatabase"
                   factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
-                  pathname="conf/odisee-basic-users.xml"/>
+                  pathname="conf/odisee-digest-users.xml"/>
     </GlobalNamingResources>
     <Service name="Catalina">
         <!--
@@ -30,7 +30,12 @@
                 <!-- /odisee -->
                 <Context path="/odisee" docBase="../../odisee/webapp" reloadable="false" crossContext="true">
                     <Realm className="org.apache.catalina.realm.LockOutRealm">
-                        <Realm className="org.apache.catalina.realm.UserDatabaseRealm" resourceName="OdiseeUserDatabase"/>
+                        <!--
+                            MD5 is used when digesting cleartext passwords.
+                            * http://tomcat.apache.org/tomcat-7.0-doc/realm-howto.html#Digested_Passwords
+                            * https://issues.apache.org/bugzilla/show_bug.cgi?id=52515
+                        -->
+                        <Realm className="org.apache.catalina.realm.UserDatabaseRealm" resourceName="OdiseeUserDatabase" digest="md5"/>
                     </Realm>
                 </Context>
             </Host>
