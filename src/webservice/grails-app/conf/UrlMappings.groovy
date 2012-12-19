@@ -13,16 +13,10 @@
 class UrlMappings {
 
     static mappings = {
-        "/$controller/$action?/$id?" {
-            constraints {
-                // apply constraints here
-            }
-        }
-        //'500'(view: '/error')
         // Index
         '/'(controller: 'document', action: 'index')
-        // Add a template
-        '/document/add'(controller: 'document', action: 'add')
+        // Generate document from template
+        "/document/generate"(controller: 'document', action: 'generate')
         // Generate document from template
         "/document/generate/$id?"(controller: 'document', action: 'generate')
     }
