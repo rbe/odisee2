@@ -84,7 +84,7 @@
         </auth-constraint>
     </security-constraint>
     <login-config>
-        <auth-method>DIGEST</auth-method>
+        <auth-method>BASIC</auth-method>
         <realm-name>Odisee</realm-name>
     </login-config>
 
