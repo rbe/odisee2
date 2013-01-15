@@ -1,0 +1,1 @@
+for i in *; do mkdir $i/.ssh; chown $i $i/.ssh; chmod go= $i/.ssh ; done
