@@ -128,9 +128,9 @@
     <!--
     
         Compile everything and run tests.
-    
+        depends="run-lib-tests"
     -->
-    <target name="world" depends="clean,distrib,run-lib-tests">
+    <target name="world" depends="clean,distrib">
     </target>
     <!--
 
