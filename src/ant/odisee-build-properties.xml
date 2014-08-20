@@ -92,7 +92,7 @@
         Groovy, Grails.
     
     -->
-    <property name="local.libexec.dir" value="/Users/rbe/app"/>
+    <property name="local.libexec.dir" value="/opt"/>
     <property name="groovy.version" value="1.8.5"/>
     <property name="grails.version" value="2.1.1"/>
     <property name="groovy.home" value="${local.libexec.dir}/groovy/${groovy.version}"/>
