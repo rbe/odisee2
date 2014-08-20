@@ -9,7 +9,6 @@ atlassian-ide-plugin.xml
 *.log
 etc/odiinst
 src/webservice/lib
-lib/*
 libexec/tomcat
 libexec/ant
 libexec/groovy
