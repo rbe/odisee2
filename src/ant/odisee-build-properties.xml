@@ -23,7 +23,9 @@
     <!-- OOo extension -->
     <property name="extension.dir" value="${src.dir}/extension"/>
     <!-- Distribution w/o platform dependent things -->
-    <property name="dist.dir" value="${basedir}/dist"/>
+    <property name="dist.dir" value="${build.dir}/world/dist"/>
+    <!-- Download third party software -->
+    <property name="thirdparty.dir" value="${user.home}/project/odisee/thirdparty"/>
     <!--
     
         Embedded Odisee (library).
@@ -43,18 +45,21 @@
         Distribution, world: distribution including platform-dependent things.
     
     -->
+    <property name="overlay.dir"          value="${basedir}/overlay"/>
     <!-- Directory to produce platform independent distribution -->
-    <property name="world.base.dir"      value="${build.dir}/world"/>
-    <property name="world.etc.dir"       value="${world.base.dir}/etc"/>
-    <property name="world.license.dir"   value="${world.base.dir}/license"/>
-    <property name="world.bin.dir"       value="${world.base.dir}/bin"/>
-    <property name="world.lib.dir"       value="${world.base.dir}/lib"/>
-    <property name="world.libexec.dir"   value="${world.base.dir}/libexec"/>
-    <property name="world.tomcat.dir"    value="${world.libexec.dir}/tomcat"/>
-    <property name="world.src.dir"       value="${world.base.dir}/src"/>
-    <property name="world.extension.dir" value="${world.src.dir}/extension"/>
-    <property name="world.var.dir"       value="${world.base.dir}/var"/>
-    <property name="world.var.tmp.dir"   value="${world.var.dir}/tmp"/>
+    <property name="world.base.dir"       value="${build.dir}/world"/>
+    <property name="world.etc.dir"        value="${world.base.dir}/etc"/>
+    <property name="world.license.dir"    value="${world.base.dir}/license"/>
+    <property name="world.bin.dir"        value="${world.base.dir}/bin"/>
+    <property name="world.lib.dir"        value="${world.base.dir}/lib"/>
+    <property name="world.libexec.dir"    value="${world.base.dir}/libexec"/>
+    <property name="world.tomcat.dir"     value="${world.libexec.dir}/tomcat"/>
+    <property name="world.src.dir"        value="${world.base.dir}/src"/>
+    <property name="world.extension.dir"  value="${world.src.dir}/extension"/>
+    <property name="world.var.dir"        value="${world.base.dir}/var"/>
+    <property name="world.var.tmp.dir"    value="${world.var.dir}/tmp"/>
+    <!-- -->
+    <property name="world.linux_x86_64.base.dir" value="${build.dir}/world-linux-x86_64"/>
     <!--
     
         OpenOffice.
@@ -92,7 +97,7 @@
         Groovy, Grails.
     
     -->
-    <property name="local.libexec.dir" value="/opt"/>
+    <property name="local.libexec.dir" value="${user.home}/app"/>
     <property name="groovy.version" value="1.8.5"/>
     <property name="grails.version" value="2.1.1"/>
     <property name="groovy.home" value="${local.libexec.dir}/groovy/${groovy.version}"/>
