@@ -199,8 +199,8 @@
     -->
     <target name="world-linux-x86_64-zip" depends="world-linux-x86_64">
         <zip destfile="${dist.zip.dir}/odisee-linux-x86_64-${webservice.version.number}.zip" whenempty="fail">
-            <zipfileset dir="${world.base.dir}" includes="**" excludes="bin/**" prefix="odisee"/>
-            <zipfileset dir="${world.base.dir}" includes="bin/**" prefix="odisee" filemode="555"/>
+            <zipfileset dir="${world.linux_x86_64.base.dir}" includes="**" excludes="bin/**" prefix="odisee"/>
+            <zipfileset dir="${world.linux_x86_64.base.dir}" includes="bin/**" prefix="odisee" filemode="555"/>
         </zip>
     </target>
     <!--
