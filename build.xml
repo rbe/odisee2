@@ -27,9 +27,7 @@
     
     -->
     <target name="clean" depends="clean-webservice,clean-library">
-        <!-- Clean ZIP distributions -->
-        <delete verbose="${buildprop.odisee.build.verbose}" dir="${dist.zip.dir}"/>
-        <!-- Clean world distributions -->
+        <!-- Clean world -->
         <delete verbose="${buildprop.odisee.build.verbose}" dir="${world.base.dir}"/>
     </target>
     <!--
@@ -87,7 +85,7 @@
         </copy>
         <!-- odisee -->
         <mkdir dir="${world.base.dir}"/>
-        <!-- Version -->
+        <!-- etc -->
         <mkdir dir="${world.etc.dir}"/>
         <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.etc.dir}">
             <fileset dir="${etc.dir}">
@@ -95,14 +93,14 @@
                 <exclude name="odiinst"/>
             </fileset>
         </copy>
-        <!-- bin/ -->
+        <!-- bin -->
         <mkdir dir="${world.bin.dir}"/>
         <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.bin.dir}">
             <fileset dir="${bin.dir}">
                 <include name="**"/>
             </fileset>
         </copy>
-        <!-- Libraries -->
+        <!-- lib -->
         <mkdir dir="${world.lib.dir}"/>
         <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.lib.dir}">
             <!-- -->
@@ -122,7 +120,9 @@
                 <include name="**"/>
             </fileset>
         </copy>
-        <!-- Source -->
+        <!-- odisee.war -->
+        <unzip src="${webservice.target.dir}/odisee.war" dest="${world.libexec.dir}/odisee/webapp"/>
+        <!-- src -->
         <mkdir dir="${world.src.dir}"/>
         <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.src.dir}">
             <fileset dir="${src.dir}">
@@ -165,7 +165,7 @@
         depends="run-lib-tests"
     -->
     <target name="world" depends="clean,distrib">
-        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.base.dir}/libexec">
+        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.base.dir}/libexec" overwrite="true">
             <fileset dir="${overlay.dir}/libexec"/>
         </copy>
         <echo file="${world.etc.dir}/version" message="${webservice.version.number}"/>
@@ -176,19 +176,19 @@
     
     -->
     <target name="world-linux-x86_64" depends="world">
-        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.linux_x86_64.base.dir}">
+        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.linux_x86_64.base.dir}" overwrite="true">
             <fileset dir="${world.base.dir}"/>
         </copy>
-        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.linux_x86_64.base.dir}">
+        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.linux_x86_64.base.dir}" overwrite="true">
             <fileset file="${overlay.dir}/Linux/.bash_profile"/>
         </copy>
-        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.linux_x86_64.base.dir}/bin">
+        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.linux_x86_64.base.dir}/bin" overwrite="true">
             <fileset dir="${overlay.dir}/Linux/bin"/>
         </copy>
-        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.linux_x86_64.base.dir}/etc">
+        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.linux_x86_64.base.dir}/etc" overwrite="true">
             <fileset dir="${overlay.dir}/Linux/etc"/>
         </copy>
-        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.linux_x86_64.base.dir}">
+        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.linux_x86_64.base.dir}" overwrite="true">
             <fileset dir="${overlay.dir}/Linux/x86_64"/>
         </copy>
     </target>
