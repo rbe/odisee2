@@ -18,7 +18,6 @@ libexec/tomcat
 libexec/Darwin/x86_64
 libexec/Linux/i386
 libexec/Linux/x86_64
-var/
 /out/
 build/
 target/
