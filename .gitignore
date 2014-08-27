@@ -31,3 +31,4 @@ overlay/libexec/odisee/webapp
 overlay/libexec/tomcat/lib
 src/webservice/test/report
 .fonts
+distrib/install4j/output.txt
