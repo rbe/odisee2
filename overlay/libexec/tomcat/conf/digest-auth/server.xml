@@ -8,7 +8,7 @@
         <Resource name="OdiseeUserDatabase"
                   auth="Container" type="org.apache.catalina.UserDatabase"
                   factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
-                  pathname="conf/odisee-digest-users.xml"/>
+                  pathname="conf/odisee-users.digest.xml"/>
     </GlobalNamingResources>
     <Service name="Catalina">
         <!--
