@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<updateDescriptor baseUrl="">
+  <entry targetMediaFileId="312" updatableVersionMin="" updatableVersionMax="" fileName="Odisee_2_2_3_20_Windows_x64.exe" newVersion="2.2.3.20" newMediaFileId="312" fileSize="123482624" bundledJre="windows-amd64-1.7.0_10" archive="false">
+    <comment language="en" />
+  </entry>
+</updateDescriptor>
+

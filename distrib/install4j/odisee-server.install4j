@@ -1,0 +1,1018 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<install4j version="5.1.5" transformSequenceNumber="4">
+  <directoryPresets config="../odisee-windows/OdiseeService/OdiseeService/bin/Release/OdiseeService.exe" />
+  <application name="Odisee" distributionSourceDir="" applicationId="0761-6879-6638-8412" mediaDir="./install4j" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.version}_${compiler:sys.platform}" compression="9" lzmaCompression="true" pack200Compression="false" excludeSignedFromPacking="true" commonExternalFiles="true" createMd5Sums="true" shrinkRuntime="true" shortName="Odisee" publisher="art of coding UG" publisherWeb="http://www.odisee.de" version="2.2.3.20" allPathsRelative="true" backupOnSave="false" autoSave="true" convertDotsToUnderscores="true" macSignature="????" installerName="" javaMinVersion="1.7" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
+    <languages skipLanguageSelection="false" languageSelectionInPrincipalLanguage="false">
+      <principalLanguage id="en" customLocalizationFile="" />
+      <additionalLanguages />
+    </languages>
+    <searchSequence>
+      <registry />
+      <envVar name="JAVA_HOME" />
+      <envVar name="JDK_HOME" />
+    </searchSequence>
+    <variables />
+    <mergedProjects />
+    <codeSigning macEnabled="true" macPkcs12File="../../cert/devloperID_application.p12" windowsEnabled="false" windowsKeySource="pvkAndSpc" windowsPvkFile="" windowsSpcFile="" windowsPkcs12File="" />
+  </application>
+  <files keepModificationTimes="false" missingFilesStrategy="warn" globalExcludeSuffixes=".DS_Store" defaultOverwriteMode="4" defaultUninstallMode="0" launcherOverwriteMode="3" defaultFileMode="644" defaultDirMode="755">
+    <filesets>
+      <fileset name="Odisee Request Examples" id="335" customizedId="" />
+      <fileset name="Odisee Extension" id="342" customizedId="" />
+      <fileset name="FreeBSD i386" id="840" customizedId="" />
+      <fileset name="FreeBSD amd64" id="153" customizedId="" />
+      <fileset name="Linux x86" id="850" customizedId="" />
+      <fileset name="Linux x86_64" id="124" customizedId="" />
+      <fileset name="Darwin x86_64" id="117" customizedId="" />
+      <fileset name="Windows x86" id="163" customizedId="" />
+      <fileset name="Windows x64" id="165" customizedId="" />
+    </filesets>
+    <roots>
+      <root id="336" fileset="335" location="" />
+      <root id="343" fileset="342" location="" />
+      <root id="841" fileset="840" location="" />
+      <root id="154" fileset="153" location="" />
+      <root id="851" fileset="850" location="" />
+      <root id="125" fileset="124" location="" />
+      <root id="118" fileset="117" location="" />
+      <root id="164" fileset="163" location="" />
+      <root id="166" fileset="165" location="" />
+    </roots>
+    <mountPoints>
+      <mountPoint id="100" root="" location="bin" mode="755" />
+      <mountPoint id="101" root="" location="etc" mode="755" />
+      <mountPoint id="314" root="" location="lib" mode="755" />
+      <mountPoint id="327" root="" location="lib/ant" mode="755" />
+      <mountPoint id="103" root="" location="libexec" mode="755" />
+      <mountPoint id="155" root="" location="libexec/ant" mode="755" />
+      <mountPoint id="328" root="" location="libexec/ant/bin" mode="755" />
+      <mountPoint id="156" root="" location="libexec/odisee" mode="755" />
+      <mountPoint id="665" root="" location="libexec/tomcat" mode="755" />
+      <mountPoint id="666" root="" location="libexec/tomcat/lib" mode="755" />
+      <mountPoint id="104" root="" location="license" mode="755" />
+      <mountPoint id="106" root="" location="var" mode="755" />
+      <mountPoint id="107" root="" location="var/deploy" mode="755" />
+      <mountPoint id="200" root="" location="var/deploy/fonts" mode="755" />
+      <mountPoint id="109" root="" location="var/deploy/oxt" mode="755" />
+      <mountPoint id="110" root="" location="var/deploy/pdf" mode="755" />
+      <mountPoint id="111" root="" location="var/deploy/template" mode="755" />
+      <mountPoint id="112" root="" location="var/log" mode="755" />
+      <mountPoint id="316" root="" location="var/profile" mode="755" />
+      <mountPoint id="113" root="" location="var/tmp" mode="755" />
+      <mountPoint id="466" root="" location="var/user" mode="755" />
+      <mountPoint id="467" root="" location="var/user/odisee" mode="755" />
+      <mountPoint id="468" root="" location="var/user/odisee/document" mode="755" />
+      <mountPoint id="469" root="" location="var/user/odisee/template" mode="755" />
+      <mountPoint id="144" root="" location="" mode="755" />
+      <mountPoint id="338" root="336" location="var" mode="755" />
+      <mountPoint id="341" root="336" location="var/test" mode="755" />
+      <mountPoint id="470" root="336" location="var/user" mode="755" />
+      <mountPoint id="471" root="336" location="var/user/odisee" mode="755" />
+      <mountPoint id="472" root="336" location="var/user/odisee/template" mode="755" />
+      <mountPoint id="582" root="336" location="var/user/odisee/pdf" mode="755" />
+      <mountPoint id="348" root="343" location="src" mode="755" />
+      <mountPoint id="349" root="343" location="src/extension" mode="755" />
+      <mountPoint id="350" root="343" location="src/extension/ant" mode="755" />
+      <mountPoint id="351" root="343" location="src/extension/Odisee" mode="755" />
+      <mountPoint id="862" root="841" location="bin" mode="755" />
+      <mountPoint id="856" root="841" location="etc" mode="755" />
+      <mountPoint id="842" root="841" location="libexec" mode="755" />
+      <mountPoint id="844" root="841" location="libexec/tomcat" mode="755" />
+      <mountPoint id="845" root="841" location="libexec/tomcat/bin" mode="755" />
+      <mountPoint id="863" root="154" location="bin" mode="755" />
+      <mountPoint id="857" root="154" location="etc" mode="755" />
+      <mountPoint id="157" root="154" location="libexec" mode="755" />
+      <mountPoint id="206" root="154" location="libexec/tomcat" mode="755" />
+      <mountPoint id="839" root="154" location="libexec/tomcat/bin" mode="755" />
+      <mountPoint id="869" root="154" location="" mode="755" />
+      <mountPoint id="864" root="851" location="bin" mode="755" />
+      <mountPoint id="858" root="851" location="etc" mode="755" />
+      <mountPoint id="852" root="851" location="libexec" mode="755" />
+      <mountPoint id="854" root="851" location="libexec/tomcat" mode="755" />
+      <mountPoint id="855" root="851" location="libexec/tomcat/bin" mode="755" />
+      <mountPoint id="870" root="851" location="" mode="755" />
+      <mountPoint id="865" root="125" location="bin" mode="755" />
+      <mountPoint id="859" root="125" location="etc" mode="755" />
+      <mountPoint id="126" root="125" location="libexec" mode="755" />
+      <mountPoint id="207" root="125" location="libexec/tomcat" mode="755" />
+      <mountPoint id="846" root="125" location="libexec/tomcat/bin" mode="755" />
+      <mountPoint id="871" root="125" location="" mode="755" />
+      <mountPoint id="866" root="118" location="bin" mode="755" />
+      <mountPoint id="860" root="118" location="etc" mode="755" />
+      <mountPoint id="122" root="118" location="libexec" mode="755" />
+      <mountPoint id="208" root="118" location="libexec/tomcat" mode="755" />
+      <mountPoint id="847" root="118" location="libexec/tomcat/bin" mode="755" />
+      <mountPoint id="867" root="164" location="bin" mode="755" />
+      <mountPoint id="171" root="164" location="libexec" mode="755" />
+      <mountPoint id="172" root="164" location="libexec/tomcat" mode="755" />
+      <mountPoint id="848" root="164" location="libexec/tomcat/bin" mode="755" />
+      <mountPoint id="868" root="166" location="bin" mode="755" />
+      <mountPoint id="173" root="166" location="libexec" mode="755" />
+      <mountPoint id="174" root="166" location="libexec/tomcat" mode="755" />
+      <mountPoint id="849" root="166" location="libexec/tomcat/bin" mode="755" />
+    </mountPoints>
+    <entries>
+      <dirEntry mountPoint="100" file="../odisee/bin" overwriteMode="1" shared="false" fileMode="755" uninstallMode="2" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" entryMode="direct" subDirectory="bin" excludeSuffixes="" dirMode="755" overrideDirMode="true">
+        <exclude>
+          <entry location="odirun" fileType="regular" />
+          <entry location="odisee" fileType="regular" />
+          <entry location="odistartinst" fileType="regular" />
+          <entry location="odiupdate" fileType="regular" />
+          <entry location="odiwatchdog" fileType="regular" />
+        </exclude>
+      </dirEntry>
+      <dirEntry mountPoint="101" file="../odisee/etc" overwriteMode="1" shared="false" fileMode="644" uninstallMode="2" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" entryMode="direct" subDirectory="etc" excludeSuffixes="" dirMode="755" overrideDirMode="true">
+        <exclude>
+          <entry location="local.odienv" fileType="regular" />
+          <entry location="odiinst" fileType="regular" />
+          <entry location="Odisee.xpr" fileType="regular" />
+        </exclude>
+      </dirEntry>
+      <dirEntry mountPoint="101" file="../odisee/etc" overwriteMode="0" shared="false" fileMode="644" uninstallMode="1" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" entryMode="direct" subDirectory="etc" excludeSuffixes="" dirMode="755" overrideDirMode="true">
+        <exclude>
+          <entry location="odienv" fileType="regular" />
+          <entry location="Odisee.xpr" fileType="regular" />
+          <entry location="request.xml" fileType="regular" />
+          <entry location="request.xsd" fileType="regular" />
+          <entry location="version" fileType="regular" />
+        </exclude>
+      </dirEntry>
+      <dirEntry mountPoint="327" file="../odisee/lib/ant" overwriteMode="1" shared="false" fileMode="644" uninstallMode="2" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" entryMode="direct" subDirectory="ant" excludeSuffixes="" dirMode="755" overrideDirMode="true">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="328" file="./apache-ant-1.8.4/bin" overwriteMode="1" shared="false" fileMode="755" uninstallMode="2" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" entryMode="direct" subDirectory="bin" excludeSuffixes="" dirMode="755" overrideDirMode="true">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="155" file="./apache-ant-1.8.4" overwriteMode="1" shared="false" fileMode="644" uninstallMode="2" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" entryMode="direct" subDirectory="apache-ant-1.8.4" excludeSuffixes="" dirMode="755" overrideDirMode="true">
+        <exclude>
+          <entry location="bin" fileType="regular" />
+          <entry location="fetch.xml" fileType="regular" />
+          <entry location="get-m2.xml" fileType="regular" />
+          <entry location="INSTALL" fileType="regular" />
+          <entry location="KEYS" fileType="regular" />
+          <entry location="manual" fileType="regular" />
+          <entry location="NOTICE" fileType="regular" />
+          <entry location="README" fileType="regular" />
+          <entry location="WHATSNEW" fileType="regular" />
+        </exclude>
+      </dirEntry>
+      <dirEntry mountPoint="156" file="../odisee/libexec/odisee" overwriteMode="1" shared="false" fileMode="644" uninstallMode="2" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" entryMode="direct" subDirectory="odisee" excludeSuffixes="" dirMode="755" overrideDirMode="true">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="156" file="../odisee/overlay/libexec/odisee" overwriteMode="1" shared="false" fileMode="644" uninstallMode="2" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" entryMode="direct" subDirectory="odisee" excludeSuffixes="" dirMode="755" overrideDirMode="true">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="666" file="./grails-2.1.1-libs" overwriteMode="1" shared="false" fileMode="644" uninstallMode="2" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" entryMode="direct" subDirectory="grails-2.0.1-libs" excludeSuffixes="" dirMode="755" overrideDirMode="true">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="104" file="../odisee/license" overwriteMode="1" shared="false" fileMode="644" uninstallMode="2" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" entryMode="direct" subDirectory="license" excludeSuffixes="" dirMode="755" overrideDirMode="true">
+        <exclude />
+      </dirEntry>
+      <fileEntry mountPoint="144" file="../odisee/README.md" overwriteMode="1" shared="false" fileMode="644" uninstallMode="2" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" />
+      <dirEntry mountPoint="341" file="../odisee/var/test" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="test" excludeSuffixes="*.odt,*.pdf" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <fileEntry mountPoint="472" file="../odisee/var/user/odisee/template/HalloOdisee_rev1.ott" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" />
+      <fileEntry mountPoint="582" file="../odisee/var/user/odisee/pdf/AGB.pdf" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" />
+      <dirEntry mountPoint="350" file="../odisee/src/extension/ant" overwriteMode="1" shared="false" fileMode="644" uninstallMode="2" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" entryMode="direct" subDirectory="ant" excludeSuffixes="" dirMode="755" overrideDirMode="true">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="351" file="../odisee/src/extension/Odisee" overwriteMode="1" shared="false" fileMode="644" uninstallMode="2" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" entryMode="direct" subDirectory="Odisee" excludeSuffixes="" dirMode="755" overrideDirMode="true">
+        <exclude>
+          <entry location="build" fileType="regular" />
+          <entry location="dist" fileType="regular" />
+        </exclude>
+      </dirEntry>
+      <fileEntry mountPoint="349" file="../odisee/src/extension/extension-build-template.xml" overwriteMode="1" shared="false" fileMode="644" uninstallMode="2" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" />
+      <dirEntry mountPoint="862" file="../odisee/overlay/FreeBSD/bin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="bin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="856" file="../odisee/overlay/FreeBSD/etc" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="etc" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="845" file="../odisee/overlay/FreeBSD/i386/libexec/tomcat/bin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="bin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="844" file="./apache-tomcat-7.0.34" overwriteMode="1" shared="false" fileMode="644" uninstallMode="2" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" entryMode="direct" subDirectory="apache-tomcat-7.0.32" excludeSuffixes="" dirMode="755" overrideDirMode="true">
+        <exclude>
+          <entry location="conf/logging.properties" fileType="regular" />
+          <entry location="conf/server.xml" fileType="regular" />
+          <entry location="conf/tomcat-users.xml" fileType="regular" />
+          <entry location="conf/web.xml" fileType="regular" />
+          <entry location="NOTICE" fileType="regular" />
+          <entry location="RELEASE-NOTES" fileType="regular" />
+          <entry location="RUNNING.txt" fileType="regular" />
+          <entry location="temp" fileType="regular" />
+          <entry location="webapps" fileType="regular" />
+          <entry location="work" fileType="regular" />
+        </exclude>
+      </dirEntry>
+      <dirEntry mountPoint="844" file="../odisee/overlay/libexec/tomcat" overwriteMode="1" shared="false" fileMode="644" uninstallMode="2" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" entryMode="direct" subDirectory="tomcat" excludeSuffixes="" dirMode="755" overrideDirMode="true">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="863" file="../odisee/overlay/FreeBSD/bin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="bin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="857" file="../odisee/overlay/FreeBSD/etc" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="etc" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="839" file="../odisee/overlay/FreeBSD/amd64/libexec/tomcat/bin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="bin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="206" file="./apache-tomcat-7.0.34" overwriteMode="1" shared="false" fileMode="644" uninstallMode="2" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" entryMode="direct" subDirectory="apache-tomcat-7.0.32" excludeSuffixes="" dirMode="755" overrideDirMode="true">
+        <exclude>
+          <entry location="conf/logging.properties" fileType="regular" />
+          <entry location="conf/server.xml" fileType="regular" />
+          <entry location="conf/tomcat-users.xml" fileType="regular" />
+          <entry location="conf/web.xml" fileType="regular" />
+          <entry location="NOTICE" fileType="regular" />
+          <entry location="RELEASE-NOTES" fileType="regular" />
+          <entry location="RUNNING.txt" fileType="regular" />
+          <entry location="temp" fileType="regular" />
+          <entry location="webapps" fileType="regular" />
+          <entry location="work" fileType="regular" />
+        </exclude>
+      </dirEntry>
+      <dirEntry mountPoint="206" file="../odisee/overlay/libexec/tomcat" overwriteMode="1" shared="false" fileMode="644" uninstallMode="2" overrideFileMode="true" overrideOverwriteMode="true" overrideUninstallMode="true" entryMode="direct" subDirectory="tomcat" excludeSuffixes="" dirMode="755" overrideDirMode="true">
+        <exclude />
+      </dirEntry>
+      <fileEntry mountPoint="869" file="../odisee/overlay/FreeBSD/.bash_profile" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" />
+      <dirEntry mountPoint="864" file="../odisee/overlay/Linux/bin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="bin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="858" file="../odisee/overlay/Linux/etc" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="etc" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="855" file="../odisee/overlay/Linux/x86/libexec/tomcat/bin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="bin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="854" file="./apache-tomcat-7.0.34" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="apache-tomcat-7.0.32" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude>
+          <entry location="conf/logging.properties" fileType="regular" />
+          <entry location="conf/server.xml" fileType="regular" />
+          <entry location="conf/tomcat-users.xml" fileType="regular" />
+          <entry location="conf/web.xml" fileType="regular" />
+          <entry location="NOTICE" fileType="regular" />
+          <entry location="RELEASE-NOTES" fileType="regular" />
+          <entry location="RUNNING.txt" fileType="regular" />
+          <entry location="temp" fileType="regular" />
+          <entry location="webapps" fileType="regular" />
+          <entry location="work" fileType="regular" />
+        </exclude>
+      </dirEntry>
+      <dirEntry mountPoint="854" file="../odisee/overlay/libexec/tomcat" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="tomcat" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <fileEntry mountPoint="870" file="../odisee/overlay/Linux/.bash_profile" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" />
+      <dirEntry mountPoint="865" file="../odisee/overlay/Linux/bin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="bin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="859" file="../odisee/overlay/Linux/etc" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="etc" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="846" file="../odisee/overlay/Linux/x86_64/libexec/tomcat/bin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="bin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="207" file="./apache-tomcat-7.0.34" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="apache-tomcat-7.0.32" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude>
+          <entry location="conf/logging.properties" fileType="regular" />
+          <entry location="conf/server.xml" fileType="regular" />
+          <entry location="conf/tomcat-users.xml" fileType="regular" />
+          <entry location="conf/web.xml" fileType="regular" />
+          <entry location="NOTICE" fileType="regular" />
+          <entry location="RELEASE-NOTES" fileType="regular" />
+          <entry location="RUNNING.txt" fileType="regular" />
+          <entry location="temp" fileType="regular" />
+          <entry location="webapps" fileType="regular" />
+          <entry location="work" fileType="regular" />
+        </exclude>
+      </dirEntry>
+      <dirEntry mountPoint="207" file="../odisee/overlay/libexec/tomcat" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="tomcat" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <fileEntry mountPoint="871" file="../odisee/overlay/Linux/.bash_profile" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" />
+      <dirEntry mountPoint="866" file="../odisee/overlay/Darwin/bin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="bin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="860" file="../odisee/overlay/Darwin/etc" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="etc" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="847" file="../odisee/overlay/Darwin/x86_64/libexec/tomcat/bin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="bin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="208" file="./apache-tomcat-7.0.34" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="apache-tomcat-7.0.32" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude>
+          <entry location="conf/logging.properties" fileType="regular" />
+          <entry location="conf/server.xml" fileType="regular" />
+          <entry location="conf/tomcat-users.xml" fileType="regular" />
+          <entry location="conf/web.xml" fileType="regular" />
+          <entry location="NOTICE" fileType="regular" />
+          <entry location="RELEASE-NOTES" fileType="regular" />
+          <entry location="RUNNING.txt" fileType="regular" />
+          <entry location="temp" fileType="regular" />
+          <entry location="webapps" fileType="regular" />
+          <entry location="work" fileType="regular" />
+        </exclude>
+      </dirEntry>
+      <dirEntry mountPoint="208" file="../odisee/overlay/libexec/tomcat" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="tomcat" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <fileEntry mountPoint="867" file="../odisee-windows/OdiseeService/OdiseeService/bin/Release/OdiseeService.exe" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" />
+      <dirEntry mountPoint="848" file="../odisee/overlay/windows/x86/libexec/tomcat/bin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="bin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="172" file="./apache-tomcat-7.0.34-windows-x86" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="apache-tomcat-7.0.32-windows-x86" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude>
+          <entry location="conf/logging.properties" fileType="regular" />
+          <entry location="conf/server.xml" fileType="regular" />
+          <entry location="conf/tomcat-users.xml" fileType="regular" />
+          <entry location="conf/web.xml" fileType="regular" />
+          <entry location="NOTICE" fileType="regular" />
+          <entry location="RELEASE-NOTES" fileType="regular" />
+          <entry location="RUNNING.txt" fileType="regular" />
+          <entry location="temp" fileType="regular" />
+          <entry location="webapps" fileType="regular" />
+          <entry location="work" fileType="regular" />
+        </exclude>
+      </dirEntry>
+      <dirEntry mountPoint="172" file="../odisee/overlay/libexec/tomcat" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="tomcat" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <fileEntry mountPoint="868" file="../odisee-windows/OdiseeService/OdiseeService/bin/Release/OdiseeService.exe" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" />
+      <dirEntry mountPoint="849" file="../odisee/overlay/windows/x64/libexec/tomcat/bin" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="bin" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="174" file="./apache-tomcat-7.0.34-windows-x64" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="apache-tomcat-7.0.32-windows-x64" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude>
+          <entry location="conf/logging.properties" fileType="regular" />
+          <entry location="conf/server.xml" fileType="regular" />
+          <entry location="conf/tomcat-users.xml" fileType="regular" />
+          <entry location="conf/web.xml" fileType="regular" />
+          <entry location="NOTICE" fileType="regular" />
+          <entry location="RELEASE-NOTES" fileType="regular" />
+          <entry location="RUNNING.txt" fileType="regular" />
+          <entry location="temp" fileType="regular" />
+          <entry location="webapps" fileType="regular" />
+          <entry location="work" fileType="regular" />
+        </exclude>
+      </dirEntry>
+      <dirEntry mountPoint="174" file="../odisee/overlay/libexec/tomcat" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="tomcat" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+    </entries>
+    <components>
+      <component name="Odisee Server Core" id="334" customizedId="" displayDescription="true" hideHelpButton="false" selected="true" changeable="false" downloadable="false" hidden="false">
+        <description>Odisee(R) Server mandatory components.</description>
+        <include all="false">
+          <entry location=".i4j_fileset_" fileType="regular" />
+          <entry location=".i4j_fileset_117" fileType="regular" />
+          <entry location=".i4j_fileset_163" fileType="regular" />
+          <entry location=".i4j_fileset_165" fileType="regular" />
+        </include>
+        <dependencies />
+      </component>
+      <component name="Odisee Extension" id="344" customizedId="" displayDescription="true" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
+        <description>The Odisee extension, written mainly in Basic.</description>
+        <include all="false">
+          <entry location=".i4j_fileset_342" fileType="regular" />
+        </include>
+        <dependencies>
+          <component id="334" />
+        </dependencies>
+      </component>
+      <component name="Odisee Request Examples" id="337" customizedId="" displayDescription="true" hideHelpButton="false" selected="true" changeable="true" downloadable="false" hidden="false">
+        <description>Examples of requests which can be sent to Odisee. Used for testing.</description>
+        <include all="false">
+          <entry location=".i4j_fileset_335" fileType="regular" />
+        </include>
+        <dependencies>
+          <component id="334" />
+        </dependencies>
+      </component>
+      <component name="LibreOffice" id="785" customizedId="" displayDescription="false" hideHelpButton="false" selected="true" changeable="true" downloadable="true" hidden="false">
+        <description />
+        <include all="false" />
+        <dependencies>
+          <component id="334" />
+        </dependencies>
+      </component>
+    </components>
+  </files>
+  <launchers>
+    <launcher name="OdiseeService x86" id="1009" customizedId="" external="true" excludeFromMenu="false" unixMode="755" menuName="" externalFile="bin/OdiseeService.exe" />
+    <launcher name="OdiseeService x64" id="1010" customizedId="" external="true" excludeFromMenu="false" unixMode="755" menuName="" externalFile="bin/OdiseeService.exe" />
+  </launchers>
+  <installerGui installerType="1" addOnAppId="" suggestPreviousLocations="true" autoUpdateDescriptorUrl="" useAutoUpdateBaseUrl="false" autoUpdateBaseUrl="">
+    <customCode />
+    <autoUpdate useMinUpdatableVersion="false" minUpdatableVersion="" useMaxUpdatableVersion="false" maxUpdatableVersion="">
+      <commentFiles />
+      <customAttributes />
+    </autoUpdate>
+    <applications>
+      <application name="" id="installer" customizedId="" beanClass="com.install4j.runtime.beans.applications.InstallerApplication" enabled="true" commentSet="false" comment="" actionElevationType="none" fileset="" customIcnsFile="" customIcoFile="" macEntitlementsFile="" automaticLauncherIntegration="false" launchMode="startupFirstWindow" launchInNewProcess="false" launchSchedule="updateSchedule" allLaunchers="true">
+        <serializedBean>
+          <java class="java.beans.XMLDecoder">
+            <object class="com.install4j.runtime.beans.applications.InstallerApplication" />
+          </java>
+        </serializedBean>
+        <launcherIds />
+        <variables />
+        <startup>
+          <screen name="" id="1" customizedId="" beanClass="com.install4j.runtime.beans.screens.StartupScreen" enabled="true" commentSet="false" comment="" actionElevationType="inherit" rollbackBarrier="false" backButton="2" finishScreen="false" wizardIndexChangeType="unchanged" wizardIndexKey="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.StartupScreen" />
+              </java>
+            </serializedBean>
+            <condition />
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions>
+              <action name="" id="13" customizedId="" beanClass="com.install4j.runtime.beans.actions.misc.RequestPrivilegesAction" enabled="true" commentSet="false" comment="" actionElevationType="none" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.misc.RequestPrivilegesAction">
+                      <void property="failIfNotRootUnix">
+                        <boolean>true</boolean>
+                      </void>
+                      <void property="obtainIfAdminMac">
+                        <boolean>true</boolean>
+                      </void>
+                      <void property="obtainIfNormalMac">
+                        <boolean>true</boolean>
+                      </void>
+                      <void property="obtainIfNormalWin">
+                        <boolean>true</boolean>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+            </actions>
+            <formComponents />
+          </screen>
+        </startup>
+        <screens>
+          <screen name="" id="2" customizedId="" beanClass="com.install4j.runtime.beans.screens.WelcomeScreen" enabled="true" commentSet="false" comment="" actionElevationType="inherit" rollbackBarrier="false" backButton="2" finishScreen="false" wizardIndexChangeType="unchanged" wizardIndexKey="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.WelcomeScreen" />
+              </java>
+            </serializedBean>
+            <condition />
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions>
+              <action name="" id="3" customizedId="" beanClass="com.install4j.runtime.beans.actions.misc.LoadResponseFileAction" enabled="true" commentSet="false" comment="" actionElevationType="inherit" rollbackBarrier="false" multiExec="true" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.misc.LoadResponseFileAction">
+                      <void property="excludedVariables">
+                        <array class="java.lang.String" length="1">
+                          <void index="0">
+                            <string>sys.installationDir</string>
+                          </void>
+                        </array>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition>context.getBooleanVariable("sys.confirmedUpdateInstallation")</condition>
+              </action>
+            </actions>
+            <formComponents />
+          </screen>
+          <screen name="" id="4" customizedId="" beanClass="com.install4j.runtime.beans.screens.InstallationDirectoryScreen" enabled="true" commentSet="false" comment="" actionElevationType="inherit" rollbackBarrier="false" backButton="2" finishScreen="false" wizardIndexChangeType="unchanged" wizardIndexKey="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.InstallationDirectoryScreen" />
+              </java>
+            </serializedBean>
+            <condition>!context.getBooleanVariable("sys.confirmedUpdateInstallation")</condition>
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions>
+              <action name="" id="5" customizedId="" beanClass="com.install4j.runtime.beans.actions.misc.LoadResponseFileAction" enabled="true" commentSet="false" comment="" actionElevationType="inherit" rollbackBarrier="false" multiExec="true" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.misc.LoadResponseFileAction">
+                      <void property="excludedVariables">
+                        <array class="java.lang.String" length="1">
+                          <void index="0">
+                            <string>sys.installationDir</string>
+                          </void>
+                        </array>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition>context.getVariable("sys.responseFile") == null</condition>
+              </action>
+            </actions>
+            <formComponents />
+          </screen>
+          <screen name="" id="6" customizedId="" beanClass="com.install4j.runtime.beans.screens.ComponentsScreen" enabled="true" commentSet="false" comment="" actionElevationType="inherit" rollbackBarrier="false" backButton="2" finishScreen="false" wizardIndexChangeType="unchanged" wizardIndexKey="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.ComponentsScreen" />
+              </java>
+            </serializedBean>
+            <condition />
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions />
+            <formComponents />
+          </screen>
+          <screen name="" id="7" customizedId="" beanClass="com.install4j.runtime.beans.screens.StandardProgramGroupScreen" enabled="true" commentSet="false" comment="" actionElevationType="inherit" rollbackBarrier="false" backButton="2" finishScreen="false" wizardIndexChangeType="unchanged" wizardIndexKey="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.StandardProgramGroupScreen">
+                  <void property="programGroupName">
+                    <string>${compiler:sys.fullName}</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition>!context.getBooleanVariable("sys.confirmedUpdateInstallation")</condition>
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions />
+            <formComponents />
+          </screen>
+          <screen name="" id="8" customizedId="" beanClass="com.install4j.runtime.beans.screens.InstallationScreen" enabled="true" commentSet="false" comment="" actionElevationType="inherit" rollbackBarrier="true" backButton="2" finishScreen="false" wizardIndexChangeType="unchanged" wizardIndexKey="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.InstallationScreen" />
+              </java>
+            </serializedBean>
+            <condition />
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions>
+              <action name="" id="9" customizedId="" beanClass="com.install4j.runtime.beans.actions.InstallFilesAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" multiExec="false" failureStrategy="2" errorMessage="${i18n:FileCorrupted}">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.InstallFilesAction" />
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="" id="10" customizedId="" beanClass="com.install4j.runtime.beans.actions.desktop.CreateProgramGroupAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.desktop.CreateProgramGroupAction">
+                      <void property="uninstallerMenuName">
+                        <string>${i18n:UninstallerMenuEntry(${compiler:sys.fullName})}</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition>!context.getBooleanVariable("sys.programGroupDisabled")</condition>
+              </action>
+              <action name="" id="11" customizedId="" beanClass="com.install4j.runtime.beans.actions.desktop.RegisterAddRemoveAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.desktop.RegisterAddRemoveAction">
+                      <void property="itemName">
+                        <string>${compiler:sys.fullName} ${compiler:sys.version}</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="" id="1006" customizedId="" beanClass="com.install4j.runtime.beans.actions.misc.RunExecutableAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="Der Service für den automatischen Start konnte nicht installiert werden!">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.misc.RunExecutableAction">
+                      <void property="arguments">
+                        <array class="java.lang.String" length="3">
+                          <void index="0">
+                            <string>//IS/Tomcat7</string>
+                          </void>
+                          <void index="1">
+                            <string>--DisplayName</string>
+                          </void>
+                          <void index="2">
+                            <string>"Odisee Server"</string>
+                          </void>
+                        </array>
+                      </void>
+                      <void property="executable">
+                        <object class="java.io.File">
+                          <string>libexec/tomcat/bin/tomcat7.exe</string>
+                        </object>
+                      </void>
+                      <void property="keepConsoleWindow">
+                        <boolean>true</boolean>
+                      </void>
+                      <void property="returnCodeVariable">
+                        <string>TOMCAT_SERVICE_INSTALLED</string>
+                      </void>
+                      <void property="showWindowsConsole">
+                        <boolean>true</boolean>
+                      </void>
+                      <void property="wait">
+                        <boolean>true</boolean>
+                      </void>
+                      <void property="workingDirectory">
+                        <object class="java.io.File">
+                          <string>libexec/tomcat</string>
+                        </object>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+            </actions>
+            <formComponents />
+          </screen>
+          <screen name="" id="12" customizedId="" beanClass="com.install4j.runtime.beans.screens.FinishedScreen" enabled="true" commentSet="false" comment="" actionElevationType="inherit" rollbackBarrier="false" backButton="2" finishScreen="true" wizardIndexChangeType="unchanged" wizardIndexKey="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.FinishedScreen" />
+              </java>
+            </serializedBean>
+            <condition />
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions />
+            <formComponents />
+          </screen>
+        </screens>
+      </application>
+      <application name="" id="uninstaller" customizedId="" beanClass="com.install4j.runtime.beans.applications.UninstallerApplication" enabled="true" commentSet="false" comment="" actionElevationType="none" fileset="" customIcnsFile="" customIcoFile="" macEntitlementsFile="" automaticLauncherIntegration="false" launchMode="startupFirstWindow" launchInNewProcess="false" launchSchedule="updateSchedule" allLaunchers="true">
+        <serializedBean>
+          <java class="java.beans.XMLDecoder">
+            <object class="com.install4j.runtime.beans.applications.UninstallerApplication" />
+          </java>
+        </serializedBean>
+        <launcherIds />
+        <variables />
+        <startup>
+          <screen name="" id="14" customizedId="" beanClass="com.install4j.runtime.beans.screens.StartupScreen" enabled="true" commentSet="false" comment="" actionElevationType="inherit" rollbackBarrier="false" backButton="2" finishScreen="false" wizardIndexChangeType="unchanged" wizardIndexKey="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.StartupScreen" />
+              </java>
+            </serializedBean>
+            <condition />
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions>
+              <action name="" id="20" customizedId="" beanClass="com.install4j.runtime.beans.actions.misc.LoadResponseFileAction" enabled="true" commentSet="false" comment="" actionElevationType="inherit" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.misc.LoadResponseFileAction" />
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+              <action name="" id="21" customizedId="" beanClass="com.install4j.runtime.beans.actions.misc.RequireInstallerPrivilegesAction" enabled="true" commentSet="false" comment="" actionElevationType="none" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.misc.RequireInstallerPrivilegesAction" />
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+            </actions>
+            <formComponents />
+          </screen>
+        </startup>
+        <screens>
+          <screen name="" id="15" customizedId="" beanClass="com.install4j.runtime.beans.screens.UninstallWelcomeScreen" enabled="true" commentSet="false" comment="" actionElevationType="inherit" rollbackBarrier="false" backButton="2" finishScreen="false" wizardIndexChangeType="unchanged" wizardIndexKey="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.UninstallWelcomeScreen" />
+              </java>
+            </serializedBean>
+            <condition />
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions />
+            <formComponents />
+          </screen>
+          <screen name="" id="16" customizedId="" beanClass="com.install4j.runtime.beans.screens.UninstallationScreen" enabled="true" commentSet="false" comment="" actionElevationType="inherit" rollbackBarrier="false" backButton="2" finishScreen="false" wizardIndexChangeType="unchanged" wizardIndexKey="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.UninstallationScreen" />
+              </java>
+            </serializedBean>
+            <condition />
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions>
+              <action name="" id="17" customizedId="" beanClass="com.install4j.runtime.beans.actions.UninstallFilesAction" enabled="true" commentSet="false" comment="" actionElevationType="elevated" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.UninstallFilesAction" />
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
+            </actions>
+            <formComponents />
+          </screen>
+          <screen name="" id="19" customizedId="" beanClass="com.install4j.runtime.beans.screens.UninstallFailureScreen" enabled="true" commentSet="false" comment="" actionElevationType="inherit" rollbackBarrier="false" backButton="2" finishScreen="true" wizardIndexChangeType="unchanged" wizardIndexKey="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.UninstallFailureScreen" />
+              </java>
+            </serializedBean>
+            <condition />
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions />
+            <formComponents />
+          </screen>
+          <screen name="" id="18" customizedId="" beanClass="com.install4j.runtime.beans.screens.UninstallSuccessScreen" enabled="true" commentSet="false" comment="" actionElevationType="inherit" rollbackBarrier="false" backButton="2" finishScreen="true" wizardIndexChangeType="unchanged" wizardIndexKey="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.UninstallSuccessScreen" />
+              </java>
+            </serializedBean>
+            <condition />
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions />
+            <formComponents />
+          </screen>
+        </screens>
+      </application>
+    </applications>
+  </installerGui>
+  <mediaSets>
+    <unixArchive name="FreeBSD i386" id="889" customizedId="" mediaFileName="${compiler:sys.shortName}_${compiler:sys.version}_FreeBSD_i386" installDir="odisee" overridePrincipalLanguage="false" jreBitType="all" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="" manualJREEntry="false">
+      <excludedLaunchers>
+        <launcher id="55" />
+      </excludedLaunchers>
+      <excludedBeans />
+      <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
+      <exclude>
+        <entry location=".i4j_fileset_153" fileType="regular" />
+        <entry location=".i4j_fileset_850" fileType="regular" />
+        <entry location=".i4j_fileset_124" fileType="regular" />
+        <entry location=".i4j_fileset_117" fileType="regular" />
+        <entry location=".i4j_fileset_163" fileType="regular" />
+        <entry location=".i4j_fileset_165" fileType="regular" />
+      </exclude>
+      <variables />
+      <autoUpdate useMinUpdatableVersion="false" minUpdatableVersion="" useMaxUpdatableVersion="false" maxUpdatableVersion="">
+        <commentFiles />
+        <customAttributes />
+      </autoUpdate>
+    </unixArchive>
+    <unixArchive name="FreeBSD amd64" id="128" customizedId="" mediaFileName="${compiler:sys.shortName}_${compiler:sys.version}_FreeBSD_amd64" installDir="odisee" overridePrincipalLanguage="false" jreBitType="all" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="" manualJREEntry="false">
+      <excludedLaunchers>
+        <launcher id="55" />
+      </excludedLaunchers>
+      <excludedBeans />
+      <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
+      <exclude>
+        <entry location=".i4j_fileset_840" fileType="regular" />
+        <entry location=".i4j_fileset_850" fileType="regular" />
+        <entry location=".i4j_fileset_124" fileType="regular" />
+        <entry location=".i4j_fileset_117" fileType="regular" />
+        <entry location=".i4j_fileset_163" fileType="regular" />
+        <entry location=".i4j_fileset_165" fileType="regular" />
+      </exclude>
+      <variables />
+      <autoUpdate useMinUpdatableVersion="false" minUpdatableVersion="" useMaxUpdatableVersion="false" maxUpdatableVersion="">
+        <commentFiles />
+        <customAttributes />
+      </autoUpdate>
+    </unixArchive>
+    <unixArchive name="Linux x86" id="886" customizedId="" mediaFileName="${compiler:sys.shortName}_${compiler:sys.version}_Linux_x86" installDir="odisee" overridePrincipalLanguage="false" jreBitType="all" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="" manualJREEntry="false">
+      <excludedLaunchers />
+      <excludedBeans />
+      <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
+      <exclude>
+        <entry location=".i4j_fileset_840" fileType="regular" />
+        <entry location=".i4j_fileset_153" fileType="regular" />
+        <entry location=".i4j_fileset_124" fileType="regular" />
+        <entry location=".i4j_fileset_117" fileType="regular" />
+        <entry location=".i4j_fileset_163" fileType="regular" />
+        <entry location=".i4j_fileset_165" fileType="regular" />
+      </exclude>
+      <variables />
+      <autoUpdate useMinUpdatableVersion="false" minUpdatableVersion="" useMaxUpdatableVersion="false" maxUpdatableVersion="">
+        <commentFiles />
+        <customAttributes />
+      </autoUpdate>
+    </unixArchive>
+    <unixArchive name="Linux x86_64" id="203" customizedId="" mediaFileName="${compiler:sys.shortName}_${compiler:sys.version}_Linux_x86_64" installDir="odisee" overridePrincipalLanguage="false" jreBitType="all" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="" manualJREEntry="false">
+      <excludedLaunchers />
+      <excludedBeans />
+      <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
+      <exclude>
+        <entry location=".i4j_fileset_840" fileType="regular" />
+        <entry location=".i4j_fileset_153" fileType="regular" />
+        <entry location=".i4j_fileset_850" fileType="regular" />
+        <entry location=".i4j_fileset_117" fileType="regular" />
+        <entry location=".i4j_fileset_163" fileType="regular" />
+        <entry location=".i4j_fileset_165" fileType="regular" />
+      </exclude>
+      <variables />
+      <autoUpdate useMinUpdatableVersion="false" minUpdatableVersion="" useMaxUpdatableVersion="false" maxUpdatableVersion="">
+        <commentFiles />
+        <customAttributes />
+      </autoUpdate>
+    </unixArchive>
+    <linuxDeb name="Debian Linux x86_64" id="145" customizedId="" mediaFileName="${compiler:sys.shortName}_${compiler:sys.version}_Linux_x86_64" installDir="/opt/odisee" overridePrincipalLanguage="false" jreBitType="all" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="" manualJREEntry="false" bzip="true" description="Odisee(R) Server" dependencies="openjdk-7-jre" maintainerEmail="support@odisee.de">
+      <excludedLaunchers>
+        <launcher id="55" />
+      </excludedLaunchers>
+      <excludedBeans />
+      <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
+      <exclude>
+        <entry location=".i4j_fileset_840" fileType="regular" />
+        <entry location=".i4j_fileset_153" fileType="regular" />
+        <entry location=".i4j_fileset_850" fileType="regular" />
+        <entry location=".i4j_fileset_117" fileType="regular" />
+        <entry location=".i4j_fileset_163" fileType="regular" />
+        <entry location=".i4j_fileset_165" fileType="regular" />
+      </exclude>
+      <variables />
+      <autoUpdate useMinUpdatableVersion="false" minUpdatableVersion="" useMaxUpdatableVersion="false" maxUpdatableVersion="">
+        <commentFiles />
+        <customAttributes />
+      </autoUpdate>
+      <preInstallScript mode="1" file="">
+        <content />
+      </preInstallScript>
+      <postInstallScript mode="2" file="../odisee/overlay/Linux/bin/postinstall.sh">
+        <content />
+      </postInstallScript>
+      <preUninstallScript mode="1" file="">
+        <content />
+      </preUninstallScript>
+      <postUninstallScript mode="1" file="">
+        <content />
+      </postUninstallScript>
+    </linuxDeb>
+    <linuxRPM name="Red Hat x86_64" id="213" customizedId="" mediaFileName="${compiler:sys.shortName}_${compiler:sys.version}_Linux_x86_64" installDir="/opt/odisee" overridePrincipalLanguage="false" jreBitType="all" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="" manualJREEntry="false" os="linux" arch="i386">
+      <excludedLaunchers />
+      <excludedBeans />
+      <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
+      <exclude>
+        <entry location=".i4j_fileset_840" fileType="regular" />
+        <entry location=".i4j_fileset_153" fileType="regular" />
+        <entry location=".i4j_fileset_850" fileType="regular" />
+        <entry location=".i4j_fileset_117" fileType="regular" />
+        <entry location=".i4j_fileset_163" fileType="regular" />
+        <entry location=".i4j_fileset_165" fileType="regular" />
+      </exclude>
+      <variables />
+      <autoUpdate useMinUpdatableVersion="false" minUpdatableVersion="" useMaxUpdatableVersion="false" maxUpdatableVersion="">
+        <commentFiles />
+        <customAttributes />
+      </autoUpdate>
+      <preInstallScript mode="1" file="">
+        <content />
+      </preInstallScript>
+      <postInstallScript mode="2" file="../odisee/overlay/Linux/bin/postinstall.sh">
+        <content />
+      </postInstallScript>
+      <preUninstallScript mode="1" file="">
+        <content />
+      </preUninstallScript>
+      <postUninstallScript mode="1" file="">
+        <content />
+      </postUninstallScript>
+    </linuxRPM>
+    <windowsArchive name="Windows x86" id="195" customizedId="" mediaFileName="${compiler:sys.shortName}_${compiler:sys.version}_Windows_x86" installDir="Odisee" overridePrincipalLanguage="false" jreBitType="32" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="windows-x86-1.7.0_10" manualJREEntry="false">
+      <excludedLaunchers />
+      <excludedBeans />
+      <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
+      <exclude>
+        <entry location=".i4j_fileset_840" fileType="regular" />
+        <entry location=".i4j_fileset_153" fileType="regular" />
+        <entry location=".i4j_fileset_850" fileType="regular" />
+        <entry location=".i4j_fileset_124" fileType="regular" />
+        <entry location=".i4j_fileset_117" fileType="regular" />
+        <entry location=".i4j_fileset_165" fileType="regular" />
+      </exclude>
+      <variables />
+      <autoUpdate useMinUpdatableVersion="false" minUpdatableVersion="" useMaxUpdatableVersion="false" maxUpdatableVersion="">
+        <commentFiles />
+        <customAttributes />
+      </autoUpdate>
+    </windowsArchive>
+    <windowsArchive name="Windows x64" id="197" customizedId="" mediaFileName="${compiler:sys.shortName}_${compiler:sys.version}_Windows_x64" installDir="Odisee" overridePrincipalLanguage="false" jreBitType="64" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="windows-amd64-1.7.0_10" manualJREEntry="false">
+      <excludedLaunchers />
+      <excludedBeans />
+      <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
+      <exclude>
+        <entry location=".i4j_fileset_840" fileType="regular" />
+        <entry location=".i4j_fileset_153" fileType="regular" />
+        <entry location=".i4j_fileset_850" fileType="regular" />
+        <entry location=".i4j_fileset_124" fileType="regular" />
+        <entry location=".i4j_fileset_117" fileType="regular" />
+        <entry location=".i4j_fileset_163" fileType="regular" />
+      </exclude>
+      <variables />
+      <autoUpdate useMinUpdatableVersion="false" minUpdatableVersion="" useMaxUpdatableVersion="false" maxUpdatableVersion="">
+        <commentFiles />
+        <customAttributes />
+      </autoUpdate>
+    </windowsArchive>
+    <windows name="Windows x86 Installer" id="310" customizedId="" mediaFileName="${compiler:sys.shortName}_${compiler:sys.version}_Windows_x86" installDir="Odisee" overridePrincipalLanguage="false" jreBitType="32" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="windows-x86-1.7.0_10" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" downloadURL="" verifyIntegrity="true">
+      <excludedLaunchers />
+      <excludedBeans />
+      <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
+      <exclude>
+        <entry location=".i4j_fileset_840" fileType="regular" />
+        <entry location=".i4j_fileset_153" fileType="regular" />
+        <entry location=".i4j_fileset_850" fileType="regular" />
+        <entry location=".i4j_fileset_124" fileType="regular" />
+        <entry location=".i4j_fileset_117" fileType="regular" />
+        <entry location=".i4j_fileset_165" fileType="regular" />
+      </exclude>
+      <variables />
+      <autoUpdate useMinUpdatableVersion="false" minUpdatableVersion="" useMaxUpdatableVersion="false" maxUpdatableVersion="">
+        <commentFiles />
+        <customAttributes />
+      </autoUpdate>
+      <excludedComponents />
+      <includedDownloadableComponents />
+    </windows>
+    <windows name="Windows x64 Installer" id="312" customizedId="" mediaFileName="${compiler:sys.shortName}_${compiler:sys.version}_Windows_x64" installDir="Odisee" overridePrincipalLanguage="false" jreBitType="64" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="windows-amd64-1.7.0_10" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" downloadURL="" verifyIntegrity="true">
+      <excludedLaunchers />
+      <excludedBeans />
+      <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
+      <exclude>
+        <entry location=".i4j_fileset_840" fileType="regular" />
+        <entry location=".i4j_fileset_153" fileType="regular" />
+        <entry location=".i4j_fileset_850" fileType="regular" />
+        <entry location=".i4j_fileset_124" fileType="regular" />
+        <entry location=".i4j_fileset_117" fileType="regular" />
+        <entry location=".i4j_fileset_163" fileType="regular" />
+      </exclude>
+      <variables />
+      <autoUpdate useMinUpdatableVersion="false" minUpdatableVersion="" useMaxUpdatableVersion="false" maxUpdatableVersion="">
+        <commentFiles />
+        <customAttributes />
+      </autoUpdate>
+      <excludedComponents />
+      <includedDownloadableComponents />
+    </windows>
+    <macosFolderArchive name="Mac OS X x86_64" id="217" customizedId="" mediaFileName="${compiler:sys.shortName}_${compiler:sys.version}_OSX_x86_64" installDir="odisee" overridePrincipalLanguage="false" jreBitType="all" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="macosx-amd64-1.7.0_10" manualJREEntry="false" appleJre="false">
+      <excludedLaunchers />
+      <excludedBeans />
+      <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
+      <exclude>
+        <entry location=".i4j_fileset_840" fileType="regular" />
+        <entry location=".i4j_fileset_153" fileType="regular" />
+        <entry location=".i4j_fileset_850" fileType="regular" />
+        <entry location=".i4j_fileset_124" fileType="regular" />
+        <entry location=".i4j_fileset_163" fileType="regular" />
+        <entry location=".i4j_fileset_165" fileType="regular" />
+      </exclude>
+      <variables />
+      <autoUpdate useMinUpdatableVersion="false" minUpdatableVersion="" useMaxUpdatableVersion="false" maxUpdatableVersion="">
+        <commentFiles />
+        <customAttributes />
+      </autoUpdate>
+    </macosFolderArchive>
+    <macosFolder name="Mac OS X x86_64 Installer" id="1003" customizedId="" mediaFileName="${compiler:sys.shortName}_${compiler:sys.version}_OSX_x86_64" installDir="Odisee" overridePrincipalLanguage="false" jreBitType="all" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="macosx-amd64-1.7.0_10" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" appleJre="false" customInstallBaseDir="" contentFilesType="1" downloadURL="" signLaunchers="true">
+      <excludedLaunchers />
+      <excludedBeans />
+      <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
+      <exclude>
+        <entry location=".i4j_fileset_840" fileType="regular" />
+        <entry location=".i4j_fileset_153" fileType="regular" />
+        <entry location=".i4j_fileset_850" fileType="regular" />
+        <entry location=".i4j_fileset_124" fileType="regular" />
+        <entry location=".i4j_fileset_163" fileType="regular" />
+        <entry location=".i4j_fileset_165" fileType="regular" />
+      </exclude>
+      <variables />
+      <autoUpdate useMinUpdatableVersion="false" minUpdatableVersion="" useMaxUpdatableVersion="false" maxUpdatableVersion="">
+        <commentFiles />
+        <customAttributes />
+      </autoUpdate>
+      <excludedComponents />
+      <includedDownloadableComponents />
+    </macosFolder>
+  </mediaSets>
+  <buildIds buildAll="false">
+    <mediaSet refId="312" />
+  </buildIds>
+  <buildOptions verbose="true" faster="false" disableSigning="false" debug="false" />
+</install4j>
+
