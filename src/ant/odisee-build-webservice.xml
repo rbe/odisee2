@@ -33,9 +33,9 @@
             <arg value="clean"/>
         </exec>
         <!-- Clean target in webservice.base.dir -->
-        <delete verbose="true" dir="${webservice.base.dir}/target"/>
+        <delete verbose="${webservice-buildprop.odisee.library.build.verbose}" dir="${webservice.base.dir}/target"/>
         <!-- Clean log files -->
-        <delete verbose="true">
+        <delete verbose="${webservice-buildprop.odisee.library.build.verbose}">
             <fileset dir="${webservice.base.dir}">
                 <include name="**.log"/>
             </fileset>
@@ -121,22 +121,11 @@
     -->
     <target name="build-and-copy-libraries">
         <!-- Clean lib directory -->
-        <delete dir="${webservice.lib.dir}"/>
+        <delete verbose="${webservice-buildprop.odisee.library.build.verbose}" dir="${webservice.lib.dir}"/>
         <mkdir dir="${webservice.lib.dir}"/>
-        <!-- Copy Glue 1.3.1 library
-        <copy verbose="${webservice-buildprop.odisee.library.build.verbose}" todir="${webservice.lib.dir}" file="${glue.zip}"/>
-        -->
         <!-- Copy PDFbox library -->
         <copy verbose="${webservice-buildprop.odisee.library.build.verbose}" todir="${webservice.lib.dir}" file="${odisee.pdfbox-app.library.jar}"/>
-        <!-- Copy Odisee library -->
-        <!--
-        <copy verbose="${webservice-buildprop.odisee.library.build.verbose}" todir="${webservice.lib.dir}" file="${odisee.library.jar}"/>
-        -->
-        <!-- TODO Copy OpenOffice libraries
-        <copy verbose="${webservice-buildprop.odisee.library.build.verbose}" todir="${webservice.lib.dir}">
-            <fileset dir="${odisee.libreoffice.jar.dir}"/>
-        </copy>
-        -->
+        <!-- Copy OpenOffice/LibreOffice libraries -->
         <antcall target="copy-libreoffice-libraries"/>
     </target>
     <target name="compile-webservice" depends="clean-webservice,webservice-set-version-props,build-and-copy-libraries">

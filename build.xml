@@ -27,8 +27,8 @@
     
     -->
     <target name="clean" depends="clean-webservice,clean-library">
-        <!-- Clean distributions -->
-        <delete verbose="${buildprop.odisee.build.verbose}" dir="${dist.dir}"/>
+        <!-- Clean ZIP distributions -->
+        <delete verbose="${buildprop.odisee.build.verbose}" dir="${dist.zip.dir}"/>
         <!-- Clean world distributions -->
         <delete verbose="${buildprop.odisee.build.verbose}" dir="${world.base.dir}"/>
     </target>
@@ -49,10 +49,10 @@
         <property name="ant_world" value="${world.libexec.dir}/ant"/>
         <get src="${ant_url}" dest="${ant_download}" verbose="true" usetimestamp="true"/>
         <unzip src="${ant_download}" dest="${world.libexec.dir}"/>
-        <move todir="${ant_world}">
+        <move verbose="${buildprop.odisee.build.verbose}" todir="${ant_world}">
             <fileset dir="${world.libexec.dir}/${ant_unzipped}"/>
         </move>
-        <delete includeemptydirs="true">
+        <delete verbose="${buildprop.odisee.build.verbose}" includeemptydirs="true">
             <fileset dir="${ant_world}/manual"/>
         </delete>
         <!-- Apache Tomcat 7 -->
@@ -65,10 +65,10 @@
         <property name="tomcat7_world" value="${world.libexec.dir}/tomcat"/>
         <get src="${tomcat7_url}" dest="${tomcat7_download}" verbose="true" usetimestamp="true"/>
         <unzip src="${tomcat7_download}" dest="${world.libexec.dir}"/>
-        <move todir="${world.libexec.dir}/tomcat">
+        <move verbose="${buildprop.odisee.build.verbose}" todir="${world.libexec.dir}/tomcat">
             <fileset dir="${world.libexec.dir}/${tomcat7_unzipped}"/>
         </move>
-        <delete includeemptydirs="true">
+        <delete verbose="${buildprop.odisee.build.verbose}" includeemptydirs="true">
             <fileset dir="${tomcat7_world}/webapps"/>
         </delete>
     </target>
@@ -160,7 +160,7 @@
         <mkdir dir="${world.var.dir}/deploy"/>
         <mkdir dir="${world.var.dir}/log"/>
         <mkdir dir="${world.var.dir}/profile"/>
-        <copy todir="${world.var.dir}/test">
+        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.var.dir}/test">
             <fileset dir="${basedir}/var/test"/>
         </copy>
         <mkdir dir="${world.var.tmp.dir}/ramdisk"/>
@@ -176,7 +176,7 @@
         <mkdir dir="${world.var.dir}/user/odisee/deploy/pdf"/>
         <mkdir dir="${world.var.dir}/user/odisee/deploy/template"/>
         -->
-        <copy todir="${world.var.dir}/user/odisee">
+        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.var.dir}/user/odisee">
             <fileset dir="${basedir}/var/user/odisee"/>
         </copy>
     </target>
@@ -186,11 +186,10 @@
         depends="run-lib-tests"
     -->
     <target name="world" depends="clean,distrib">
-        <copy todir="${world.base.dir}/libexec">
+        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.base.dir}/libexec">
             <fileset dir="${overlay.dir}/libexec"/>
         </copy>
         <echo file="${world.etc.dir}/version" message="${webservice.version.number}"/>
-        <delete dir="${dist.dir}"/>
     </target>
     <!--
     
@@ -198,19 +197,19 @@
     
     -->
     <target name="world-linux-x86_64" depends="world">
-        <copy todir="${world.linux_x86_64.base.dir}">
+        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.linux_x86_64.base.dir}">
             <fileset dir="${world.base.dir}"/>
         </copy>
-        <copy todir="${world.linux_x86_64.base.dir}">
+        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.linux_x86_64.base.dir}">
             <fileset file="${overlay.dir}/Linux/.bash_profile"/>
         </copy>
-        <copy todir="${world.linux_x86_64.base.dir}/bin">
+        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.linux_x86_64.base.dir}/bin">
             <fileset dir="${overlay.dir}/Linux/bin"/>
         </copy>
-        <copy todir="${world.linux_x86_64.base.dir}/etc">
+        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.linux_x86_64.base.dir}/etc">
             <fileset dir="${overlay.dir}/Linux/etc"/>
         </copy>
-        <copy todir="${world.linux_x86_64.base.dir}">
+        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.linux_x86_64.base.dir}">
             <fileset dir="${overlay.dir}/Linux/x86_64"/>
         </copy>
     </target>
@@ -219,8 +218,8 @@
         Make a distribution: compile everything and create one big ZIP archive.
 
     -->
-    <target name="world-zip" depends="world">
-        <zip destfile="${dist.dir}/odisee-${webservice.version.number}.zip" whenempty="fail">
+    <target name="world-linux-x86_64-zip" depends="world-linux-x86_64">
+        <zip destfile="${dist.zip.dir}/odisee-linux-x86_64-${webservice.version.number}.zip" whenempty="fail">
             <zipfileset dir="${world.base.dir}" includes="**" excludes="bin/**" prefix="odisee"/>
             <zipfileset dir="${world.base.dir}" includes="bin/**" prefix="odisee" filemode="555"/>
         </zip>

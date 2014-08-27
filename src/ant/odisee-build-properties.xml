@@ -23,7 +23,8 @@
     <!-- OOo extension -->
     <property name="extension.dir" value="${src.dir}/extension"/>
     <!-- Distribution w/o platform dependent things -->
-    <property name="dist.dir" value="${build.dir}/world/dist"/>
+    <property name="dist.dir" value="${build.dir}/distrib"/>
+    <property name="dist.zip.dir" value="${dist.dir}/zip"/>
     <!-- Download third party software -->
     <property name="thirdparty.dir" value="${user.home}/project/odisee/thirdparty"/>
     <!--

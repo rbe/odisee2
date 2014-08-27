@@ -146,12 +146,12 @@
     <target name="run-lib-tests" depends="compile-lib">
         <property environment="env"/>
         <mkdir dir="${groovy.test.report.dir}/data"/>
-        <delete verbose="true">
+        <delete verbose="${library-buildprop.odisee.library.build.verbose}">
             <fileset dir="${groovy.test.report.dir}/data" includes="**"/>
         </delete>
         <!-- Run tests, produce XML files -->
         <mkdir dir="${groovy.test.report.dir}/xml"/>
-        <delete verbose="true">
+        <delete verbose="${library-buildprop.odisee.library.build.verbose}">
             <fileset dir="${groovy.test.report.dir}/xml" includes="**"/>
         </delete>
         <junit printsummary="withOutAndErr" haltonerror="no" haltonfailure="no" fork="yes">
@@ -168,7 +168,7 @@
         </junit>
         <!-- Generate HTML reports -->
         <mkdir dir="${groovy.test.report.dir}/html"/>
-        <delete verbose="true">
+        <delete verbose="${library-buildprop.odisee.library.build.verbose}">
             <fileset dir="${groovy.test.report.dir}/html" includes="**"/>
         </delete>
         <junitreport todir="${groovy.test.report.dir}">
