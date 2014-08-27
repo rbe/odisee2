@@ -122,35 +122,14 @@
                 <include name="**"/>
             </fileset>
         </copy>
-        <!-- odisee.war -->
-        <echo message="copy ${webservice.target.dir}/odisee.war -> ${world.tomcat.dir}/webapps"/>
-        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.tomcat.dir}/webapps">
-            <fileset dir="${webservice.target.dir}">
-                <include name="odisee.war"/>
-            </fileset>
-        </copy>
-        <!-- OOo extension
-        <mkdir dir="${world.extension.dir}"/>
-        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.extension.dir}">
-            <fileset dir="${extension.dir}">
-                <include name="Odisee/**"/>
-            </fileset>
-        </copy>
-        -->
         <!-- Source -->
         <mkdir dir="${world.src.dir}"/>
         <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.src.dir}">
             <fileset dir="${src.dir}">
                 <!-- Source for Odisee OpenOffice extension and custom extensions -->
                 <include name="extension/**"/>
-                <!-- Source for Oracle PL/SQL -->
-                <include name="oracle/**"/>
-                <!-- Source for examples -->
-                <include name="example/**"/>
                 <!-- XML -->
-                <include name="xml/**.xsd"/>
-                <!-- Never include Groovy sources -->
-                <exclude name="groovy/**"/>
+                <include name="xml/**"/>
             </fileset>
         </copy>
         <!-- Set permissions in bin directory -->
