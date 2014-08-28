@@ -211,6 +211,7 @@
     <target name="run-webservice" depends="compile-webservice">
         <property environment="env"/>
         <exec dir="${src.webservice.dir}" executable="bash">
+            <env key="ODISEE_HOME" value="../.."/>
             <env key="GROOVY_HOME" value="${groovy.home}"/>
             <env key="GRAILS_HOME" value="${grails.home}"/>
             <env key="PATH" path="${env.GRAILS_HOME}/bin:${env.GROOVY_HOME}/bin:${env.PATH}"/>
@@ -225,7 +226,8 @@
     -->
     <target name="debug-webservice" depends="compile-webservice">
         <property environment="env"/>
-        <exec dir="webservice" executable="bash">
+        <exec dir="${src.webservice.dir}" executable="bash">
+            <env key="ODISEE_HOME" value="../.."/>
             <env key="GROOVY_HOME" value="${groovy.home}"/>
             <env key="GRAILS_HOME" value="${grails.home}"/>
             <env key="PATH" path="${env.GRAILS_HOME}/bin:${env.GROOVY_HOME}/bin:${env.PATH}"/>
