@@ -7,19 +7,14 @@
  * All rights reserved. Use is subject to license terms.
  */
 package eu.artofcoding.odisee.document
-
 import com.sun.org.apache.xerces.internal.dom.DeferredNode
 import eu.artofcoding.grails.helper.FileHelper
 import eu.artofcoding.grails.helper.XmlHelper
 import eu.artofcoding.odisee.OdiseeException
 import groovy.xml.XmlUtil
 
-import static eu.artofcoding.odisee.OdiseePath.ODISEE_DEBUG
 import static eu.artofcoding.odisee.OdiseePath.ODISEE_USER
-import static eu.artofcoding.odisee.server.OdiseeConstant.MINUS_ONE
-import static eu.artofcoding.odisee.server.OdiseeConstant.S_DOT
-import static eu.artofcoding.odisee.server.OdiseeConstant.S_TEMPLATE
-
+import static eu.artofcoding.odisee.server.OdiseeConstant.*
 /**
  *
  */
@@ -64,96 +59,6 @@ class StorageService {
     }
 
     /**
-     * Determine mime type.
-     * @param arg
-     * @return
-     */
-    MimeType getMimeType(Map arg) {
-        MimeType mimeType = null
-        Map decomposedFilename = FileHelper.decomposeFilename(arg.name)
-        // Filename with extension?
-        if (decomposedFilename.ext) {
-            mimeType = MimeType.findByExtension(decomposedFilename.ext)
-        }
-        /*
-        else {
-            // See GRAILS-1186, findByNameOrExtensionOrBrowser
-            mimeType = MimeType.findByExtensionOrBrowser(arg.name, arg.name)
-        }
-        */
-        if (mimeType) {
-            if (log.debugEnabled) {
-                log.debug "ODI-xxxx: Mime type for ${arg.name} is ${mimeType.name}"
-            }
-        } else {
-            mimeType = MimeType.findByName('Unknown') //"appliction/octet-stream"
-            if (log.debugEnabled) {
-                log.debug "ODI-xxxx: Could not recognize mime type of ${arg.name}; using application/octet-stream"
-            }
-        }
-        mimeType
-    }
-
-    /**
-     *
-     * @param arg
-     * @return
-     */
-    boolean hasDocument(Map arg) {
-        /* TODO Move feature into enterprise version of Odisee
-        List<Integer> doc = OooDocument.withCriteria {
-            or {
-                if (arg.name) {
-                    ilike('name', arg.name)
-                }
-                if (arg.revision) {
-                    eq('revision', arg.revision.toLong())
-                }
-                if (arg.mimeType) {
-                    mimeType {
-                        eq(OdiseeConstant.S_NAME, arg.mimeType)
-                    }
-                }
-            }
-            projections {
-                count('name')
-            }
-        }
-        boolean b = false
-        if (doc?.size() == 1) {
-            b = true
-        }
-        b
-        */
-        true
-    }
-
-    /**
-     * Add a document.
-     * @param arg
-     * @return
-     */
-    OooDocument addDocument(Map arg) {
-        if (log.traceEnabled) {
-            log.trace "ODI-xxxx: addDocument(${arg.inspect()})"
-        }
-        OooDocument document = createDocument(arg)
-        /* TODO Move feature into enterprise version of Odisee
-        if (document) {
-            // Revision: lookup if we have a document with same name and filename
-            List<OooDocument> existingTemplates = OooDocument.findAllByNameAndFilename(document.name, document.filename)
-            long highestRevisionNumber = (long) existingTemplates.inject(0) { long o, OooDocument n ->
-                n.revision > o ? n.revision : o
-            }
-            document.revision = highestRevisionNumber + 1
-            // Save new document
-            document.save(flush: true)
-        }
-        */
-        document
-    }
-
-    /**
      * Create a document with 'name' from path. If the document does not exist, revision 1 is created
      * otherwise the revision is incremented by 1.
      * @param arg A map
@@ -194,9 +99,6 @@ class StorageService {
             // Instance of...
             document.instanceOfName = arg.instanceOf?.name
             document.instanceOfRevision = arg.instanceOf?.revision?.toLong()
-            // TODO Move feature into enterprise version of Odisee
-            // Get mime type from database
-            //document.mimeType = getMimeType(name: document.filename)
             document.odiseeRequest = arg.odiseeRequest
             //document.data = Hibernate.createBlob(arg.bytes)
             document.bytes = arg.bytes
@@ -204,96 +106,6 @@ class StorageService {
             log.error "ODI-xxxx: createDocument(${arg.inspect()}): Failed to create instance of OOoDocument, no data: ${arg}"
         }
         document
-    }
-
-    /**
-     * Get all revisions of a document.
-     * @param arg
-     * @return
-     */
-    List<Integer> getDocumentRevision(Map arg) {
-        /* TODO Move feature into enterprise version of Odisee
-        OooDocument.findAllByName(arg.name)*.revision
-        */
-        [1]
-    }
-
-    /**
-     * Get latest revision for a document.
-     * @param arg
-     * @return
-     */
-    Integer getDocumentsLatestRevision(Map arg) {
-        /* TODO Move feature into enterprise version of Odisee
-        getDocumentByLatestRevision(name: arg.name)?.revision
-        */
-        1
-    }
-
-    /**
-     * Get a document by name and optionally by revision (default is 1).
-     * @param arg
-     * @return
-     */
-    OooDocument getDocumentByRevision(Map arg) {
-        OooDocument.findByNameAndRevision(arg.name, arg.revision ?: 1)
-    }
-
-    /**
-     * Get a document with its latest revision.
-     * @param arg
-     * @return
-     */
-    OooDocument getDocumentByLatestRevision(Map arg) {
-        /* TODO Move feature into enterprise version of Odisee
-        try {
-            List<OooDocument> list = OooDocument.findAllByName(arg.name, [sort: OdiseeConstant.S_REVISION, order: 'desc'])
-            if (list?.size() > 0) { // TODO Ask database for "latest" revision!?
-                list.first()
-            }
-        } catch (e) { // NoSuchElementException: Cannot access last() from an empty List
-            log.error e
-        }
-        */
-    }
-
-    /**
-     * Returns one or more document(s) queried by given map keys.
-     * @param arg Map: name, revision, mimeType
-     */
-    List<OooDocument> getDocument(Map arg) {
-        OooDocument.withCriteria {
-            and {
-                ilike(OdiseeWebserviceConstant.S_NAME, arg.name)
-                eq(OdiseeWebserviceConstant.S_REVISION, arg.revision?.toLong() ?: getDocumentByLatestRevision(arg)?.revision)
-                if (arg.mimeType) {
-                    or {
-                        mimeType {
-                            ilike(OdiseeWebserviceConstant.S_NAME, "%${arg.mimeType}")
-                        }
-                        ilike('filename', "%${arg.mimeType}")
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Get binary data from document by name and revision.
-     * @param arg
-     * @return
-     */
-    byte[] getDocumentData(Map arg) {
-        getDocument(name: arg.name, revision: arg.revision)[0]?.toByteArray()
-    }
-
-    /**
-     * Get binary data from document's latest revision.
-     * @param arg
-     * @return
-     */
-    byte[] getDocumentsLatestRevisionData(Map arg) {
-        getDocumentByLatestRevision(name: arg.name).toByteArray()
     }
 
     /**
@@ -319,7 +131,6 @@ class StorageService {
             xmlString = XmlUtil.serialize(arg.xml)
         } else {
             // Just save active request including <odisee> element
-            //requestXMLFile = new File(arg.documentDir, "${arg.documentName}.xml")
             String filename = String.format('%s_%04d.xml', arg.uniqueRequestId, requestNumber)
             requestXMLFile = new File(arg.documentDir as File, filename as String)
             DeferredNode deferredNode = (DeferredNode) arg.xml.request[requestNumber]
@@ -346,44 +157,20 @@ class StorageService {
         // Set template directory (same as request's working directory)
         arg.templateDir = new File("${ODISEE_USER}/${arg.principal.name}", S_TEMPLATE)
         // Template
-        arg.revision = 1 // TODO Move feature into enterprise version of Odisee
+        arg.revision = 1
         // Check local template directory for latest revision of template
-        File localTemplate = new File(arg.templateDir as File, "${arg.template}_rev${arg.revision}.ott")
+        File localTemplate = new File(arg.templateDir as File, "${arg.template}.ott")
+        if (!localTemplate.exists()) {
+            localTemplate = new File(arg.templateDir as File, "${arg.template}_rev${arg.revision}.ott")
+        }
         boolean templateExists = localTemplate.exists()
-        if (ODISEE_DEBUG) {
-            println "ODI-xxx: ${arg.principal.name} tries to access template ${localTemplate}, exists=${templateExists}"
+        if (log.isDebugEnabled()) {
+            log.debug "ODI-xxx: ${arg.principal.name} tries to access template ${localTemplate}, exists=${templateExists}"
         }
         if (templateExists) {
             // Point template for this request to local template
             arg.templateFile = localTemplate
         }
-        /* TODO Move feature into enterprise version of Odisee
-        else {
-            // Get template from StorageService
-            // Does the storage service has got the template?
-            boolean hasTemplate = hasDocument(name: arg.template, revision: arg.revision)
-            if (!hasTemplate) {
-                throw new OdiseeException("Template ${arg.template} (revision ${arg.revision}) not found in template database!")
-            }
-            if (!arg.templateFile.exists()) {
-                // Retrieve template via StorageService and save it to a file
-                byte[] templateBytes = getDocumentData(name: arg.template, revision: arg.revision)
-                if (templateBytes) {
-                    arg.templateFile.createNewFile()
-                    arg.templateFile << templateBytes
-                    //arg.templateFile.withOutputStream { os ->
-                    //    os.write(templateBytes, 0, templateBytes.length)
-                    //}
-                    log.info "ODI-xxxx: Copied template ${arg.template} revision ${arg.revision} as ${arg.templateFile.absolutePath}"
-                } else {
-                    throw new OdiseeException("Cannot save template, template ${arg.template} with revision ${arg.revision} not found!")
-                }
-            }
-            // Copy it to arg.templateDir
-            localTemplate.createNewFile()
-            localTemplate << arg.templateFile.bytes
-        }
-        */
         // Check
         if (!arg.templateFile || !arg.templateFile?.exists()) {
             throw new OdiseeException("ODI-xxxx: Template ${arg.templateFile} does not exist")

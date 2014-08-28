@@ -113,27 +113,6 @@ class OooService implements InitializingBean {
     }
 
     /**
-     * Convert a simple map with values for OpenOffice userfields (e.g. controller's parameters)
-     * into properties for generating an OOo document.
-     * @param arg
-     * @return
-     */
-    Map mapToOooProps(Map arg) {
-        // Create map with values for template
-        Map prop = [id: [value: arg.map.id ?: 0]]
-        arg.map.findAll { k, v ->
-            // Skip Grails' controller parameters
-            !(k in ['controller', 'action', OdiseeConstant.S_TEMPLATE])
-        }?.each { k, v ->
-            prop[k] = [
-                    value: v,
-                    postSetMacro: arg.map."${k}_postSetMacro"
-            ]
-        }
-        prop
-    }
-
-    /**
      *
      * @param arg
      */
@@ -155,12 +134,12 @@ class OooService implements InitializingBean {
             // Get (latest) revision of template?
             arg.revision = template.'@revision' ?: S_LATEST
             if (!arg.revision || arg.revision == S_LATEST) {
-                arg.revision = storageService.getDocumentsLatestRevision(name: arg.template)
+                arg.revision = 1 //storageService.getDocumentsLatestRevision(name: arg.template)
                 // Save in XML request for Odisee
                 template.setAttribute(S_REVISION, arg.revision.toString())
             }
         }
-        log.debug arg
+        log.debug "arg=${arg}"
         // Check state
         boolean ok = arg.template && arg.revision && arg.id
         if (!ok) {
@@ -273,46 +252,6 @@ class OooService implements InitializingBean {
             }
         } else {
             throw new OdiseeException('ODI-xxxx: No result!')
-        }
-    }
-
-    /**
-     * Archive document(s).
-     * @param arg Map: result: filename -> bytes
-     * @return Array of OooDocument instance(s).
-     */
-    private void archive(Map arg) {
-        use(DOMCategory) {
-            def request = arg.xml.request[arg.activeIndex]
-            def archive = request.archive[0]
-            if (log.debugEnabled && archive) {
-                log.debug "ODI-xxxx: archive: files=${archive.'@files'}, database=${archive.'@database'}"
-            } else {
-                log.debug 'ODI-xxxx: No archive tag found'
-            }
-            OooDocument oooDocument = null
-            arg.result.output.each { k, v ->
-                try {
-                    // TODO Move feature into enterprise version of Odisee
-                    oooDocument = storageService.addDocument(
-                            instanceOf: [name: arg.template, revision: arg.revision],
-                            filename: k.name,
-                            odiseeRequest: arg.xmlString,
-                            data: v
-                    )
-                    if (oooDocument) {
-                        arg.document << oooDocument
-                        if (log.debugEnabled) {
-                            log.debug "ODI-xxxx: Document archived: ${oooDocument}"
-                        }
-                    } else {
-                        log.error "ODI-xxxx: Couldn't archive document from request ${request.'@name'}"
-                    }
-                } catch (e) {
-                    // Ignore exception
-                    log.error "ODI-xxxx: Couldn't archive document ${oooDocument}", e
-                }
-            }
         }
     }
 

@@ -9,30 +9,19 @@
 package eu.artofcoding.odisee.document
 
 import eu.artofcoding.grails.helper.ControllerHelper
+import eu.artofcoding.grails.helper.XmlHelper
 import eu.artofcoding.odisee.OdiseeException
 import groovy.xml.dom.DOMCategory
+import org.w3c.dom.Element
 
 import static eu.artofcoding.odisee.server.OdiseeConstant.*
 
-/**
- *
- */
 class DocumentController {
-
-    /**
-     * The document storage service.
-     */
-    StorageService storageService
 
     /**
      * The Odisee service.
      */
-    OdiseeService odiseeService
-
-    /**
-     * Default options for GORM.
-     */
-    private static final Map DEFAULT_LIST_OPTION = [sort: 'id', order: 'desc', max: 25]
+    OooService oooService
 
     /**
      * The before-request-interceptor.
@@ -50,45 +39,6 @@ class DocumentController {
     }
 
     /**
-     * TODO Enterprise feature
-     * List last 25 templates/documents.
-     def list() {[
-     documents: OooDocument.list(DEFAULT_LIST_OPTION),
-     totalDocuments: OooDocument.count()
-     ]}*/
-
-    /**
-     * TODO Enterprise feature
-     * List last 25 documents.
-     def listDocuments() {[
-     documents: OooDocument.findAllByTemplate(false, DEFAULT_LIST_OPTION),
-     totalDocuments: OooDocument.countByTemplate(false)
-     ]}*/
-
-    /**
-     * TODO Enterprise feature
-     * List last 25 templates.
-     def listTemplates() {[
-     templates: OooDocument.findAllByTemplate(true, DEFAULT_LIST_OPTION),
-     totalTemplates: OooDocument.countByTemplate(true)
-     ]}*/
-
-    /**
-     * TODO Enterprise feature
-     * Add a document to document service.
-     def add() {if (params.name && params.url) {storageService.addDocument(file: params.name, data: params.url)
-     redirect(action: 'list')} else if (params.file) {def f = request.getFile('file')
-     storageService.addDocument(filename: f.originalFilename, data: f.bytes)
-     redirect(action: 'list')}}*/
-
-    /**
-     * TODO Enterprise feature
-     * Remove a document from document service.
-     def remove() {// Remove document
-     try {if (params.id) {storageService.remove(id: params.id)} else {log.error "ODI-xxxx: Missing parameter 'id' to remove a document"}} catch (e) {log.error "ODI-xxxx: Cannot remove document #${params.id}", e}// Redirect to list
-     redirect(action: 'index')}*/
-
-    /**
      * Generate d document with values from XML request and an OpenOffice template.
      */
     def generate() {
@@ -99,7 +49,9 @@ class DocumentController {
                 // Stop processing time
                 long startWallTime = System.currentTimeMillis()
                 try {
-                    Map result = odiseeService.generateWithXml(request.userPrincipal, request.XML)
+                    // Build Odisee XML request using StreamingMarkupBuilder
+                    Element documentElement = XmlHelper.asElement(request.XML)
+                    Map result = oooService.generateDocument(principal: request.userPrincipal, xml: documentElement)
                     streamRequestedDocument(params, result)
                 } catch (e) {
                     error.message = 'ODI-xxxx: Document generation failed'
@@ -112,21 +64,6 @@ class DocumentController {
                     }
                 }
             }
-            /*
-            else if (params.template) { // Generate a document using a template and value(s) from request parameters.
-                // Check and correct stream parameters
-                Map params = checkStreamParameter(params)
-                // Generate document(s)
-                List<OooDocument> document = odiseeService.generateWithProperties(params)
-                // Stream document
-                streamRequestedDocument(params, document)
-            }
-            */
-            /*
-            else {
-                error.message = 'ODI-xxxx: Insufficient parameters'
-            }
-            */
         } catch (e) {
             error.message = 'ODI-xxxx: Cannot fulfill request'
             error.exception = e

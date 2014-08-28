@@ -20,10 +20,6 @@ import static eu.artofcoding.odisee.server.OdiseeConstant.*
  */
 class ControllerHelper {
 
-    /**
-     *
-     * @param arg
-     */
     static void sendNothing(arg) {
         try {
             // TODO Enable or disable logging of errors as they already are displayed in HTTP response instead of a document
