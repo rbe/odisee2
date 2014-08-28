@@ -11,6 +11,7 @@ grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
 grails.project.war.file = "target/${appName}.war"
+grails.project.dependency.resolver = 'maven'
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
     inherits("global") {
@@ -24,15 +25,18 @@ grails.project.dependency.resolution = {
         grailsHome()
         // uncomment the below to enable remote dependency resolution
         // from public Maven repositories
-        //mavenLocal()
-        //mavenCentral()
+        mavenLocal()
+        mavenCentral()
         //mavenRepo "http://snapshots.repository.codehaus.org"
         //mavenRepo "http://repository.codehaus.org"
         //mavenRepo "http://download.java.net/maven/2/"
         //mavenRepo "http://repository.jboss.com/maven2/"
+        mavenRepo "https://ci.art-of-coding.eu/maven2/"
     }
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
         // runtime 'mysql:mysql-connector-java:5.1.5'
+        build 'org.grails.plugins:tomcat:zip:7.0.55'
+        runtime 'org.grails.plugins:hibernate4:zip:4.3.5.5'
     }
 }
