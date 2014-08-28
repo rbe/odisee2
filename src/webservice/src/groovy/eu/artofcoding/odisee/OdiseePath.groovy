@@ -97,8 +97,6 @@ public class OdiseePath {
             ODISEE_TMP = new File(ODISEE_HOME, S_VAR_TMP).absoluteFile
         }
         ODISEE_TMP.mkdirs()
-        //
-        dumpEnv()
     }
 
     static void dumpEnv() {

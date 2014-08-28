@@ -7,6 +7,8 @@
  * All rights reserved. Use is subject to license terms.
  */
 
+
+import eu.artofcoding.odisee.OdiseePath
 import eu.artofcoding.odisee.document.MimeType
 
 /**
@@ -95,6 +97,7 @@ class OdiseeBootStrap {
          Server initialized.
          
 """
+        OdiseePath.dumpEnv()
     }
 
     /**
