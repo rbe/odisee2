@@ -98,6 +98,7 @@ class OooService implements InitializingBean {
             } else {
                 log.warn('ODI-xxxx: No odiinst found, using default 127.0.0.1:2001')
                 // Setup defaults; port 2001 on localhost
+                contents << ['odi1', '127.0.0.1', '2001', '', '', '', 'false']
                 oooGroup[S_GROUP0] = ['127.0.0.1': 2001]
             }
             // Create and return instance of OOo connection manager
@@ -159,6 +160,7 @@ class OooService implements InitializingBean {
                 template.setAttribute(S_REVISION, arg.revision.toString())
             }
         }
+        log.debug arg
         // Check state
         boolean ok = arg.template && arg.revision && arg.id
         if (!ok) {
