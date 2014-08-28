@@ -1,33 +1,27 @@
+# OS X
 .DS_Store
+
+# IntelliJ
 .idea/
-atlassian-ide-plugin.xml
 *.iml
+/out/
+
+# Java
 *.class
+build/
+target/
+
+# Database
 *.h2.db
 *.lock.db
 *Db.*/
 *.log
+
+# Odisee
 .fonts
 etc/odiinst
 src/webservice/lib
-src/webservice/src/templates/scaffolding
-src/webservice/src/templates/testing
-src/webservice/src/templates/artifacts
-src/webservice/test/report
-overlay/libexec/odisee/webapp
-overlay/libexec/tomcat/lib
 libexec/tomcat
-libexec/ant
-libexec/groovy
-libexec/grails
-libexec/hightide
-libexec/tomcat
-libexec/Darwin/x86_64
-libexec/Linux/i386
-libexec/Linux/x86_64
+
+# install4j
 distrib/install4j/output.txt
-/out/
-build/
-target/
-dist/
-test/report/
