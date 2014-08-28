@@ -158,7 +158,7 @@ class OooDocument {
         filename(nullable: true, editable: false)
         extension(nullable: true, editable: false)
         mimeType(nullable: true)
-        odiseeXmlRequest(nullable: true, maxSize: 1 * 1024 * 1024 * 1024, editable: false)
+        odiseeXmlRequest(nullable: true, editable: false)
         data(nullable: true)
     }
 
