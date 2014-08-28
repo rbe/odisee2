@@ -349,10 +349,11 @@ class StorageService {
         arg.revision = 1 // TODO Move feature into enterprise version of Odisee
         // Check local template directory for latest revision of template
         File localTemplate = new File(arg.templateDir as File, "${arg.template}_rev${arg.revision}.ott")
+        boolean templateExists = localTemplate.exists()
         if (ODISEE_DEBUG) {
-            println "ODI-xxx: ${arg.principal.name} tries to access template ${localTemplate}, exists=${localTemplate.exists()}"
+            println "ODI-xxx: ${arg.principal.name} tries to access template ${localTemplate}, exists=${templateExists}"
         }
-        if (localTemplate.exists()) {
+        if (templateExists) {
             // Point template for this request to local template
             arg.templateFile = localTemplate
         }
