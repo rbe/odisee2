@@ -99,9 +99,8 @@
     
     -->
     <property name="local.libexec.dir" value="${user.home}/app"/>
-    <property name="groovy.version" value="1.8.5"/>
-    <property name="grails.version" value="2.1.1"/>
+    <property name="groovy.version" value="2.3.6"/>
+    <property name="grails.version" value="2.4.3"/>
     <property name="groovy.home" value="${local.libexec.dir}/groovy/${groovy.version}"/>
     <property name="grails.home" value="${local.libexec.dir}/grails/${grails.version}"/>
-    <!--property name="glue.zip" value="${lib.dir}/glue-1.3.1.zip"/-->
 </project>
