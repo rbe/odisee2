@@ -12,17 +12,6 @@
 package eu.artofcoding.odisee.ooo
 
 import eu.artofcoding.odisee.helper.Profile
-import org.apache.tools.ant.taskdefs.Get
-import com.sun.star.text.XTextFieldsSupplier
-
-import static com.sun.star.uno.UnoRuntime.queryInterface
-import com.sun.star.text.XBookmarksSupplier
-
-import static com.sun.star.uno.UnoRuntime.queryInterface
-import com.sun.star.container.XNameAccess
-import com.sun.star.container.XEnumerationAccess
-import com.sun.star.util.XRefreshable
-import java.nio.charset.Charset
 
 /**
  * Category for working with Writer fields: userfields, set expressions.

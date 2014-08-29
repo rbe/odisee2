@@ -11,6 +11,10 @@
  */
 package eu.artofcoding.odisee
 
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
+
 import static eu.artofcoding.odisee.server.OdiseeConstant.*
 
 /**
@@ -37,7 +41,7 @@ public class OdiseePath {
     /**
      * Base directory for Odisee.
      */
-    public static final File ODISEE_HOME
+    public static final Path ODISEE_HOME
 
     /**
      * Deployment directory for Odisee, contains additional files.
@@ -47,56 +51,56 @@ public class OdiseePath {
     /**
      * Variable data directory for Odisee.
      */
-    public static final File ODISEE_VAR
-    public static final File ODISEE_USER
-    public static final File ODISEE_TMP
+    public static final Path ODISEE_VAR
+    public static final Path ODISEE_USER
+    public static final Path ODISEE_TMP
 
     static {
         // ODISEE_HOME
         // Is Odisee home set?
         String envOdiseeHome = System.getenv(S_ODISEE_HOME)
         if (!envOdiseeHome) {
-            ODISEE_HOME = new File(S_DOT).absoluteFile
+            ODISEE_HOME = Paths.get(S_DOT).toAbsolutePath()
             println "Please set ODISEE_HOME, using actual directory ${ODISEE_HOME}"
         } else {
-            ODISEE_HOME = new File(envOdiseeHome).absoluteFile
+            ODISEE_HOME = Paths.get(envOdiseeHome).toAbsolutePath()
         }
         //
         // ODISEE_DEPLOY
         String envOdiseeDeploy = System.getenv(S_ODISEE_DEPLOY)
         if (envOdiseeDeploy) {
-            ODISEE_DEPLOY = new File(envOdiseeDeploy).absoluteFile
+            ODISEE_DEPLOY = Paths.get(envOdiseeDeploy).toAbsolutePath()
         } else {
-            ODISEE_DEPLOY = new File(ODISEE_HOME, S_VAR_DEPLOY).absoluteFile
+            ODISEE_DEPLOY = Paths.get(ODISEE_HOME, S_VAR_DEPLOY).toAbsolutePath()
         }
-        ODISEE_DEPLOY.mkdirs()
+        Files.createDirectories(ODISEE_DEPLOY)
         //
         // ODISEE_VAR
         String envOdiseeVar = System.getenv(S_ODISEE_VAR)
         if (envOdiseeVar) {
-            ODISEE_VAR = new File(envOdiseeVar).absoluteFile
+            ODISEE_VAR = Paths.get(envOdiseeVar).toAbsolutePath()
         } else {
-            ODISEE_VAR = new File(ODISEE_HOME, S_VAR).absoluteFile
+            ODISEE_VAR = Paths.get(ODISEE_HOME, S_VAR).toAbsolutePath()
         }
-        ODISEE_VAR.mkdirs()
+        Files.createDirectories(ODISEE_VAR)
         //
         // ODISEE_USER
         String envOdiseeUser = System.getenv(S_ODISEE_USER)
         if (envOdiseeUser) {
-            ODISEE_USER = new File(envOdiseeUser).absoluteFile
+            ODISEE_USER = Paths.get(envOdiseeUser).toAbsolutePath()
         } else {
-            ODISEE_USER = new File(ODISEE_VAR, S_USER).absoluteFile
+            ODISEE_USER = Paths.get(ODISEE_VAR, S_USER).toAbsolutePath()
         }
-        ODISEE_USER.mkdirs()
+        Files.createDirectories(ODISEE_USER)
         //
         // ODISEE_TMP
         String envOdiseeTmp = System.getenv(S_ODISEE_TMP)
         if (envOdiseeTmp) {
-            ODISEE_TMP = new File(envOdiseeTmp).absoluteFile
+            ODISEE_TMP = Paths.get(envOdiseeTmp).toAbsolutePath()
         } else {
-            ODISEE_TMP = new File(ODISEE_HOME, S_VAR_TMP).absoluteFile
+            ODISEE_TMP = Paths.get(ODISEE_HOME, S_VAR_TMP).toAbsolutePath()
         }
-        ODISEE_TMP.mkdirs()
+        Files.createDirectories(ODISEE_TMP)
     }
 
     static void dumpEnv() {

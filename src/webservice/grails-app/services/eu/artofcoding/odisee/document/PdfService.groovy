@@ -10,6 +10,8 @@ package eu.artofcoding.odisee.document
 
 import org.apache.pdfbox.util.PDFMergerUtility
 
+import java.nio.file.Path
+
 /**
  * Provide services for dealing with PDF files.
  */
@@ -21,13 +23,13 @@ class PdfService {
      * @param pdfFiles
      * @return
      */
-    File mergeDocuments(File target, List<File> pdfFiles) {
+    Path mergeDocuments(Path target, List<Path> pdfFiles) {
         PDFMergerUtility merger = new PDFMergerUtility()
         try {
-            pdfFiles.each {
-                merger.addSource(it)
+            pdfFiles.each { Path p ->
+                merger.addSource(p.toFile())
             }
-            merger.destinationFileName = target.absolutePath
+            merger.destinationFileName = target.toAbsolutePath().toString()
             merger.mergeDocuments()
             target
         } catch (e) {

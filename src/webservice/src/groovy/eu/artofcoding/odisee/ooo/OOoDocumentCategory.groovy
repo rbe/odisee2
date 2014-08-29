@@ -11,24 +11,21 @@
  */
 package eu.artofcoding.odisee.ooo
 
-import eu.artofcoding.odisee.OdiseeException
-import eu.artofcoding.odisee.OdiseeFileFormat
-import eu.artofcoding.odisee.helper.Profile
-import eu.artofcoding.odisee.ooo.server.OOoConnection
+import com.sun.star.frame.*
 import com.sun.star.lang.XComponent
+import com.sun.star.script.provider.XScript
+import com.sun.star.script.provider.XScriptProviderSupplier
 import com.sun.star.util.CloseVetoException
 import com.sun.star.util.XCloseable
-import com.sun.star.frame.XModel
-import com.sun.star.frame.XDispatchHelper
-import com.sun.star.frame.XStorable
 import com.sun.star.util.XRefreshable
-import com.sun.star.frame.XController
-import com.sun.star.frame.XFrame
-import com.sun.star.frame.XDispatchProvider
-import com.sun.star.script.provider.XScriptProviderSupplier
-import com.sun.star.script.provider.XScript
+import eu.artofcoding.odisee.OdiseeException
+import eu.artofcoding.odisee.OdiseeFileFormat
 import eu.artofcoding.odisee.OdiseePath
+import eu.artofcoding.odisee.helper.Profile
 import eu.artofcoding.odisee.server.OfficeConnection
+
+import java.nio.file.Files
+import java.nio.file.Path
 
 /**
  * Things we can do with any OpenOffice.org document.
@@ -63,8 +60,9 @@ class OOoDocumentCategory {
     /**
      * Ensure proper file URL.
      */
-    static String getFileURL(File file) {
-        'file:///' + ((file.toURL() as String) - 'file:')
+    static String getFileURL(Path file) {
+        //'file:///' + ((file.toURL() as String) - 'file:')
+        file.toUri().toString()
     }
 
     /**
@@ -77,17 +75,17 @@ class OOoDocumentCategory {
     /**
      * Open an OpenOffice.org document.
      */
-    //static XComponent open(File file, OOoConnection oooConnection, props = null) {
-    static XComponent open(File file, OfficeConnection oooConnection, props = null) {
+    static XComponent open(Path file, OfficeConnection oooConnection, props = null) {
         // Add connection to template's File object
         file.metaClass._oooConnection = oooConnection
         file.metaClass.getOooConnection = {-> _oooConnection }
         // Properties for loading component
         List properties = []
         // Is this a template?
-        if (file.name.length() > 3 && file.name.toLowerCase()[-3..-1] ==~ TEMPLATE_EXT_REGEX) {
+        String filename = file.fileName.toString()
+        if (filename.length() > 3 && filename.toLowerCase()[-3..-1] ==~ TEMPLATE_EXT_REGEX) {
             // Check if template exists
-            if (!file.exists()) {
+            if (!Files.exists(file)) {
                 throw new OdiseeException("Template ${file} not found")
             }
             // Set property for loading
@@ -101,24 +99,21 @@ class OOoDocumentCategory {
         // If we got a regular file and no private: URL
         if (file ==~ PRIVATE_URL_REGEX) {
             // URL must be private:... for this
-            sURL = file.path
+            sURL = file.toString()
         } else {
             // Does the file exist? If not, create an empty file
-            if (!file.exists()) {
-                file.createNewFile()
+            if (!Files.exists(file)) {
+                Files.createFile(file)
             }
             // Ensure correct URL to prevent "URL seems to be an unsupported one"
-            // file.toURL() would give "file:/document.odt" (missing slashes)
             sURL = getFileURL(file)
         }
         // Open document
-        //if (!oooConnection.xComponentLoader) {
-        if (!oooConnection.getXComponentLoader()) {
+        XComponentLoader xComponentLoader = oooConnection.getXComponentLoader()
+        if (!xComponentLoader) {
             throw new OdiseeException('No XComponentLoader!')
         }
-        //XComponent xComponent = oooConnection.xComponentLoader.loadComponentFromURL(sURL, '_blank', 0, (properties ?: null) as com.sun.star.beans.PropertyValue[])
-        XComponent xComponent = oooConnection.getXComponentLoader().loadComponentFromURL(sURL, '_blank', 0, (properties ?: null) as com.sun.star.beans.PropertyValue[])
-        // Add OOoConnection to XComponent
+        XComponent xComponent = xComponentLoader.loadComponentFromURL(sURL, '_blank', 0, (properties ?: null) as com.sun.star.beans.PropertyValue[])
         xComponent.metaClass._oooConnection = oooConnection
         xComponent.metaClass.getOooConnection = {-> _oooConnection }
         xComponent.metaClass._file = file
@@ -149,12 +144,12 @@ class OOoDocumentCategory {
      * Save an OpenOffice.org document to an alternate URL or format.
      * @param component com.sun.star.lang.XComponent
      */
-    static saveAs(XComponent component, File file, props = null) {
+    static saveAs(XComponent component, Path file, props = null) {
         use(UnoCategory) {
             // Properties for saving component
             List properties = []
             // Filter for saving?
-            String ext = file.name.toLowerCase()[-3..-1]
+            String ext = file.fileName.toString().toLowerCase()[-3..-1]
             if (!(ext ==~ /od[gpst]/)) {
                 properties << makePropertyValue('FilterName', OdiseeFileFormat[ext].filter)
             }
@@ -234,7 +229,8 @@ class OOoDocumentCategory {
         Profile.time "OOoDocumentCategory.executeDispatch($name)", {
             use(UnoCategory) {
                 // Get XMultiComponentFactory
-                OOoConnection oooConnection = (OOoConnection) component.oooConnection
+                //OOoConnection oooConnection = (OOoConnection) component.oooConnection
+                OfficeConnection oooConnection = (OfficeConnection) component.oooConnection
                 if (oooConnection) {
                     Object o = oooConnection.xMultiComponentFactory.createInstanceWithContext('com.sun.star.frame.DispatchHelper', oooConnection.xOfficeComponentContext)
                     // XDispatchHelper

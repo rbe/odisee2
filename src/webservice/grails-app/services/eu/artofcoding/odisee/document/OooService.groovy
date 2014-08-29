@@ -11,10 +11,13 @@ package eu.artofcoding.odisee.document
 import eu.artofcoding.grails.helper.NameHelper
 import eu.artofcoding.odisee.OdiseeException
 import eu.artofcoding.odisee.OdiseeXmlCategory
-import eu.artofcoding.odisee.server.OdiseeConstant
 import eu.artofcoding.odisee.server.OfficeConnectionFactory
 import groovy.xml.dom.DOMCategory
 import org.springframework.beans.factory.InitializingBean
+
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
 
 import static eu.artofcoding.odisee.OdiseePath.ODISEE_HOME
 import static eu.artofcoding.odisee.OdiseePath.ODISEE_USER
@@ -76,11 +79,11 @@ class OooService implements InitializingBean {
             Map oooGroup = [:]
             Map ipPortGroup = [:]
             // Try to get etc/odiinst through environment variable ODISEE_HOME
-            File odiinst = new File(ODISEE_HOME, 'etc/odiinst'.intern())
+            Path odiinst = ODISEE_HOME.resolve(S_ETC_ODIINST)
             // Read contents of odiinst
             // odiinst=[odi1, 127.0.0.1, 2001, /Applications/OpenOffice.org.app, /Users/rbe/project/odisee/var/user/odi1, nologo nofirststartwizard norestart nodefault nolockcheck nocrashreport, true]
             List<String> contents = []
-            if (odiinst?.exists()) {
+            if (Files.exists(odiinst)) {
                 // odi1|127.0.0.1|2001| ...
                 odiinst.eachLine S_UTF8, {
                     contents << it.split('[|]')
@@ -292,11 +295,10 @@ class OooService implements InitializingBean {
         // Generate unique request ID
         arg.uniqueRequestId = UUID.randomUUID()
         // Set request directory
-        //arg.requestDir = new File("${arg.principal.name}/${OdiseePath.DOCUMENT_DIR}", arg.uniqueRequestId.toString())
-        arg.requestDir = new File("${ODISEE_USER}/${arg.principal.name}/${S_DOCUMENT}", arg.uniqueRequestId.toString())
+        arg.requestDir = Paths.get("${ODISEE_USER}/${arg.principal.name}/${S_DOCUMENT}", arg.uniqueRequestId.toString())
         arg.requestDir.mkdirs()
         // Save XML request
-        storageService.saveRequestToDisk(arg, OdiseeConstant.MINUS_ONE)
+        storageService.saveRequestToDisk(arg, MINUS_ONE)
         // The result document(s)
         arg.document = []
         try {
@@ -309,7 +311,7 @@ class OooService implements InitializingBean {
                     if (i > 0) {
                         // Reset all request-specific map keys
                         [
-                                S_ID, OdiseeConstant.S_TEMPLATE, S_REVISION,
+                                S_ID, S_TEMPLATE, S_REVISION,
                                 'documentName',
                                 'templateDir', 'documentDir',
                                 'templateFile'

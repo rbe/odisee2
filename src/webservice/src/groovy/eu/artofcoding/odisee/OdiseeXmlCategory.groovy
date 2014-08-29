@@ -18,6 +18,9 @@ import eu.artofcoding.odisee.server.OfficeConnection
 import eu.artofcoding.odisee.server.OfficeConnectionFactory
 
 import java.nio.charset.Charset
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
 import java.util.concurrent.TimeUnit
 
 import static eu.artofcoding.odisee.server.OdiseeConstant.*
@@ -34,13 +37,13 @@ class OdiseeXmlCategory {
      * Find latest revision of a file with name following this convention:
      * name_revN.ext
      */
-    static File findLatestRevision(File dir) {
-        if (!dir.exists()) {
+    static Path findLatestRevision(Path dir) {
+        if (!Files.exists(dir)) {
             throw new OdiseeException("Cannot find template in directory '${dir}'")
         }
-        File[] fs = dir.listFiles()
+        Path[] fs = dir.listFiles()
         // TODO NullPointer when cN == directory
-        fs.inject fs[0], { File o, File n ->
+        fs.inject fs[0], { Path o, Path n ->
             // Strip extension and find _rev in filename
             def c1 = (o.name - ~WRITER_EXT_REGEX).split(S_UNDERSCORE).find { it ==~ REVISION_REGEX }
             def c2 = (n.name - ~WRITER_EXT_REGEX).split(S_UNDERSCORE).find { it ==~ REVISION_REGEX }
@@ -52,7 +55,7 @@ class OdiseeXmlCategory {
      * Find OpenOffice template by revision and return File object.
      * @param xmlTemplate Node xml.request.template from request XML.
      */
-    static File findTemplate(xmlTemplate) {
+    static Path findTemplate(xmlTemplate) {
         // Check argument
         if (!xmlTemplate) {
             throw new OdiseeException('No template specified')
@@ -64,13 +67,14 @@ class OdiseeXmlCategory {
         }
         String revision = xmlTemplate.'@revision'?.toString()?.toUpperCase()
         // Get template
-        File template = null
+        Path template = null
         if (templatePath && revision != S_LATEST) {
-            template = new File(templatePath)
+            template = Paths.get(templatePath)
         }
         // Find latest revision of template
         if (!revision || revision == S_LATEST) {
-            template = OdiseeXmlCategory.findLatestRevision(new File(template.parentFile, template.name))
+            Path p = template.parent.resolve(template.fileName)
+            template = OdiseeXmlCategory.findLatestRevision(p)
         }
         // Does template exist?
         if (!template.exists()) {
@@ -228,10 +232,9 @@ class OdiseeXmlCategory {
      * @param oooConnection
      * @return
      */
-    //static List<File> processTemplate(Map arg, OOoConnection oooConnection) {
-    static List<File> processTemplate(Map arg, OfficeConnection oooConnection) {
+    static List<Path> processTemplate(Map arg, OfficeConnection oooConnection) {
         // Result is one or more document(s)
-        List<File> output = []
+        List<Path> output = []
         // Get XML request element
         def request = arg.xml.request[arg.activeRequestIndex]
         def template = request.template[0]
@@ -240,8 +243,9 @@ class OdiseeXmlCategory {
         String documentBasename = null
         if (request.'@name') {
             documentBasename = request.'@name'.toString()
-            byte[] requestNameAsUTF8 = documentBasename.getBytes('UTF-8')
-            documentBasename = new String(requestNameAsUTF8, Charset.forName('UTF-8'))
+            Charset utf8 = Charset.forName('UTF-8')
+            byte[] requestNameAsUTF8 = documentBasename.getBytes(utf8)
+            documentBasename = new String(requestNameAsUTF8, utf8)
         } else {
             documentBasename = "${arg.template.name.split('\\.')[0..-2].join('.')}-id${arg.id}"
         }
@@ -273,10 +277,7 @@ class OdiseeXmlCategory {
                     }
                 }
             }
-            /* TODO
-            // Refresh document before executing macro
-            template.refresh()
-            */
+            // TODO Refresh document before executing macro? template.refresh()
             // Execute pre-save macro
             String preSaveMacro = template.'@pre-save-macro'.toString()
             if (preSaveMacro) {
@@ -284,13 +285,14 @@ class OdiseeXmlCategory {
             }
             // Create File references for outputFormats from XML
             String outputPath = template.'@outputPath'.toString()
+            Path outputDir = Paths.get(outputPath)
             template.'@outputFormat'?.toString()?.split(',')?.each { format ->
-                output << new File(outputPath, "${documentBasename}.${format}")
+                output << outputDir.resolve("${documentBasename}.${format}")
             }
             // Save document to disk
-            output.each { File file ->
+            output.each { Path file ->
                 // Ensure existance of directory for document
-                file.parentFile.mkdirs()
+                Files.createDirectories(file.parent)
                 xComponent.saveAs(file)
             }
             // Execute post-save macro
@@ -313,7 +315,6 @@ class OdiseeXmlCategory {
      * @param requestOverride
      * @return Map
      */
-    //static Map toDocument(File file, OOoConnectionManager oooConnectionManager, int requestNumber, requestOverride = null) {
     static Map toDocument(File file, OfficeConnectionFactory officeConnectionFactory, int requestNumber, requestOverride = null) {
         long start = System.nanoTime()
         // Read XML from file
@@ -326,7 +327,6 @@ class OdiseeXmlCategory {
             arg += requestOverride
         }
         // The connection
-        //OOoConnection oooConnection = null
         OfficeConnection oooConnection = null
         List<File> output = null
         // Our return value is a map with timing and output information
@@ -336,7 +336,6 @@ class OdiseeXmlCategory {
         try {
             // Get connection to OpenOffice
             String group = 'group0' // TODO request.ooo.'@group'.toString()
-            //oooConnection = oooConnectionManager.acquire(group)
             oooConnection = officeConnectionFactory.fetchConnection(false)
             if (!oooConnection) {
                 throw new OdiseeException("Could not acquire connection from group '${group}'")
@@ -369,7 +368,6 @@ class OdiseeXmlCategory {
             */
         } finally {
             // Release connection to pool
-            //oooConnectionManager.release(oooConnection)
             if (oooConnection) {
                 officeConnectionFactory.repositConnection(oooConnection)
             }

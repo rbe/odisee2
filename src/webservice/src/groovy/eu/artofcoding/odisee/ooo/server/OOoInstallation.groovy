@@ -14,13 +14,10 @@ package eu.artofcoding.odisee.ooo.server
 import eu.artofcoding.odisee.OdiseePath
 import eu.artofcoding.odisee.helper.JvmHelper
 
-/**
- * Created by IntelliJ IDEA.
- * User: rbe
- * Date: 09.03.12
- * Time: 18:49
- * To change this template use File | Settings | File Templates.
- */
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
+
 class OOoInstallation {
 
     private static final String SOFFICE_PROGRAM_DIR = 'program'
@@ -54,15 +51,15 @@ class OOoInstallation {
             // MacOS X: Don't use program link
             // http://www.openoffice.org/issues/show_bug.cgi?id=101203
                 case { it ==~ JvmHelper.OS_DARWIN }:
-                    File file = new File(OdiseePath.OOO_HOME, OS_MAC_OS)
-                    if (file.exists()) {
+                    Path file = Paths.get(OdiseePath.OOO_HOME, OS_MAC_OS)
+                    if (Files.exists(file)) {
                         result = [file]
                     }
                     break
             // All other
                 default:
-                    File file = new File(OdiseePath.OOO_HOME, SOFFICE_PROGRAM_DIR)
-                    if (file.exists()) {
+                    Path file = Paths.get(OdiseePath.OOO_HOME, SOFFICE_PROGRAM_DIR)
+                    if (Files.exists(file)) {
                         result = [file]
                     }
                     break
@@ -75,13 +72,13 @@ class OOoInstallation {
             switch (OS_NAME) {
             // Mac OS X: make an educated guess
                 case { it ==~ OS_DARWIN }:
-                    File guess = new File('/Applications/OpenOffice.org.app/Contents/MacOS/soffice')
-                    if (guess.exists()) {
+                    Path guess = Paths.get('/Applications/OpenOffice.org.app/Contents/MacOS/soffice')
+                    if (Files.exists(guess)) {
                         result = [guess]
                     } else {
                         result = File.listRoots().collectMany { root ->
                             ['Applications/Oracle Open Office.app', 'Applications/LibreOffice.app'].collect { folder ->
-                                look(SOFFICE_BIN, new File(root, folder))
+                                look(SOFFICE_BIN, Paths.get(root, folder))
                             }
                         }
                     }

@@ -8,6 +8,8 @@
  */
 package eu.artofcoding.grails.helper
 
+import java.nio.file.Path
+
 /**
  *
  * @author rbe
@@ -40,13 +42,13 @@ final class FileHelper {
     }
 
     /**
-     * Convenience method for {@link decomposeFilename ( String )}.
+     * Convenience method for {@link decomposeFilename(String)}.
      * @see #decomposeFilename(String)
      * @param file
      * @return Map Keys: name, ext.
      */
-    static Map decomposeFilename(File file) {
-        decomposeFilename(file?.name)
+    static Map decomposeFilename(Path file) {
+        decomposeFilename(file?.fileName?.toString())
     }
 
     /**
@@ -68,7 +70,7 @@ final class FileHelper {
      * @param file
      * @param str
      */
-    static void writeUTF8(File file, String str) {
+    static void writeUTF8(Path file, String str) {
         file.withWriter S_UTF8, { writer ->
             writer.write(str)
         }

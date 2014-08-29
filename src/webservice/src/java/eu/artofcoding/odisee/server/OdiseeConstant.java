@@ -14,13 +14,13 @@ package eu.artofcoding.odisee.server;
 
 public class OdiseeConstant {
 
-    public static final String NATIVE_TEMPLATE_REGEX = ".*\\.ot[gpst]".intern();
+    public static final String NATIVE_TEMPLATE_REGEX = ".*\\.ot[gpst]";
 
-    public static final String NATIVE_DOCUMENT_REGEX = ".*\\.od[gpst]".intern();
+    public static final String NATIVE_DOCUMENT_REGEX = ".*\\.od[gpst]";
 
-    public static final String WRITER_EXT_REGEX = ".o\\wt$".intern();
+    public static final String WRITER_EXT_REGEX = ".o\\wt$";
 
-    public static final String REVISION_REGEX = "rev\\d+".intern();
+    public static final String REVISION_REGEX = "rev\\d+";
 
     public static final int THOUSAND = 1000;
 
@@ -32,60 +32,62 @@ public class OdiseeConstant {
 
     public static final int MINUS_ONE = -1;
 
-    public static final String S_DOT = ".".intern();
+    public static final String S_DOT = ".";
     
-    public static final String S_UNDERSCORE = "_".intern();
+    public static final String S_UNDERSCORE = "_";
 
-    public static final String S_UTF8 = "UTF-8".intern();
+    public static final String S_UTF8 = "UTF-8";
 
-    public static final String S_TRUE = "true".intern();
+    public static final String S_TRUE = "true";
 
-    public static final String S_FALSE = "false".intern();
+    public static final String S_FALSE = "false";
 
-    public static final String S_GROUP0 = "group0".intern();
+    public static final String S_GROUP0 = "group0";
 
-    public static final String S_LATEST = "LATEST".intern();
+    public static final String S_LATEST = "LATEST";
     
-    public static final String S_ODISEE_DEBUG = "ODISEE_DEBUG".intern();
+    public static final String S_ETC_ODIINST = "etc/odiinst";
     
-    public static final String S_ODISEE_PROFILE = "ODISEE_PROFILE".intern();
+    public static final String S_ODISEE_DEBUG = "ODISEE_DEBUG";
     
-    public static final String S_ODISEE_HOME = "ODISEE_HOME".intern();
-
-    public static final String S_ODISEE_DEPLOY = "ODISEE_DEPLOY".intern();
-
-    public static final String S_ODISEE_VAR = "ODISEE_VAR".intern();
-
-    public static final String S_ODISEE_USER = "ODISEE_USER".intern();
-
-    public static final String S_ODISEE_TMP = "ODISEE_TMP".intern();
-
-    public static final String S_VAR = "var".intern();
-
-    public static final String S_VAR_DEPLOY = "var/deploy".intern();
+    public static final String S_ODISEE_PROFILE = "ODISEE_PROFILE";
     
-    public static final String S_VAR_TMP = "var/tmp".intern();
+    public static final String S_ODISEE_HOME = "ODISEE_HOME";
 
-    public static final String S_USER = "user".intern();
+    public static final String S_ODISEE_DEPLOY = "ODISEE_DEPLOY";
 
-    public static final String S_TEMPLATE = "template".intern();
+    public static final String S_ODISEE_VAR = "ODISEE_VAR";
 
-    public static final String S_DOCUMENT = "document".intern();
+    public static final String S_ODISEE_USER = "ODISEE_USER";
 
-    public static final String S_PDF = "pdf".intern();
+    public static final String S_ODISEE_TMP = "ODISEE_TMP";
 
-    public static final String S_ID = "id".intern();
+    public static final String S_VAR = "var";
 
-    public static final String S_REVISION = "revision".intern();
+    public static final String S_VAR_DEPLOY = "var/deploy";
+    
+    public static final String S_VAR_TMP = "var/tmp";
 
-    public static final String S_NOSTREAM = "nostream".intern();
+    public static final String S_USER = "user";
 
-    public static final String FILE_DATEFORMAT_SSSS = "yyyyMMdd-HHmmss_SSSS".intern();
+    public static final String S_TEMPLATE = "template";
 
-    public static final String MIME_TYPE_OCTET_STREAM = "application/octet-stream".intern();
+    public static final String S_DOCUMENT = "document";
 
-    public static final String MIME_TYPE_ODT = "application/vnd.oasis.opendocument.text".intern();
+    public static final String S_PDF = "pdf";
 
-    public static final String MIME_TYPE_PDF = "application/pdf".intern();
+    public static final String S_ID = "id";
+
+    public static final String S_REVISION = "revision";
+
+    public static final String S_NOSTREAM = "nostream";
+
+    public static final String FILE_DATEFORMAT_SSSS = "yyyyMMdd-HHmmss_SSSS";
+
+    public static final String MIME_TYPE_OCTET_STREAM = "application/octet-stream";
+
+    public static final String MIME_TYPE_ODT = "application/vnd.oasis.opendocument.text";
+
+    public static final String MIME_TYPE_PDF = "application/pdf";
 
 }

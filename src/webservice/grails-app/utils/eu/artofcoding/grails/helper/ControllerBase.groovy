@@ -161,12 +161,12 @@ abstract class ControllerBase {
                 response.outputStream << file.bytes
             } else {
                 // TODO Stream error image
-                //response.outputStream << new File().bytes
+                //response.outputStream << Files.readAllBytes()
             }
         } catch (Exception e) {
             e.printStackTrace()
             // TODO Stream error image
-            //response.outputStream << new File().bytes
+            //response.outputStream << Files.readAllBytes()
         } finally {
             // Flush stream
             response.outputStream.flush()

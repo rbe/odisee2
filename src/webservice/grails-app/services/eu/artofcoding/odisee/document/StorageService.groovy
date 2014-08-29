@@ -7,17 +7,20 @@
  * All rights reserved. Use is subject to license terms.
  */
 package eu.artofcoding.odisee.document
+
 import com.sun.org.apache.xerces.internal.dom.DeferredNode
 import eu.artofcoding.grails.helper.FileHelper
 import eu.artofcoding.grails.helper.XmlHelper
 import eu.artofcoding.odisee.OdiseeException
 import groovy.xml.XmlUtil
 
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
+
 import static eu.artofcoding.odisee.OdiseePath.ODISEE_USER
 import static eu.artofcoding.odisee.server.OdiseeConstant.*
-/**
- *
- */
+
 class StorageService {
 
     /**
@@ -50,11 +53,12 @@ class StorageService {
      * Read a file and save its content.
      */
     private Object fromFile(path) {
-        File f = path instanceof File ? path : new File(path)
-        if (f.exists() && f.canRead()) {
+        Path f = path instanceof Path ? path : Paths.get(path)
+        if (Files.exists(f) && Files.isReadable(f)) {
             f.readBytes()
         } else {
             log.error "ODI-xxxx: Can't find or read file ${path}"
+            null
         }
     }
 
@@ -70,10 +74,11 @@ class StorageService {
         }
         // Got filename?
         if (!arg.filename) {
-            if (arg.data instanceof File) {
-                arg.filename = arg.data.name
+            if (arg.data instanceof Path) {
+                Path p = (Path) arg.data
+                arg.filename = p.fileName.toString()
             } else if (arg.data instanceof String) {
-                arg.data = new File(arg.data)
+                arg.data = Paths.get(arg.data)
                 arg.filename = arg.data.name
             } else {
                 arg.filename = 'unknown'
@@ -81,7 +86,7 @@ class StorageService {
         }
         // Load data depending on type?
         if (!arg.bytes) {
-            if (arg.data instanceof String || arg.data instanceof File) {
+            if (arg.data instanceof String || arg.data instanceof Path) {
                 arg.bytes = fromFile(arg.data)
             } else if (arg.data instanceof InputStream) {
                 arg.bytes = arg.data.readBytes()
@@ -122,27 +127,25 @@ class StorageService {
      * @param requestNumber Request# to work with, -1 is the whole file.
      * @return File Reference to generated XML file.
      */
-    File saveRequestToDisk(Map arg, int requestNumber) {
-        File requestXMLFile = null
+    Path saveRequestToDisk(Map arg, int requestNumber) {
+        Path requestXMLFile = null
         String xmlString = null
         // Make XML string
         if (requestNumber == MINUS_ONE) {
-            requestXMLFile = new File(arg.requestDir as File, "${arg.uniqueRequestId}.xml" as String)
+            Path requestDir = (Path) arg.requestDir
+            requestXMLFile = requestDir.resolve("${arg.uniqueRequestId}.xml" as String)
             xmlString = XmlUtil.serialize(arg.xml)
         } else {
             // Just save active request including <odisee> element
             String filename = String.format('%s_%04d.xml', arg.uniqueRequestId, requestNumber)
-            requestXMLFile = new File(arg.documentDir as File, filename as String)
+            Path documentDir = (Path) arg.documentDir
+            requestXMLFile = documentDir.resolve(filename as String)
             DeferredNode deferredNode = (DeferredNode) arg.xml.request[requestNumber]
             xmlString = XmlHelper.asString(deferredNode)
         }
         // Write XML file
-        if (requestXMLFile.exists()) {
-            throw new OdiseeException("ODI-xxxx: Cannot write request XML file ${requestXMLFile.absolutePath} as it exists already")
-        } else {
-            requestXMLFile.parentFile.mkdirs()
-            FileHelper.writeUTF8(requestXMLFile, xmlString)
-        }
+        Files.createDirectories(requestXMLFile.parent)
+        FileHelper.writeUTF8(requestXMLFile, xmlString)
         requestXMLFile
     }
 
@@ -155,24 +158,22 @@ class StorageService {
         // Set document directory (same as request's working directory)
         arg.documentDir = arg.requestDir
         // Set template directory (same as request's working directory)
-        arg.templateDir = new File("${ODISEE_USER}/${arg.principal.name}", S_TEMPLATE)
+        arg.templateDir = Paths.get("${ODISEE_USER}/${arg.principal.name}", S_TEMPLATE)
         // Template
         arg.revision = 1
         // Check local template directory for latest revision of template
-        File localTemplate = new File(arg.templateDir as File, "${arg.template}.ott")
-        if (!localTemplate.exists()) {
-            localTemplate = new File(arg.templateDir as File, "${arg.template}_rev${arg.revision}.ott")
+        Path localTemplate = arg.templateDir.resolve("${arg.template}.ott")
+        if (!Files.exists(localTemplate)) {
+            localTemplate = arg.templateDir.resolve("${arg.template}_rev${arg.revision}.ott")
         }
-        boolean templateExists = localTemplate.exists()
+        boolean templateExists = Files.exists(localTemplate)
         if (log.isDebugEnabled()) {
-            log.debug "ODI-xxx: ${arg.principal.name} tries to access template ${localTemplate}, exists=${templateExists}"
+            log.debug "ODI-xxxx: ${arg.principal.name} tries to access template ${localTemplate}, exists=${templateExists}"
         }
         if (templateExists) {
             // Point template for this request to local template
             arg.templateFile = localTemplate
-        }
-        // Check
-        if (!arg.templateFile || !arg.templateFile?.exists()) {
+        } else {
             throw new OdiseeException("ODI-xxxx: Template ${arg.templateFile} does not exist")
         }
     }
