@@ -77,7 +77,7 @@ class OdiseeXmlCategory {
             template = OdiseeXmlCategory.findLatestRevision(p)
         }
         // Does template exist?
-        if (!template.exists()) {
+        if (!Files.exists(template)) {
             throw new OdiseeException("ODI-xxxx: Template '${template}' does not exist!")
         }
         template
@@ -198,7 +198,7 @@ class OdiseeXmlCategory {
     /**
      * Read request and return map.
      */
-    static Map readRequest(File file, int requestNumber) {
+    static Map readRequest(Path file, int requestNumber) {
         Map arg = [:]
         /*
         // TODO Use validating XmlSlurper
@@ -220,7 +220,7 @@ class OdiseeXmlCategory {
         // Get File reference to certain or latest revision of template
         arg.template = OdiseeXmlCategory.findTemplate(request.template)
         // Set revision from found template
-        arg.revision = (arg.template.name - ~WRITER_EXT_REGEX).split('_rev').last()
+        arg.revision = (arg.template.fileName.toString() - ~WRITER_EXT_REGEX).split('_rev').last()
         // Return map
         arg
     }
@@ -247,7 +247,7 @@ class OdiseeXmlCategory {
             byte[] requestNameAsUTF8 = documentBasename.getBytes(utf8)
             documentBasename = new String(requestNameAsUTF8, utf8)
         } else {
-            documentBasename = "${arg.template.name.split('\\.')[0..-2].join('.')}-id${arg.id}"
+            documentBasename = "${arg.template.fileName.toString().split('\\.')[0..-2].join('.')}-id${arg.id}"
         }
         use(OOoDocumentCategory) {
             // Should we hide OpenOffice?
@@ -315,7 +315,7 @@ class OdiseeXmlCategory {
      * @param requestOverride
      * @return Map
      */
-    static Map toDocument(File file, OfficeConnectionFactory officeConnectionFactory, int requestNumber, requestOverride = null) {
+    static Map toDocument(Path file, OfficeConnectionFactory officeConnectionFactory, int requestNumber, requestOverride = null) {
         long start = System.nanoTime()
         // Read XML from file
         Map arg = readRequest(file, requestNumber)

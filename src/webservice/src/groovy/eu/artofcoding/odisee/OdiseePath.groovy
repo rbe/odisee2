@@ -46,7 +46,7 @@ public class OdiseePath {
     /**
      * Deployment directory for Odisee, contains additional files.
      */
-    public static final File ODISEE_DEPLOY
+    public static final Path ODISEE_DEPLOY
 
     /**
      * Variable data directory for Odisee.
@@ -71,7 +71,7 @@ public class OdiseePath {
         if (envOdiseeDeploy) {
             ODISEE_DEPLOY = Paths.get(envOdiseeDeploy).toAbsolutePath()
         } else {
-            ODISEE_DEPLOY = Paths.get(ODISEE_HOME, S_VAR_DEPLOY).toAbsolutePath()
+            ODISEE_DEPLOY = ODISEE_HOME.resolve(S_VAR_DEPLOY).toAbsolutePath()
         }
         Files.createDirectories(ODISEE_DEPLOY)
         //
@@ -80,7 +80,7 @@ public class OdiseePath {
         if (envOdiseeVar) {
             ODISEE_VAR = Paths.get(envOdiseeVar).toAbsolutePath()
         } else {
-            ODISEE_VAR = Paths.get(ODISEE_HOME, S_VAR).toAbsolutePath()
+            ODISEE_VAR = ODISEE_HOME.resolve(S_VAR).toAbsolutePath()
         }
         Files.createDirectories(ODISEE_VAR)
         //
@@ -89,7 +89,7 @@ public class OdiseePath {
         if (envOdiseeUser) {
             ODISEE_USER = Paths.get(envOdiseeUser).toAbsolutePath()
         } else {
-            ODISEE_USER = Paths.get(ODISEE_VAR, S_USER).toAbsolutePath()
+            ODISEE_USER = ODISEE_VAR.resolve(S_USER).toAbsolutePath()
         }
         Files.createDirectories(ODISEE_USER)
         //
@@ -98,7 +98,7 @@ public class OdiseePath {
         if (envOdiseeTmp) {
             ODISEE_TMP = Paths.get(envOdiseeTmp).toAbsolutePath()
         } else {
-            ODISEE_TMP = Paths.get(ODISEE_HOME, S_VAR_TMP).toAbsolutePath()
+            ODISEE_TMP = ODISEE_HOME.resolve(S_VAR_TMP).toAbsolutePath()
         }
         Files.createDirectories(ODISEE_TMP)
     }

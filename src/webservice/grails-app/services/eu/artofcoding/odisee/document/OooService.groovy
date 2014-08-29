@@ -159,7 +159,7 @@ class OooService implements InitializingBean {
             def request = arg.xml.request[arg.activeIndex]
             def template = request.template[0]
             // Ensure template path in Odisee XML request
-            template.setAttribute('path', arg.templateFile.absolutePath)
+            template.setAttribute('path', arg.templateFile.toAbsolutePath().toString())
             // Ensure document output path for Odisee XML request
             if (!template.'@outputPath') {
                 template.setAttribute('outputPath', arg.documentDir.toString())
@@ -179,7 +179,7 @@ class OooService implements InitializingBean {
      */
     private void processSingleRequest(Map arg) {
         // Save (enriched) XML request to disk
-        File requestXMLFile = storageService.saveRequestToDisk(arg, arg.activeIndex)
+        Path requestXMLFile = storageService.saveRequestToDisk(arg, arg.activeIndex)
         // Process request
         use(OdiseeXmlCategory) {
             def request = arg.xml.request[arg.activeIndex]
@@ -296,7 +296,7 @@ class OooService implements InitializingBean {
         arg.uniqueRequestId = UUID.randomUUID()
         // Set request directory
         arg.requestDir = Paths.get("${ODISEE_USER}/${arg.principal.name}/${S_DOCUMENT}", arg.uniqueRequestId.toString())
-        arg.requestDir.mkdirs()
+        Files.createDirectories(arg.requestDir)
         // Save XML request
         storageService.saveRequestToDisk(arg, MINUS_ONE)
         // The result document(s)
