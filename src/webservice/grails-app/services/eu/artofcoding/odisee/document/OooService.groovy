@@ -186,13 +186,8 @@ class OooService implements InitializingBean {
             arg.result = requestXMLFile.toDocument(officeConnectionFactory, 0) // requestNumber = 0 as file contains only one request
             if (!arg.result) {
                 // This should never happen; except all OOo instances have crashed.
-                String group = '?'
-                try {
-                    group = 'group0' // TODO request.ooo[0]?.'@group'
-                } catch (e) {
-                    // ignore
-                }
-                log.error "ODI-xxxx: ${requestXMLFile.name}/${arg.activeIndex}: Got no result, maybe all OpenOffice instance(s) in group '${group}' are unwilling to perform?"
+                String group = 'group0'
+                log.error "ODI-xxxx: ${requestXMLFile.fileName.toString()}/${arg.activeIndex}: Got no result, maybe all OpenOffice instance(s) in group '${group}' are unwilling to perform?"
             }
         }
     }
