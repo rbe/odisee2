@@ -26,7 +26,7 @@ class ControllerHelper {
             arg.log.error arg.message, arg.exception
             HttpServletResponse response = arg.response
             response.reset()
-            response.outputStream << String.format('Sorry, I have got no document for you, %s%n', arg.message)
+            response.outputStream << String.format('%s%n', arg.message)
             response.outputStream.flush()
         } catch (e) {
             arg.log.error 'ODI-xxxx: Could not send error message to client', e
