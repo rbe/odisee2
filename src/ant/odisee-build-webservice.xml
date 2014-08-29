@@ -25,10 +25,10 @@
     <target name="clean-webservice">
         <property environment="env"/>
         <!-- Clean web service -->
-        <exec dir="${webservice.base.dir}" executable="bash">
+        <exec dir="${webservice.base.dir}" executable="bash" failonerror="true">
             <env key="GROOVY_HOME" value="${groovy.home}"/>
             <env key="GRAILS_HOME" value="${grails.home}"/>
-            <env key="PATH" path="${GRAILS_HOME}/bin:${GROOVY_HOME}/bin:${env.PATH}"/>
+            <env key="PATH" path="${env.GRAILS_HOME}/bin:${env.GROOVY_HOME}/bin:${env.JAVA_HOME}/bin:${env.PATH}"/>
             <arg value="${grails.home}/bin/grails"/>
             <arg value="clean"/>
         </exec>
@@ -131,10 +131,11 @@
     <target name="compile-webservice" depends="clean-webservice,webservice-set-version-props,build-and-copy-libraries">
         <!-- Execute grails compile -->
         <property environment="env"/>
-        <exec dir="${webservice.base.dir}" executable="bash">
+        <exec dir="${webservice.base.dir}" executable="bash" failonerror="true">
+            <env key="ODISEE_HOME" value="../.."/>
             <env key="GROOVY_HOME" value="${groovy.home}"/>
             <env key="GRAILS_HOME" value="${grails.home}"/>
-            <env key="PATH" path="${GRAILS_HOME}/bin:${GROOVY_HOME}/bin:${env.PATH}"/>
+            <env key="PATH" path="${env.GRAILS_HOME}/bin:${env.GROOVY_HOME}/bin:${env.JAVA_HOME}/bin:${env.PATH}"/>
             <arg value="${grails.home}/bin/grails"/>
             <arg value="compile"/>
         </exec>
@@ -147,10 +148,11 @@
     <target name="package-webservice" depends="webservice-inc-buildnumber,compile-webservice">
         <property environment="env"/>
         <!-- Create web service as war (Grails plugin) -->
-        <exec dir="${webservice.base.dir}" executable="bash">
+        <exec dir="${webservice.base.dir}" executable="bash" failonerror="true">
+            <env key="ODISEE_HOME" value="../.."/>
             <env key="GROOVY_HOME" value="${groovy.home}"/>
             <env key="GRAILS_HOME" value="${grails.home}"/>
-            <env key="PATH" path="${GRAILS_HOME}/bin:${GROOVY_HOME}/bin:${env.PATH}"/>
+            <env key="PATH" path="${env.GRAILS_HOME}/bin:${env.GROOVY_HOME}/bin:${env.PATH}"/>
             <arg value="${grails.home}/bin/grails"/>
             <arg value="prod"/>
             <arg value="war"/>
@@ -169,7 +171,7 @@
         <exec dir="${webservice.base.dir}" executable="bash">
             <env key="GROOVY_HOME" value="${groovy.home}"/>
             <env key="GRAILS_HOME" value="${grails.home}"/>
-            <env key="PATH" path="${GRAILS_HOME}/bin:${GROOVY_HOME}/bin:${env.PATH}"/>
+            <env key="PATH" path="${env.GRAILS_HOME}/bin:${env.GROOVY_HOME}/bin:${env.JAVA_HOME}/bin:${env.PATH}"/>
             <arg value="${grails.home}/bin/grails"/>
             <!--arg value="-Dgrails.project.war.file=target/odisee.war"/-->
             <arg value="prod"/>
