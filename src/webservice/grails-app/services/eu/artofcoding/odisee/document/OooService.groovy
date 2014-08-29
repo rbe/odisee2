@@ -253,30 +253,6 @@ class OooService implements InitializingBean {
     }
 
     /**
-     * Delete working directory?
-     * @param arg
-     */
-    private void cleanupWorkingDirectory(Map arg) {
-        use(DOMCategory) {
-            def request = arg.xml.request[arg.activeIndex]
-            def archive = request.archive[0]
-            boolean archiveFiles = archive?.'@files' == S_TRUE
-            // TODO Check if we override this setting
-            // Delete files when <archive files="false">
-            if (!archiveFiles) {
-                try {
-                    boolean b = arg.documentDir.deleteDir()
-                    if (log.debugEnabled) {
-                        log.debug "ODI-xxxx: cleanupWorkingDirectory: Deleting document directory ${arg.documentDir} was ${b ? 'successful' : 'unsuccessful'}"
-                    }
-                } catch (e) {
-                    log.error "ODI-xxxx: cleanupWorkingDirectory: Couldn't delete working directory ${arg.documentDir}", e
-                }
-            }
-        }
-    }
-
-    /**
      * Generate a document using document service and OOo service.
      * @param arg Map: xml: an XML request (see request.xsd in Odisee).
      * @return List with generated OooDocument instance(s).
@@ -328,10 +304,6 @@ class OooService implements InitializingBean {
             postProcessAll(arg)
         } catch (e) {
             log.error 'ODI-xxxx: Exception occured during request processing', e
-        } finally {
-            // Clean up working directory
-            // TODO Decouple this action from request processing (through a message queue), so this method is not called with every request and does not increase latency
-            cleanupWorkingDirectory(arg)
         }
         // Return result
         if (log.debugEnabled) {
