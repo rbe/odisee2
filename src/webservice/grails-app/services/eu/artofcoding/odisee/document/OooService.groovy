@@ -183,7 +183,6 @@ class OooService implements InitializingBean {
         // Process request
         use(OdiseeXmlCategory) {
             def request = arg.xml.request[arg.activeIndex]
-            //arg.result = requestXMLFile.toDocument(oooConnectionManager, 0) // requestNumber = 0 as file contains only one request
             arg.result = requestXMLFile.toDocument(officeConnectionFactory, 0) // requestNumber = 0 as file contains only one request
             if (!arg.result) {
                 // This should never happen; except all OOo instances have crashed.
