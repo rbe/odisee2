@@ -21,7 +21,6 @@ target/
 .fonts
 etc/odiinst
 src/webservice/lib
-libexec/tomcat
 var/user/odisee/document
 
 # install4j
