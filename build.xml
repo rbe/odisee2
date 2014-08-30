@@ -3,37 +3,261 @@
     <property environment="env"/>
     <!-- Sources -->
     <property name="src.dir" value="${basedir}/src"/>
-    <property name="src.ant.dir" value="${src.dir}/ant"/>
     <!--
         
         Build properties
         
     -->
-    <property name="odisee-build.properties" value="${src.ant.dir}/odisee-build.properties"/>
-    <loadproperties srcFile="${odisee-build.properties}" prefix="buildprop"/>
+    <loadproperties srcFile="build.properties" prefix="buildprop"/>
+    <!--
+        Odisee
+    -->
+    <property name="etc.dir"        value="${basedir}/etc"/>
+    <property name="bin.dir"        value="${basedir}/bin"/>
+    <property name="build.dir"      value="${basedir}/build"/>
+    <property name="classes.dir"    value="${build.dir}/classes"/>
+    <property name="lib.dir"        value="${basedir}/lib"/>
+    <property name="libexec.dir"    value="${basedir}/libexec"/>
+    <property name="antlib.dir"     value="${lib.dir}/ant"/>
+    <property name="license.dir"    value="${basedir}/LICENSE"/>
+    <property name="extension.dir"  value="${src.dir}/extension"/>
+    <property name="dist.dir"       value="${build.dir}/distrib"/>
+    <property name="dist.zip.dir"   value="${dist.dir}/zip"/>
+    <property name="thirdparty.dir" value="${user.home}/project/odisee/thirdparty"/>
+    <!-- Sources -->
+    <property name="java.src.dir"           value="${src.dir}/java"/>
+    <property name="java.test.src.dir"      value="${basedir}/test/java"/>
+    <property name="java.test.report.dir"   value="${basedir}/test/report/java"/>
+    <property name="groovy.src.dir"         value="${src.dir}/groovy"/>
+    <property name="groovy.test.src.dir"    value="${basedir}/test/groovy"/>
+    <property name="groovy.test.report.dir" value="${basedir}/test/report/groovy"/>
+    <!--
+        Distribution, world: distribution including platform-dependent things
+    -->
+    <property name="world.base.dir"       value="${build.dir}/world"/>
+    <property name="world.etc.dir"        value="${world.base.dir}/etc"/>
+    <property name="world.license.dir"    value="${world.base.dir}/LICENSE"/>
+    <property name="world.bin.dir"        value="${world.base.dir}/bin"/>
+    <property name="world.lib.dir"        value="${world.base.dir}/lib"/>
+    <property name="world.libexec.dir"    value="${world.base.dir}/libexec"/>
+    <property name="world.tomcat.dir"     value="${world.libexec.dir}/tomcat"/>
+    <property name="world.src.dir"        value="${world.base.dir}/src"/>
+    <property name="world.extension.dir"  value="${world.src.dir}/extension"/>
+    <property name="world.var.dir"        value="${world.base.dir}/var"/>
+    <property name="world.var.tmp.dir"    value="${world.var.dir}/tmp"/>
+    <!-- Platform-dependent builds -->
+    <property name="overlay.dir"                 value="${basedir}/overlay"/>
+    <property name="world.linux_x86_64.base.dir" value="${build.dir}/world-linux-x86_64"/>
+    <!--
+        Third party software
+    -->
+    <property name="local.libexec.dir"             value="${user.home}/app"/>
+    <!-- OpenOffice/LibreOffice -->
+    <property name="odisee.ooo.jar.dir"            value="${lib.dir}/${buildprop.odisee.ooo.vendor}/${buildprop.odisee.ooo.version}"/>
+    <!-- Apache PDFbox -->
+    <property name="odisee.pdfbox-app.library.jar" value="${lib.dir}/pdfbox/pdfbox-app-${buildprop.odisee.pdfbox.version}.jar"/>
+    <!-- Groovy, Grails -->
+    <property name="groovy.version"                value="${buildprop.odisee.groovy.version}"/>
+    <property name="grails.version"                value="${buildprop.odisee.grails.version}"/>
+    <property name="groovy.home"                   value="${local.libexec.dir}/groovy/${groovy.version}"/>
+    <property name="grails.home"                   value="${local.libexec.dir}/grails/${grails.version}"/>
+    <!--
+        Classpaths
+    -->
+    <!-- Groovy -->
+    <path id="groovy.src.classpath">
+        <fileset dir="${groovy.home}/embeddable"/>
+        <fileset dir="${odisee.ooo.jar.dir}"/>
+    </path>
+    <path id="groovy.test.classpath">
+        <fileset dir="${groovy.home}/embeddable"/>
+        <fileset dir="${groovy.home}/lib">
+            <include name="junit-**.jar"/>
+        </fileset>
+        <fileset dir="${odisee.ooo.jar.dir}"/>
+    </path>
+    <!--
+        Ant libraries
+    -->
+    <!-- Ant contrib -->
+    <taskdef resource="net/sf/antcontrib/antlib.xml">
+        <classpath>
+            <pathelement location="${antlib.dir}/ant-contrib-1.0b3.jar"/>
+        </classpath>
+    </taskdef>
+    <!-- XMLTask -->
+    <taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask">
+        <classpath>
+            <pathelement location="${antlib.dir}/xmltask-1.16.1.jar"/>
+        </classpath>
+    </taskdef>
+    <!-- groovyc Task -->
+    <taskdef name="groovyc" classname="org.codehaus.groovy.ant.Groovyc" classpathref="groovy.src.classpath"/>
     <!--
     
-        Import Ant build files.
+        Odisee Web Service
     
     -->
-    <import file="${src.ant.dir}/odisee-build-properties.xml"/>
-    <import file="${src.ant.dir}/odisee-build-classpaths.xml"/>
-    <import file="${src.ant.dir}/odisee-build-external-tasks.xml"/>
-    <import file="${src.ant.dir}/odisee-build-library.xml"/>
-    <import file="${src.ant.dir}/odisee-build-webservice.xml"/>
     <!--
-    
-        Cleanup.
-    
+        Directories
     -->
-    <target name="clean" depends="clean-webservice,clean-library">
-        <!-- Clean world -->
-        <delete verbose="${buildprop.odisee.build.verbose}" dir="${world.base.dir}"/>
+    <property name="webservice.base.dir" value="${src.dir}/webservice"/>
+    <property name="webservice.lib.dir" value="${webservice.base.dir}/lib"/>
+    <property name="webservice.target.dir" value="${webservice.base.dir}/target"/>
+    <!--
+        Build
+    -->
+    <!-- Increase major version number, reset all other to zero -->
+    <target name="webservice-inc-major-version">
+        <propertyfile file="build.properties">
+            <!-- Set status to 'alpha' -->
+            <entry key="odisee.webservice.release.status" type="int" value="0"/>
+            <!-- Set minor number to zero -->
+            <entry key="odisee.webservice.release.minor" type="int" value="0"/>
+            <!-- Increase major number -->
+            <entry key="odisee.webservice.release.major" type="int" operation="+"/>
+            <!-- Set build number to zero -->
+            <entry key="odisee.webservice.release.build" type="int" value="0"/>
+        </propertyfile>
+    </target>
+    <!-- Increase minor version number, reset status to zero -->
+    <target name="webservice-inc-minor-version">
+        <propertyfile file="build.properties">
+            <!-- Set status to 'alpha' -->
+            <entry key="odisee.webservice.release.status" type="int" value="0"/>
+            <!-- Increase major number -->
+            <entry key="odisee.webservice.release.minor" type="int" operation="+"/>
+        </propertyfile>
+    </target>
+    <!-- Set release status to 'alpha' -->
+    <target name="webservice-set-alpha-status">
+        <propertyfile file="build.properties">
+            <entry key="odisee.webservice.release.status" type="int" value="0"/>
+        </propertyfile>
+    </target>
+    <!-- Set release status to 'beta' -->
+    <target name="webservice-set-beta-status">
+        <propertyfile file="build.properties">
+            <entry key="odisee.webservice.release.status" type="int" value="1"/>
+        </propertyfile>
+    </target>
+    <!-- Set release status to 'rc/release candidate' -->
+    <target name="webservice-set-rc-status">
+        <propertyfile file="build.properties">
+            <entry key="odisee.webservice.release.status" type="int" value="2"/>
+        </propertyfile>
+    </target>
+    <!-- Set release status to 'final' -->
+    <target name="webservice-set-final-status">
+        <propertyfile file="build.properties">
+            <entry key="odisee.webservice.release.status" type="int" value="3"/>
+        </propertyfile>
+    </target>
+    <!-- Set version properties -->
+    <target name="webservice-set-version-props">
+        <!-- Version number -->
+        <property name="webservice.version.number" value="${buildprop.odisee.release.major}.${buildprop.odisee.release.minor}.${buildprop.odisee.release.status}"/>
     </target>
     <!--
-        
-        Download third party software.
-        
+        Copy thirdparty libraries to webservice/lib directory.
+    -->
+    <target name="copy-thirdparty-libraries">
+        <!-- Clean lib directory -->
+        <delete verbose="${buildprop.odisee.build.verbose}" dir="${webservice.lib.dir}"/>
+        <mkdir dir="${webservice.lib.dir}"/>
+        <!--<copy verbose="${buildprop.odisee.build.verbose}" todir="${webservice.lib.dir}" file="${odisee.pdfbox-app.library.jar}"/>-->
+        <copy verbose="${buildprop.odisee.build.verbose}" todir="${webservice.lib.dir}">
+            <!-- Copy PDFbox library -->
+            <file name="${odisee.pdfbox-app.library.jar}"/>
+            <!-- Copy OpenOffice/LibreOffice libraries -->
+            <fileset dir="${odisee.ooo.jar.dir}"/>
+        </copy>
+    </target>
+    <!--
+        Compile web service
+    -->
+    <target name="compile-webservice" depends="clean-webservice,webservice-set-version-props,copy-thirdparty-libraries">
+        <!-- Execute grails compile -->
+        <property environment="env"/>
+        <exec dir="${webservice.base.dir}" executable="bash" failonerror="true">
+            <env key="ODISEE_HOME" value="../.."/>
+            <env key="GROOVY_HOME" value="${groovy.home}"/>
+            <env key="GRAILS_HOME" value="${grails.home}"/>
+            <env key="PATH" path="${env.GRAILS_HOME}/bin:${env.GROOVY_HOME}/bin:${env.JAVA_HOME}/bin:${env.PATH}"/>
+            <arg value="${grails.home}/bin/grails"/>
+            <arg value="compile"/>
+        </exec>
+    </target>
+    <!--
+        Package: create web service as war (Grails plugin)
+    -->
+    <target name="package-webservice" depends="compile-webservice">
+        <property environment="env"/>
+        <!-- Create web service as war (Grails plugin) -->
+        <exec dir="${webservice.base.dir}" executable="bash" failonerror="true">
+            <env key="ODISEE_HOME" value="../.."/>
+            <env key="GROOVY_HOME" value="${groovy.home}"/>
+            <env key="GRAILS_HOME" value="${grails.home}"/>
+            <env key="PATH" path="${env.GRAILS_HOME}/bin:${env.GROOVY_HOME}/bin:${env.JAVA_HOME}/bin:${env.PATH}"/>
+            <arg value="${grails.home}/bin/grails"/>
+            <arg value="prod"/>
+            <arg value="war"/>
+            <arg value="target/odisee.war"/>
+        </exec>
+        <!--<copy verbose="${buildprop.odisee.build.verbose}" todir="${dist.dir}" file="${odisee.pdfbox-app.library.jar}"/>-->
+    </target>
+    <!--
+        Package: create web service as war (Grails plugin)
+    -->
+    <target name="package-webservice-nojars" depends="compile-webservice">
+        <property environment="env"/>
+        <!-- Create web service as war (Grails plugin) -->
+        <exec dir="${webservice.base.dir}" executable="bash">
+            <env key="GROOVY_HOME" value="${groovy.home}"/>
+            <env key="GRAILS_HOME" value="${grails.home}"/>
+            <env key="PATH" path="${env.GRAILS_HOME}/bin:${env.GROOVY_HOME}/bin:${env.JAVA_HOME}/bin:${env.PATH}"/>
+            <arg value="${grails.home}/bin/grails"/>
+            <arg value="prod"/>
+            <arg value="war"/>
+            <arg value="target/odisee.war"/>
+            <arg value="--nojars"/>
+        </exec>
+        <!--<copy verbose="${buildprop.odisee.build.verbose}" todir="${dist.dir}" file="${odisee.pdfbox-app.library.jar}"/>-->
+    </target>
+    <!--
+        Cleanup
+    -->
+    <target name="clean-world">
+        <delete verbose="${buildprop.odisee.build.verbose}" dir="${world.base.dir}"/>
+    </target>
+    <target name="clean-webservice">
+        <property environment="env"/>
+        <!-- Clean web service -->
+        <exec dir="${webservice.base.dir}" executable="bash" failonerror="true">
+            <env key="GROOVY_HOME" value="${groovy.home}"/>
+            <env key="GRAILS_HOME" value="${grails.home}"/>
+            <env key="PATH" path="${env.GRAILS_HOME}/bin:${env.GROOVY_HOME}/bin:${env.JAVA_HOME}/bin:${env.PATH}"/>
+            <arg value="${grails.home}/bin/grails"/>
+            <arg value="clean"/>
+        </exec>
+        <!-- Clean target in webservice.base.dir -->
+        <delete verbose="${buildprop.odisee.build.verbose}" dir="${webservice.base.dir}/target"/>
+        <!-- Clean log files -->
+        <delete verbose="${buildprop.odisee.build.verbose}">
+            <fileset dir="${webservice.base.dir}">
+                <include name="**.log"/>
+            </fileset>
+        </delete>
+    </target>
+    <target name="clean" depends="clean-webservice,clean-world">
+    </target>
+    <!--
+    
+        Make distribution
+    
+    -->
+    <!--
+        Download third party software
     -->
     <target name="download-thirdparty">
         <mkdir dir="${thirdparty.dir}"/>
@@ -71,21 +295,19 @@
         </delete>
     </target>
     <!--
-    
-        Make distribution.
-    
+        Compile everything, run tests and create 'world'
     -->
-    <target name="distrib" depends="package-webservice,download-thirdparty">
-        <!-- license -->
+    <target name="world" depends="clean,package-webservice,download-thirdparty">
+        <!-- ${ODISEE_HOME} -->
+        <mkdir dir="${world.base.dir}"/>
+        <!-- ${ODISEE_HOME}/LICENSE -->
         <mkdir dir="${world.license.dir}"/>
         <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.license.dir}">
-            <fileset dir="${license.dir}">
+            <fileset dir="LICENSE">
                 <include name="**"/>
             </fileset>
         </copy>
-        <!-- odisee -->
-        <mkdir dir="${world.base.dir}"/>
-        <!-- etc -->
+        <!-- ${ODISEE_HOME}/etc -->
         <mkdir dir="${world.etc.dir}"/>
         <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.etc.dir}">
             <fileset dir="${etc.dir}">
@@ -93,27 +315,28 @@
                 <exclude name="odiinst"/>
             </fileset>
         </copy>
-        <!-- bin -->
+        <!-- ${ODISEE_HOME}/bin -->
         <mkdir dir="${world.bin.dir}"/>
         <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.bin.dir}">
             <fileset dir="${bin.dir}">
                 <include name="**"/>
             </fileset>
         </copy>
-        <!-- lib -->
+        <chmod perm="a+rx" file="${world.bin.dir}/**"/>
+        <!-- ${ODISEE_HOME}/lib -->
         <mkdir dir="${world.lib.dir}"/>
         <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.lib.dir}">
-            <!-- -->
             <fileset dir="${lib.dir}">
                 <include name="ant/**"/>
-                <include name="apachepoi/**"/>
-                <include name="pdfbox/**"/>
-                <include name="libreoffice/3.5/**"/>
-                <include name="odftoolkit/**"/>
-                <include name="simpleodf/**"/>
+                <!--<include name="pdfbox/**"/>-->
             </fileset>
         </copy>
-        <!-- libexec -->
+        <!--<copy verbose="${buildprop.odisee.build.verbose}" todir="${world.lib.dir}">
+            <fileset dir="${odisee.ooo.jar.dir}">
+                <include name="**"/>
+            </fileset>
+        </copy>-->
+        <!-- ${ODISEE_HOME}/libexec -->
         <mkdir dir="${world.libexec.dir}"/>
         <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.libexec.dir}">
             <fileset dir="${libexec.dir}">
@@ -122,21 +345,18 @@
         </copy>
         <!-- odisee.war -->
         <unzip src="${webservice.target.dir}/odisee.war" dest="${world.libexec.dir}/odisee/webapp"/>
-        <!-- src -->
-        <mkdir dir="${world.src.dir}"/>
+        <!-- ${ODISEE_HOME}/src -->
+        <!--<mkdir dir="${world.src.dir}"/>
         <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.src.dir}">
             <fileset dir="${src.dir}">
-                <!-- Source for Odisee OpenOffice extension and custom extensions -->
+                &lt;!&ndash; Source for Odisee OpenOffice extension and custom extensions &ndash;&gt;
                 <include name="extension/**"/>
-                <!-- XML -->
+                &lt;!&ndash; XML &ndash;&gt;
                 <include name="xml/**"/>
             </fileset>
-        </copy>
-        <!-- Set permissions in bin directory -->
-        <chmod perm="a+rx" file="${world.bin.dir}/**"/>
-        <!-- var/ -->
+        </copy>-->
+        <!-- ${ODISEE_HOME}/var -->
         <mkdir dir="${world.var.dir}"/>
-        <mkdir dir="${world.var.dir}/deploy"/>
         <mkdir dir="${world.var.dir}/log"/>
         <mkdir dir="${world.var.dir}/profile"/>
         <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.var.dir}/test">
@@ -147,40 +367,31 @@
         <mkdir dir="${world.var.dir}/backup/template"/>
         <mkdir dir="${world.var.dir}/backup/user"/>
         <mkdir dir="${world.var.dir}/user/odisee/document"/>
-        <mkdir dir="${world.var.dir}/user/odisee/template"/>
-        <mkdir dir="${world.var.dir}/user/odisee/pdf"/>
-        <!--
-        <mkdir dir="${world.var.dir}/user/odisee/deploy/fonts"/>
-        <mkdir dir="${world.var.dir}/user/odisee/deploy/oxt"/>
-        <mkdir dir="${world.var.dir}/user/odisee/deploy/pdf"/>
-        <mkdir dir="${world.var.dir}/user/odisee/deploy/template"/>
-        -->
         <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.var.dir}/user/odisee">
-            <fileset dir="${basedir}/var/user/odisee"/>
+            <fileset dir="${basedir}/var/user/odisee">
+                <include name="pdf/**"/>
+                <include name="template/**"/>
+            </fileset>
         </copy>
-    </target>
-    <!--
-    
-        Compile everything, run tests and create 'world'.
-        depends="run-lib-tests"
-    -->
-    <target name="world" depends="clean,distrib">
         <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.base.dir}/libexec" overwrite="true">
             <fileset dir="${overlay.dir}/libexec"/>
         </copy>
-        <echo file="${world.etc.dir}/version" message="${webservice.version.number}"/>
+        <!-- etc/version -->
+        <echo file="${world.etc.dir}/version" message="${webservice.version.number}.${build.number}"/>
     </target>
     <!--
     
-        Compile everything, run tests and create 'world'.
+        Distribution: Linux x86_64
     
+    -->
+    <!--
+        Compile everything, run tests and create 'world' and copy overlays for Linux x86_64.
     -->
     <target name="world-linux-x86_64" depends="world">
         <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.linux_x86_64.base.dir}" overwrite="true">
             <fileset dir="${world.base.dir}"/>
-        </copy>
-        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.linux_x86_64.base.dir}" overwrite="true">
             <fileset file="${overlay.dir}/Linux/.bash_profile"/>
+            <fileset dir="${overlay.dir}/Linux/x86_64"/>
         </copy>
         <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.linux_x86_64.base.dir}/bin" overwrite="true">
             <fileset dir="${overlay.dir}/Linux/bin"/>
@@ -188,29 +399,28 @@
         <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.linux_x86_64.base.dir}/etc" overwrite="true">
             <fileset dir="${overlay.dir}/Linux/etc"/>
         </copy>
-        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.linux_x86_64.base.dir}" overwrite="true">
-            <fileset dir="${overlay.dir}/Linux/x86_64"/>
-        </copy>
     </target>
     <!--
-
         Make a distribution: compile everything and create one big ZIP archive.
-
     -->
     <target name="world-linux-x86_64-zip" depends="world-linux-x86_64">
-        <zip destfile="${dist.zip.dir}/odisee-linux-x86_64-${webservice.version.number}.zip" whenempty="fail">
+        <!-- build.number from TeamCity -->
+        <zip destfile="${dist.zip.dir}/odisee-linux-x86_64-${build.number}.zip" whenempty="fail">
             <zipfileset dir="${world.linux_x86_64.base.dir}" includes="**" excludes="bin/**" prefix="odisee"/>
             <zipfileset dir="${world.linux_x86_64.base.dir}" includes="bin/**" prefix="odisee" filemode="555"/>
         </zip>
     </target>
     <!--
     
-       Run Odisee Server.
+        Development
     
+    -->
+    <!--
+       Run Odisee Server
     -->
     <target name="run-webservice" depends="compile-webservice">
         <property environment="env"/>
-        <exec dir="${src.webservice.dir}" executable="bash">
+        <exec dir="${webservice.base.dir}" executable="bash">
             <env key="ODISEE_HOME" value="../.."/>
             <env key="GROOVY_HOME" value="${groovy.home}"/>
             <env key="GRAILS_HOME" value="${grails.home}"/>
@@ -220,13 +430,11 @@
         </exec>
     </target>
     <!--
-    
-       Run Odisee Server in debug mode.
-    
+       Run Odisee Server in debug mode
     -->
     <target name="debug-webservice" depends="compile-webservice">
         <property environment="env"/>
-        <exec dir="${src.webservice.dir}" executable="bash">
+        <exec dir="${webservice.base.dir}" executable="bash">
             <env key="ODISEE_HOME" value="../.."/>
             <env key="GROOVY_HOME" value="${groovy.home}"/>
             <env key="GRAILS_HOME" value="${grails.home}"/>
