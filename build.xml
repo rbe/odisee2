@@ -9,6 +9,13 @@
         
     -->
     <loadproperties srcFile="build.properties" prefix="buildprop"/>
+    <!-- Sources -->
+    <property name="java.src.dir"           value="${src.dir}/java"/>
+    <property name="java.test.src.dir"      value="${basedir}/test/java"/>
+    <property name="java.test.report.dir"   value="${basedir}/test/report/java"/>
+    <property name="groovy.src.dir"         value="${src.dir}/groovy"/>
+    <property name="groovy.test.src.dir"    value="${basedir}/test/groovy"/>
+    <property name="groovy.test.report.dir" value="${basedir}/test/report/groovy"/>
     <!--
         Odisee
     -->
@@ -24,13 +31,6 @@
     <property name="dist.dir"       value="${build.dir}/distrib"/>
     <property name="dist.zip.dir"   value="${dist.dir}/zip"/>
     <property name="thirdparty.dir" value="${user.home}/project/odisee/thirdparty"/>
-    <!-- Sources -->
-    <property name="java.src.dir"           value="${src.dir}/java"/>
-    <property name="java.test.src.dir"      value="${basedir}/test/java"/>
-    <property name="java.test.report.dir"   value="${basedir}/test/report/java"/>
-    <property name="groovy.src.dir"         value="${src.dir}/groovy"/>
-    <property name="groovy.test.src.dir"    value="${basedir}/test/groovy"/>
-    <property name="groovy.test.report.dir" value="${basedir}/test/report/groovy"/>
     <!--
         Distribution, world: distribution including platform-dependent things
     -->
@@ -53,9 +53,9 @@
     -->
     <property name="local.libexec.dir"             value="${user.home}/app"/>
     <!-- OpenOffice/LibreOffice -->
-    <property name="odisee.ooo.jar.dir"            value="${lib.dir}/${buildprop.odisee.ooo.vendor}/${buildprop.odisee.ooo.version}"/>
+    <property name="odisee.ooo.jar.dir"            value="${lib.dir}/${buildprop.odisee.thirdparty.ooo.vendor}/${buildprop.odisee.thirdparty.ooo.version}"/>
     <!-- Apache PDFbox -->
-    <property name="odisee.pdfbox-app.library.jar" value="${lib.dir}/pdfbox/pdfbox-app-${buildprop.odisee.pdfbox.version}.jar"/>
+    <property name="odisee.pdfbox-app.library.jar" value="${lib.dir}/pdfbox/pdfbox-app-${buildprop.odisee.thirdparty.pdfbox.version}.jar"/>
     <!-- Groovy, Grails -->
     <property name="groovy.version"                value="${buildprop.odisee.groovy.version}"/>
     <property name="grails.version"                value="${buildprop.odisee.grails.version}"/>
@@ -165,7 +165,6 @@
         <!-- Clean lib directory -->
         <delete verbose="${buildprop.odisee.build.verbose}" dir="${webservice.lib.dir}"/>
         <mkdir dir="${webservice.lib.dir}"/>
-        <!--<copy verbose="${buildprop.odisee.build.verbose}" todir="${webservice.lib.dir}" file="${odisee.pdfbox-app.library.jar}"/>-->
         <copy verbose="${buildprop.odisee.build.verbose}" todir="${webservice.lib.dir}">
             <!-- Copy PDFbox library -->
             <file name="${odisee.pdfbox-app.library.jar}"/>
@@ -328,14 +327,8 @@
         <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.lib.dir}">
             <fileset dir="${lib.dir}">
                 <include name="ant/**"/>
-                <!--<include name="pdfbox/**"/>-->
             </fileset>
         </copy>
-        <!--<copy verbose="${buildprop.odisee.build.verbose}" todir="${world.lib.dir}">
-            <fileset dir="${odisee.ooo.jar.dir}">
-                <include name="**"/>
-            </fileset>
-        </copy>-->
         <!-- ${ODISEE_HOME}/libexec -->
         <mkdir dir="${world.libexec.dir}"/>
         <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.libexec.dir}">
@@ -345,16 +338,6 @@
         </copy>
         <!-- odisee.war -->
         <unzip src="${webservice.target.dir}/odisee.war" dest="${world.libexec.dir}/odisee/webapp"/>
-        <!-- ${ODISEE_HOME}/src -->
-        <!--<mkdir dir="${world.src.dir}"/>
-        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.src.dir}">
-            <fileset dir="${src.dir}">
-                &lt;!&ndash; Source for Odisee OpenOffice extension and custom extensions &ndash;&gt;
-                <include name="extension/**"/>
-                &lt;!&ndash; XML &ndash;&gt;
-                <include name="xml/**"/>
-            </fileset>
-        </copy>-->
         <!-- ${ODISEE_HOME}/var -->
         <mkdir dir="${world.var.dir}"/>
         <mkdir dir="${world.var.dir}/log"/>
@@ -376,7 +359,7 @@
         <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.base.dir}/libexec" overwrite="true">
             <fileset dir="${overlay.dir}/libexec"/>
         </copy>
-        <!-- etc/version -->
+        <!-- etc/version, build.number from TeamCity -->
         <echo file="${world.etc.dir}/version" message="${webservice.version.number}.${build.number}"/>
     </target>
     <!--
@@ -405,7 +388,7 @@
     -->
     <target name="world-linux-x86_64-zip" depends="world-linux-x86_64">
         <!-- build.number from TeamCity -->
-        <zip destfile="${dist.zip.dir}/odisee-linux-x86_64-${build.number}.zip" whenempty="fail">
+        <zip destfile="${dist.zip.dir}/odisee-linux-x86_64-${webservice.version.number}.${build.number}.zip" whenempty="fail">
             <zipfileset dir="${world.linux_x86_64.base.dir}" includes="**" excludes="bin/**" prefix="odisee"/>
             <zipfileset dir="${world.linux_x86_64.base.dir}" includes="bin/**" prefix="odisee" filemode="555"/>
         </zip>
