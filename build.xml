@@ -385,6 +385,9 @@
         <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.linux_x86_64.base.dir}/etc" overwrite="true">
             <fileset dir="${overlay.dir}/Linux/etc"/>
         </copy>
+        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.linux_x86_64.base.dir}/libexec" overwrite="true">
+            <fileset dir="${overlay.dir}/Linux/libexec"/>
+        </copy>
     </target>
     <target name="world-linux-x86_64-zip" depends="world-linux-x86_64">
         <!-- build.number from TeamCity -->
@@ -413,6 +416,9 @@
         </copy>
         <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.freebsd_amd64.base.dir}/etc" overwrite="true">
             <fileset dir="${overlay.dir}/FreeBSD/etc"/>
+        </copy>
+        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.freebsd_amd64.base.dir}/libexec" overwrite="true">
+            <fileset dir="${overlay.dir}/FreeBSD/libexec"/>
         </copy>
     </target>
     <target name="world-freebsd-amd64-zip" depends="world-freebsd-amd64">

@@ -157,11 +157,8 @@ export ODISEE_WD_TIMEOUT
 # Java, Groovy, Grails
 export JAVA_HOME
 export ANT_HOME
-#export GROOVY_HOME
-#export GRAILS_HOME
 export CATALINA_HOME
 # The path
-#PATH=${ODISEE_HOME}/bin:${ODISEE_HOME}/libexec/${ODISEE_OS}/${ODISEE_ARCH}/bin:${ANT_HOME}/bin:${JAVA_HOME}/bin:${GRAILS_HOME}/bin:${GROOVY_HOME}/bin:${PATH}
 PATH=${ODISEE_HOME}/bin:${ODISEE_HOME}/libexec/${ODISEE_OS}/${ODISEE_ARCH}/bin:${ANT_HOME}/bin:${JAVA_HOME}/bin:${PATH}
 export PATH
 
