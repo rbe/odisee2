@@ -8,10 +8,6 @@
  */
 package eu.artofcoding.grails.helper
 
-/**
- *
- * @author rbe
- */
 final class StringHelper {
 
     /**

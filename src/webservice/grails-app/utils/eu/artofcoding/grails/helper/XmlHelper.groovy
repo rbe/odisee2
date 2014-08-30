@@ -19,9 +19,6 @@ import org.w3c.dom.Element
 import org.xml.sax.EntityResolver
 import org.xml.sax.InputSource
 
-/**
- *
- */
 class XmlHelper {
 
     private static final String S_NEWLINE = '\n'

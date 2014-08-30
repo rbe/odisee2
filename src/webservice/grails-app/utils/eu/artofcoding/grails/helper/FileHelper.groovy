@@ -10,10 +10,6 @@ package eu.artofcoding.grails.helper
 
 import java.nio.file.Path
 
-/**
- *
- * @author rbe
- */
 final class FileHelper {
 
     private static final String S_UTF8 = 'UTF-8'
@@ -42,7 +38,7 @@ final class FileHelper {
     }
 
     /**
-     * Convenience method for {@link decomposeFilename(String)}.
+     * Convenience method for {@link #decomposeFilename(String)}.
      * @see #decomposeFilename(String)
      * @param file
      * @return Map Keys: name, ext.
