@@ -48,7 +48,7 @@
     <!-- Platform-dependent builds -->
     <property name="overlay.dir"                   value="${basedir}/overlay"/>
     <property name="world.linux_x86_64.base.dir"   value="${build.dir}/world-linux-x86_64"/>
-    <property name="world.freebsd_x86_64.base.dir" value="${build.dir}/world-freebsd-x86_64"/>
+    <property name="world.freebsd_amd64.base.dir" value="${build.dir}/world-freebsd-amd64"/>
     <!--
         Third party software
     -->
@@ -402,24 +402,24 @@
     <!--
         Compile everything, run tests and create 'world' and copy overlays for Linux x86_64.
     -->
-    <target name="world-freebsd-x86_64" depends="world">
-        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.freebsd_x86_64.base.dir}" overwrite="true">
+    <target name="world-freebsd-amd64" depends="world">
+        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.freebsd_amd64.base.dir}" overwrite="true">
             <fileset dir="${world.base.dir}"/>
             <fileset file="${overlay.dir}/FreeBSD/.bash_profile"/>
             <fileset dir="${overlay.dir}/FreeBSD/x86_64"/>
         </copy>
-        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.freebsd_x86_64.base.dir}/bin" overwrite="true">
+        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.freebsd_amd64.base.dir}/bin" overwrite="true">
             <fileset dir="${overlay.dir}/FreeBSD/bin"/>
         </copy>
-        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.freebsd_x86_64.base.dir}/etc" overwrite="true">
+        <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.freebsd_amd64.base.dir}/etc" overwrite="true">
             <fileset dir="${overlay.dir}/FreeBSD/etc"/>
         </copy>
     </target>
-    <target name="world-freebsd-x86_64-zip" depends="world-freebsd-x86_64">
+    <target name="world-freebsd-amd64-zip" depends="world-freebsd-amd64">
         <!-- build.number from TeamCity -->
-        <zip destfile="${dist.zip.dir}/odisee-freebsd-x86_64-${webservice.version.number}.${build.number}.zip" whenempty="fail">
-            <zipfileset dir="${world.freebsd_x86_64.base.dir}" includes="**" excludes="bin/**" prefix="odisee"/>
-            <zipfileset dir="${world.freebsd_x86_64.base.dir}" includes="bin/**" prefix="odisee" filemode="555"/>
+        <zip destfile="${dist.zip.dir}/odisee-freebsd-amd64-${webservice.version.number}.${build.number}.zip" whenempty="fail">
+            <zipfileset dir="${world.freebsd_amd64.base.dir}" includes="**" excludes="bin/**" prefix="odisee"/>
+            <zipfileset dir="${world.freebsd_amd64.base.dir}" includes="bin/**" prefix="odisee" filemode="555"/>
         </zip>
     </target>
     <!--
