@@ -406,7 +406,7 @@
         <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.freebsd_amd64.base.dir}" overwrite="true">
             <fileset dir="${world.base.dir}"/>
             <fileset file="${overlay.dir}/FreeBSD/.bash_profile"/>
-            <fileset dir="${overlay.dir}/FreeBSD/x86_64"/>
+            <fileset dir="${overlay.dir}/FreeBSD/amd64"/>
         </copy>
         <copy verbose="${buildprop.odisee.build.verbose}" todir="${world.freebsd_amd64.base.dir}/bin" overwrite="true">
             <fileset dir="${overlay.dir}/FreeBSD/bin"/>
