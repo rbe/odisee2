@@ -10,14 +10,8 @@ package eu.artofcoding.odisee.helper
 
 import eu.artofcoding.odisee.helper.Coordinate as Coord
 
-/**
- *
- */
 class CoordinateTestCase extends GroovyTestCase {
 
-    /**
-     *
-     */
     void testCoordinate() {
         // Z3 = column #26, 0-based index 25, row #3, 0-based index 2
         assertEquals([table: null, sheet: null, column: 'Z', columnIndex: 25, row: 3, rowIndex: 2, coord: 'Z3'], Coord.'Z3')
@@ -27,9 +21,6 @@ class CoordinateTestCase extends GroovyTestCase {
         assertEquals([table: null, sheet: null, column: 'AB', columnIndex: 27, row: 12, rowIndex: 11, coord: '$AB$12'], Coord.'$AB$12')
     }
 
-    /**
-     *
-     */
     void testCoordinateWithSheet() {
         // Sheet1!AA54 = Sheet1, column #27, 0-based index 26, row #54, 0-based index 53
         assertEquals([table: 'Sheet1', sheet: 'Sheet1', column: 'AA', columnIndex: 26, row: 54, rowIndex: 53, coord: 'Sheet1!AA54'], Coord.'Sheet1!AA54')
