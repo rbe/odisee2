@@ -39,10 +39,10 @@ watch_instance() {
     # Watchdog running?
     case "${ODISEE_OS}" in
         FreeBSD)
-            watchdog_running=$(ps axww | grep -v grep | grep -c "odiwd -i ${inst}")
+            watchdog_running=$(ps axww | grep -v grep | grep -c "odiwatchdog -i ${inst}")
         ;;
         *)
-            watchdog_running=$(ps -e | grep -v grep | grep -c "odiwd -i ${inst}")
+            watchdog_running=$(ps -e | grep -v grep | grep -c "odiwatchdog -i ${inst}")
         ;;
     esac
     if [ ${watchdog_running} -eq 0 ]; then
