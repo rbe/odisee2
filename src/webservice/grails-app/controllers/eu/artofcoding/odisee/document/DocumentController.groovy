@@ -32,13 +32,6 @@ class DocumentController {
     }
 
     /**
-     * The index action.
-     */
-    def index() {
-        render 'Hello, this is the <a target="_blank" href="http://www.odisee.de/">Odisee</a> service.'
-    }
-
-    /**
      * Generate d document with values from XML request and an OpenOffice template.
      */
     def generate() {

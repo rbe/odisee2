@@ -14,7 +14,7 @@ class UrlMappings {
 
     static mappings = {
         // Index
-        '/'(controller: 'document', action: 'index')
+        '/'(view: 'index')
         // Generate document from template
         "/document/generate"(controller: 'document', action: 'generate')
         // Generate document from template
