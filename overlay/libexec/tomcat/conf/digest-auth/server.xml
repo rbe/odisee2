@@ -15,16 +15,21 @@
             minSpareThreads: Set to CPU count
             acceptorThreadCount: Set to e.g. CPU count or CPU count * 1.5
         -->
-        <Connector address="0.0.0.0" port="8080" redirectPort="8443"
-                   protocol="org.apache.coyote.http11.Http11NioProtocol"
+        <Connector protocol="AJP/1.3"
+                   address="127.0.0.1" port="9009"
                    connectionTimeout="5000"
                    keepAliveTimeout="2500" maxKeepAliveRequests="128"
                    maxConnections="1000" minSpareThreads="4" maxThreads="128"
-                   acceptCount="128"
-                   acceptorThreadCount="4"
+                   xpoweredBy="false"/>
+        <Connector protocol="org.apache.coyote.http11.Http11NioProtocol"
+                   address="0.0.0.0" port="8080"
+                   connectionTimeout="5000"
+                   keepAliveTimeout="2500" maxKeepAliveRequests="128"
+                   maxConnections="1000" minSpareThreads="4" maxThreads="128"
+                   acceptCount="128" acceptorThreadCount="4"
                    maxHttpHeaderSize="1024"
                    compression="on" compressableMimeType="text/html,text/xml,text/plain,text/css,text/javascript,text/json,application/json"
-                   xpoweredBy="false" server="Odisee(R) Server"/>
+                   xpoweredBy="false"/>
         <Engine name="Catalina" defaultHost="localhost">
             <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="false">
                 <!-- /odisee -->
