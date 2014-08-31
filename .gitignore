@@ -19,9 +19,8 @@ target/
 
 # Odisee
 .fonts
-etc/odiinst
 src/webservice/lib
-var/user/odisee/document
+ODISEE_HOME/var/user/odisee/document
 
 # install4j
 distrib/install4j/output.txt
