@@ -115,7 +115,11 @@ then
         ;;
     esac
     # Fallback is libexec/os/arch/java
-    JAVA_HOME=${JAVA_HOME:-$ODISEE_LIBEXEC/${ODISEE_OS}/${ODISEE_ARCH}/java}
+    if [[ -d ${ODISEE_LIBEXEC}/jdk1.7.0 ]]
+    then
+        JAVA_HOME=${JAVA_HOME:-$ODISEE_LIBEXEC/jdk1.7.0}
+    fi
+    echo "WARN: Automatically discovered JAVA_HOME=${JAVA_HOME}"
 fi
 # Check if we can execute java
 [ ! -x ${JAVA_HOME}/bin/java ] && unset JAVA_HOME

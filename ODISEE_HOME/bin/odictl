@@ -20,6 +20,12 @@ esac
 # Odisee library
 . ${ODISEE_LIBEXEC}/odisee/odilib
 
+if [[ -z "${JAVA_HOME}" ]]
+then
+    echo "ODI-xxxx: Please set JAVA_HOME"
+    exit 1
+fi
+
 # TODO odilib, line 102... is not set
 ##set -o nounset
 
