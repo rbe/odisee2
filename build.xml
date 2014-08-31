@@ -412,7 +412,7 @@
                         dirmode="550" filemode="440"/>
             <zipfileset dir="${world.linux_x86_64.base.dir}"
                         prefix="odisee-${webservice.version.number}.${build.number}"
-                        includes="var/*"
+                        includes="var/**"
                         dirmode="750" filemode="640"/>
         </zip>
     </target>
@@ -491,7 +491,7 @@
                         dirmode="550" filemode="440"/>
             <zipfileset dir="${world.freebsd_amd64.base.dir}"
                         prefix="odisee-${webservice.version.number}.${build.number}"
-                        includes="var/*"
+                        includes="var/**"
                         dirmode="750" filemode="640"/>
         </zip>
     </target>
