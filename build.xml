@@ -372,6 +372,10 @@
              whenempty="fail">
             <zipfileset dir="${world.linux_x86_64.base.dir}"
                         prefix="odisee-${webservice.version.number}.${build.number}"
+                        includes="*"
+                        dirmode="550" filemode="550"/>
+            <zipfileset dir="${world.linux_x86_64.base.dir}"
+                        prefix="odisee-${webservice.version.number}.${build.number}"
                         includes="bin/*"
                         dirmode="550" filemode="550"/>
             <zipfileset dir="${world.linux_x86_64.base.dir}"
@@ -447,10 +451,48 @@
              whenempty="fail">
             <zipfileset dir="${world.freebsd_amd64.base.dir}"
                         prefix="odisee-${webservice.version.number}.${build.number}"
-                        includes="**" excludes="bin/*"/>
+                        includes="*"
+                        dirmode="550" filemode="550"/>
             <zipfileset dir="${world.freebsd_amd64.base.dir}"
                         prefix="odisee-${webservice.version.number}.${build.number}"
-                        includes="bin/*" filemode="555"/>
+                        includes="bin/*"
+                        dirmode="550" filemode="550"/>
+            <zipfileset dir="${world.freebsd_amd64.base.dir}"
+                        prefix="odisee-${webservice.version.number}.${build.number}"
+                        includes="etc/**"
+                        dirmode="750" filemode="640"/>
+            <zipfileset dir="${world.freebsd_amd64.base.dir}"
+                        prefix="odisee-${webservice.version.number}.${build.number}"
+                        includes="lib/**"
+                        dirmode="550" filemode="640"/>
+            <zipfileset dir="${world.freebsd_amd64.base.dir}"
+                        prefix="odisee-${webservice.version.number}.${build.number}"
+                        includes="libexec/odisee/**"
+                        dirmode="550" filemode="640"/>
+            <zipfileset dir="${world.freebsd_amd64.base.dir}"
+                        prefix="odisee-${webservice.version.number}.${build.number}"
+                        includes="libexec/ant/**" excludes="libexec/ant/bin/*"
+                        dirmode="550" filemode="440"/>
+            <zipfileset dir="${world.freebsd_amd64.base.dir}"
+                        prefix="odisee-${webservice.version.number}.${build.number}"
+                        includes="libexec/ant/bin/*"
+                        dirmode="550" filemode="550"/>
+            <zipfileset dir="${world.freebsd_amd64.base.dir}"
+                        prefix="odisee-${webservice.version.number}.${build.number}"
+                        includes="libexec/tomcat/**" excludes="libexec/tomcat/bin/*"
+                        dirmode="550" filemode="640"/>
+            <zipfileset dir="${world.freebsd_amd64.base.dir}"
+                        prefix="odisee-${webservice.version.number}.${build.number}"
+                        includes="libexec/tomcat/bin/*"
+                        dirmode="550" filemode="550"/>
+            <zipfileset dir="${world.freebsd_amd64.base.dir}"
+                        prefix="odisee-${webservice.version.number}.${build.number}"
+                        includes="LICENSE/*"
+                        dirmode="550" filemode="440"/>
+            <zipfileset dir="${world.freebsd_amd64.base.dir}"
+                        prefix="odisee-${webservice.version.number}.${build.number}"
+                        includes="var/*"
+                        dirmode="750" filemode="640"/>
         </zip>
     </target>
     <!--
