@@ -130,16 +130,4 @@ class DocumentController {
         }
     }
 
-    /**
-     * Stream an already stored document from document service.
-     def stream() {// Check stream and correct parameters
-     def params = checkStreamParameter(params)
-     // Document (will be streamed back)
-     def document = null
-     // Fetch document by id
-     if (params.id) {if (log.debugEnabled) {log.debug "ODI-xxxx: Fetching document by ID=${params.id}"}document = OooDocument.get(params.id)} else if (params.name && params.revision) { // Fetch template by name and revision
-     if (log.debugEnabled) {log.debug "ODI-xxxx: Fetching document by name=${params.name} and revision=${revision}"}document = storageService.getDocument(name: params.name, revision: params.revision, mimeType: params.mimetype)} else if (params.name) { // Fetch template/document by name
-     if (log.debugEnabled) {log.debug "ODI-xxxx: Fetching document by name=${params.name} and latest revision"}document = storageService.getDocument(name: params.name, mimeType: params.mimetype)}// Stream document
-     if (document) {ControllerHelper.stream(log: log, params: params, response: response, document: document)} else {ControllerHelper.sendNothing(log: log, response: response, message: "ODI-xxxx: Can't stream, no data. Maybe insufficient parameters? params=${params}")}}*/
-
 }
