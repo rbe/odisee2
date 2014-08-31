@@ -1,32 +1,32 @@
 :: Common settings
-set JVM_OPTS=-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server
-set TOMCAT_OPTS=-Dorg.apache.catalina.loader.WebappClassLoader.ENABLE_CLEAR_REFERENCES=false -Ddisable.auto.recompile=true
+set ODISEE_JVM_OPTS=-Djava.awt.headless=true -Dfile.encoding=UTF-8 -server
+set ODISEE_TOMCAT_OPTS=-Dorg.apache.catalina.loader.WebappClassLoader.ENABLE_CLEAR_REFERENCES=false -Ddisable.auto.recompile=true
 
 :: Memory settings
 :: -Xms -Xmx
-set MEM_OPTS= 
-set STACK_OPTS=-XX:ThreadStackSize=128k
+set ODISEE_MEM_OPTS= 
+set ODISEE_STACK_OPTS=-XX:ThreadStackSize=128k
 :: -XX:NewSize= -XX:MaxNewSize=
-set YOUNGEN_OPTS=-Xmn256m
-set PERMGEN_OPTS=-XX:PermSize=64m -XX:MaxPermSize=64m
+set ODISEE_YOUNGEN_OPTS=-Xmn256m
+set ODISEE_PERMGEN_OPTS=-XX:PermSize=64m -XX:MaxPermSize=64m
 
 :: Error handling
 :: -XX:OnOutOfMemoryError="<cmd args>"
-set OOM_ERROR=-XX:-HeapDumpOnOutOfMemoryError
+set ODISEE_OOM_ERROR=-XX:+HeapDumpOnOutOfMemoryError
 :: ON_ERROR=-XX:OnError="<cmd args>;<cmd args>"
-set ON_ERROR=
+set ODISEE_ON_ERROR=
 
 :: Performance optimization
 :: -XX:+CMSClassUnloadingEnabled
 :: -XX:+UseCompressedStrings -XX:+OptimizeStringConcat were introduced in Java 6u20 and u21
-set OPTIM_OPTS="-XX:+UseStringCache -XX:+OptimizeStringConcat" # -XX:+UseCompressedStrings
+set ODISEE_OPTIM_OPTS="-XX:+UseStringCache -XX:+OptimizeStringConcat" # -XX:+UseCompressedStrings
 
 :: Garbage Collection
-set GC_OPTS="-XX:+DisableExplicitGC"
-set GC_DEBUG_OPTS="-Xloggc:$CATALINA_HOME/logs/gc.log -XX:+PrintHeapAtGC -XX:+PrintGCDetails -XX:+PrintGCTimeStamps"
-set GC_LOGROTATE="-XX:-UseGCLogRotation -XX:NumberOfGClogFiles=100 -XX:GCLogFileSize=1M"
+set ODISEE_GC_OPTS="-XX:+DisableExplicitGC"
+set ODISEE_GC_DEBUG_OPTS="-Xloggc:$CATALINA_HOME/logs/gc.log -XX:+PrintHeapAtGC -XX:+PrintGCDetails -XX:+PrintGCTimeStamps"
+set ODISEE_GC_LOGROTATE="-XX:-UseGCLogRotation -XX:NumberOfGClogFiles=100 -XX:GCLogFileSize=1M"
 
 :: Management
-MGMT_OPTS="-Dcom.sun.management.jmxremote" 
+ODISEE_MGMT_OPTS="-Dcom.sun.management.jmxremote" 
 
-set JAVA_OPTS=%JVM_OPTS% %MEM_OPTS% %STACK_OPTS% %YOUNGEN_OPTS% %PERMGEN_OPTS% %OPTIM_OPTS% %TOMCAT_OPTS% %MGMT_OPTS% %GC_OPTS% %GC_DEBUG_OPTS% %OOM_ERROR% %ON_ERROR%
+set JAVA_OPTS=%ODISEE_JVM_OPTS% %ODISEE_MEM_OPTS% %ODISEE_STACK_OPTS% %ODISEE_YOUNGEN_OPTS% %ODISEE_PERMGEN_OPTS% %ODISEE_OPTIM_OPTS% %ODISEE_TOMCAT_OPTS% %ODISEE_MGMT_OPTS% %ODISEE_GC_OPTS% %ODISEE_GC_DEBUG_OPTS% %ODISEE_OOM_ERROR% %ODISEE_ON_ERROR%

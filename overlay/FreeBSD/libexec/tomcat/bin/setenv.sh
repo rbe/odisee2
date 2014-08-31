@@ -30,7 +30,7 @@ ODISEE_STACK_OPTS=""
 # Error handling
 # OutOfMemoryError
 # -XX:OnOutOfMemoryError=\"\""
-ODISEE_OOM_ERROR="-XX:-HeapDumpOnOutOfMemoryError"
+ODISEE_OOM_ERROR="-XX:+HeapDumpOnOutOfMemoryError"
 # JVM error
 # -XX:OnError=\"<cmd args>;<cmd args>\""
 ODISEE_ON_ERROR=""
@@ -41,15 +41,15 @@ ODISEE_ON_ERROR=""
 ODISEE_OPTIM_OPTS="-XX:+UseStringCache -XX:+OptimizeStringConcat" 
 
 # Garbage Collection
-#GC_OPTS="-XX:+DisableExplicitGC"
+#ODISEE_GC_OPTS="-XX:+DisableExplicitGC"
 ODISEE_GC_OPTS=""
-#GC_DEBUG_OPTS="-Xloggc:$CATALINA_HOME/logs/gc.log -XX:+PrintHeapAtGC -XX:+PrintGCDetails -XX:+PrintGCTimeStamps"
+#ODISEE_GC_DEBUG_OPTS="-Xloggc:$CATALINA_HOME/logs/gc.log -XX:+PrintHeapAtGC -XX:+PrintGCDetails -XX:+PrintGCTimeStamps"
 ODISEE_GC_DEBUG_OPTS=""
-#GC_LOGROTATE="-XX:-UseGCLogRotation -XX:NumberOfGClogFiles=100 -XX:GCLogFileSize=1M"
+#ODISEE_GC_LOGROTATE="-XX:-UseGCLogRotation -XX:NumberOfGClogFiles=100 -XX:GCLogFileSize=1M"
 ODISEE_GC_LOGROTATE=""
 
 # Management
-#MGMT_OPTS="-Dcom.sun.management.jmxremote" 
+#ODISEE_MGMT_OPTS="-Dcom.sun.management.jmxremote" 
 ODISEE_MGMT_OPTS=""
 
 # Extra options
