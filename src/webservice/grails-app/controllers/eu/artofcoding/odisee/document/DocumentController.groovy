@@ -11,6 +11,7 @@ package eu.artofcoding.odisee.document
 import eu.artofcoding.grails.helper.ControllerHelper
 import eu.artofcoding.grails.helper.XmlHelper
 import eu.artofcoding.odisee.OdiseeException
+import eu.artofcoding.odisee.OdiseePath
 import groovy.xml.dom.DOMCategory
 import org.w3c.dom.Element
 
@@ -47,13 +48,16 @@ class DocumentController {
                     Map result = oooService.generateDocument(principal: request.userPrincipal, xml: documentElement)
                     streamRequestedDocument(params, result)
                 } catch (e) {
-                    error.message = 'ODI-xxxx: Document generation failed'
+                    if (log.debugEnabled) {
+                        log.debug e
+                    }
+                    error.message = "ODI-xxxx: Document generation failed: ${e.message}"
                     error.exception = e
                 } finally {
                     // Stop processing time
                     long stopWallTime = System.currentTimeMillis()
-                    if (log.debugEnabled) {
-                        log.debug "ODI-xxxx: Document processing took ${stopWallTime - startWallTime} ms (wall clock)"
+                    if (OdiseePath.ODISEE_PROFILE) {
+                        log.info "ODI-xxxx: Document processing took ${stopWallTime - startWallTime} ms (wall clock)"
                     }
                 }
             }
@@ -85,6 +89,9 @@ class DocumentController {
             outputFormat = template.'@outputFormat'?.toString()?.split(',')?.first()
         }
         if (!outputFormat || outputFormat.length() == 0) {
+            if (log.warnEnabled) {
+                log.warn "ODI-xxxx: No outputFormat defined, not sending anything"
+            }
             return
         }
         // Check parameter: document type defaults to PDF.
@@ -122,7 +129,7 @@ class DocumentController {
                     }
                     ControllerHelper.stream(log: log, response: response, document: oooDocument)
                 } else {
-                    throw new OdiseeException('ODI-xxxx: No document generated')
+                    throw new OdiseeException('ODI-xxxx: Cannot send stream, no document generated')
                 }
             }
         } catch (e) {

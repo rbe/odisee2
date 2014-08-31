@@ -271,40 +271,36 @@ class OooService implements InitializingBean {
         storageService.saveRequestToDisk(arg, MINUS_ONE)
         // The result document(s)
         arg.document = []
-        try {
-            // Process request(s)
-            use(DOMCategory) {
-                arg.xml.request.eachWithIndex { request, i ->
-                    // TODO Process requests asnychronously
-                    // Remember which request should be processed now
-                    arg.activeIndex = i
-                    if (i > 0) {
-                        // Reset all request-specific map keys
-                        [
-                                S_ID, S_TEMPLATE, S_REVISION,
-                                'documentName',
-                                'templateDir', 'documentDir',
-                                'templateFile'
-                        ].each {
-                            arg.remove(it)
-                        }
+        // Process request(s)
+        use(DOMCategory) {
+            arg.xml.request.eachWithIndex { request, i ->
+                // TODO Process requests asnychronously
+                // Remember which request should be processed now
+                arg.activeIndex = i
+                if (i > 0) {
+                    // Reset all request-specific map keys
+                    [
+                            S_ID, S_TEMPLATE, S_REVISION,
+                            'documentName',
+                            'templateDir', 'documentDir',
+                            'templateFile'
+                    ].each {
+                        arg.remove(it)
                     }
-                    //
-                    prepareArg(arg)
-                    // Save template to disk
-                    storageService.saveTemplate(arg)
-                    // Check values for template
-                    checkPaths(arg)
-                    // Process request and result
-                    processSingleRequest(arg)
-                    processSingleResult(arg)
                 }
+                //
+                prepareArg(arg)
+                // Save template to disk
+                storageService.saveTemplate(arg)
+                // Check values for template
+                checkPaths(arg)
+                // Process request and result
+                processSingleRequest(arg)
+                processSingleResult(arg)
             }
-            // TODO Post-process all requests
-            postProcessAll(arg)
-        } catch (e) {
-            log.error 'ODI-xxxx: Exception occured during request processing', e
         }
+        // TODO Post-process all requests
+        postProcessAll(arg)
         // Return result
         if (log.debugEnabled) {
             log.debug "ODI-xxxx: Generated ${arg.document?.size() ?: 0} document(s)"

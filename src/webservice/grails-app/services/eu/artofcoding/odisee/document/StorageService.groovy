@@ -174,7 +174,7 @@ class StorageService {
             // Point template for this request to local template
             arg.templateFile = localTemplate
         } else {
-            throw new OdiseeException("ODI-xxxx: Template ${arg.templateFile} does not exist")
+            throw new OdiseeException("ODI-xxxx: Template '${arg.template}' does not exist")
         }
     }
 
