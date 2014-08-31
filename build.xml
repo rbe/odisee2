@@ -373,7 +373,7 @@
             <zipfileset dir="${world.linux_x86_64.base.dir}"
                         prefix="odisee-${webservice.version.number}.${build.number}"
                         includes="*"
-                        dirmode="550" filemode="550"/>
+                        dirmode="750" filemode="550"/>
             <zipfileset dir="${world.linux_x86_64.base.dir}"
                         prefix="odisee-${webservice.version.number}.${build.number}"
                         includes="bin/*"
@@ -401,7 +401,7 @@
             <zipfileset dir="${world.linux_x86_64.base.dir}"
                         prefix="odisee-${webservice.version.number}.${build.number}"
                         includes="libexec/tomcat/**" excludes="libexec/tomcat/bin/*"
-                        dirmode="550" filemode="640"/>
+                        dirmode="750" filemode="640"/>
             <zipfileset dir="${world.linux_x86_64.base.dir}"
                         prefix="odisee-${webservice.version.number}.${build.number}"
                         includes="libexec/tomcat/bin/*"
@@ -452,7 +452,7 @@
             <zipfileset dir="${world.freebsd_amd64.base.dir}"
                         prefix="odisee-${webservice.version.number}.${build.number}"
                         includes="*"
-                        dirmode="550" filemode="550"/>
+                        dirmode="750" filemode="550"/>
             <zipfileset dir="${world.freebsd_amd64.base.dir}"
                         prefix="odisee-${webservice.version.number}.${build.number}"
                         includes="bin/*"
@@ -480,7 +480,7 @@
             <zipfileset dir="${world.freebsd_amd64.base.dir}"
                         prefix="odisee-${webservice.version.number}.${build.number}"
                         includes="libexec/tomcat/**" excludes="libexec/tomcat/bin/*"
-                        dirmode="550" filemode="640"/>
+                        dirmode="750" filemode="640"/>
             <zipfileset dir="${world.freebsd_amd64.base.dir}"
                         prefix="odisee-${webservice.version.number}.${build.number}"
                         includes="libexec/tomcat/bin/*"
