@@ -389,7 +389,7 @@
             <zipfileset dir="${world.linux_x86_64.base.dir}"
                         prefix="odisee-${webservice.version.number}.${build.number}"
                         includes="libexec/odisee/**"
-                        dirmode="550" filemode="640"/>
+                        dirmode="550" filemode="440"/>
             <zipfileset dir="${world.linux_x86_64.base.dir}"
                         prefix="odisee-${webservice.version.number}.${build.number}"
                         includes="libexec/ant/**" excludes="libexec/ant/bin/*"
@@ -468,7 +468,7 @@
             <zipfileset dir="${world.freebsd_amd64.base.dir}"
                         prefix="odisee-${webservice.version.number}.${build.number}"
                         includes="libexec/odisee/**"
-                        dirmode="550" filemode="640"/>
+                        dirmode="550" filemode="440"/>
             <zipfileset dir="${world.freebsd_amd64.base.dir}"
                         prefix="odisee-${webservice.version.number}.${build.number}"
                         includes="libexec/ant/**" excludes="libexec/ant/bin/*"
