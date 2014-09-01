@@ -7,13 +7,16 @@
  * All rights reserved. Use is subject to license terms.
  */
 
+import org.apache.log4j.PatternLayout
+
+import java.nio.file.Path
+import java.nio.file.Paths
+
 // Odisee home
 String ODISEE_HOME = System.getenv('ODISEE_HOME')
 if (ODISEE_HOME) {
     /*
     // Odisee configuration
-    boolean configFileExists
-    File configFile = null
     [
             "${userHome}/.${appName}-webservice-config.properties",
             "${userHome}/.${appName}-webservice-config.groovy",
@@ -22,8 +25,8 @@ if (ODISEE_HOME) {
             System.properties["${appName}.config.location"]
     ].each { cfg ->
         if (cfg) {
-            configFile = new File(cfg)
-            configFileExists = configFile.exists()
+            Path configFile = Paths.get(cfg)
+            boolean configFileExists = Files.exists(configFile)
             println "ODI-xxxx: Checking configuration file '${configFile}': it ${configFileExists ? 'exists' : 'does not exist, skipping'}"
             if (configFileExists) {
                 println "ODI-xxxx: Adding configuration file '${configFile}'"
@@ -33,11 +36,8 @@ if (ODISEE_HOME) {
     }
     */
     // Version
-    odisee.version = "Version unknown"
-    File versionFile = new File(ODISEE_HOME, 'etc/version')
-    if (versionFile.exists()) {
-        odisee.version = versionFile.text?.trim()
-    }
+    Path versionFile = Paths.get(ODISEE_HOME, 'etc/version')
+    odisee.version = versionFile.text?.trim()
 } else {
     println "ODI-xxxx: Please set ODISEE_HOME."
 }
@@ -90,6 +90,8 @@ grails.json.legacy.builder = false
 grails.enable.native2ascii = true
 // whether to install the java.util.logging bridge for sl4j. Disable for AppEngine!
 grails.logging.jul.usebridge = true
+// Our own stacktrace filterer
+grails.logging.stackTraceFiltererClass = 'eu.artofcoding.odisee.helper.StacktraceFilterer'
 // packages to include in Spring bean scanning
 grails.spring.bean.packages = []
 
@@ -103,29 +105,92 @@ grails.gorm.failOnError = true
 environments {
     production {
         grails.serverURL = "http://localhost:8080/${appName}"
+        log4j = {
+            def logLayoutPattern = new PatternLayout('%d{HH:mm:ss,SSS} %p %t %c{4} %m%n')
+            appenders {
+                file name: 'root_log',          file: "${ODISEE_HOME}/var/log/odisee_root.log",           layout: logLayoutPattern
+                file name: 'dev_log',           file: "${ODISEE_HOME}/var/log/odisee_dev.log",            layout: logLayoutPattern
+                file name: 'grailsCommons_log', file: "${ODISEE_HOME}/var/log/odisee_grails_commons.log", layout: logLayoutPattern
+                file name: 'grailsWeb_log',     file: "${ODISEE_HOME}/var/log/odisee_grails_web.log",     layout: logLayoutPattern
+            }
+            root {
+                error 'stdout', 'root_log'
+            }
+            error additivity: false, grailsCommons_log: [
+                    'org.codehaus.groovy.grails.commons',
+            ]
+            error additivity: false, grailsWeb_log: [
+                    'org.codehaus.groovy.grails.web'
+            ]
+            error additivity: false, dev_log: [
+                    'eu.artofcoding.odisee',
+                    'grails.app.controllers',
+                    'grails.app.domain',
+                    'grails.app.services',
+                    'grails.app.taglib',
+                    'grails.app.conf',
+                    'grails.app.filters'
+            ]
+        }
     }
     development {
         grails.serverURL = "http://localhost:8080/${appName}"
+        log4j = {
+            def logLayoutPattern = new PatternLayout('%d{HH:mm:ss,SSS} %p %t %c{4} %m%n')
+            appenders {
+                file name: 'root_log',          file: "${ODISEE_HOME}/var/log/odisee_root.log",           layout: logLayoutPattern
+                file name: 'dev_log',           file: "${ODISEE_HOME}/var/log/odisee_dev.log",            layout: logLayoutPattern
+                file name: 'grailsCommons_log', file: "${ODISEE_HOME}/var/log/odisee_grails_commons.log", layout: logLayoutPattern
+                file name: 'grailsWeb_log',     file: "${ODISEE_HOME}/var/log/odisee_grails_web.log",     layout: logLayoutPattern
+            }
+            root {
+                error 'stdout', 'root_log'
+            }
+            all additivity: false, grailsCommons_log: [
+                    'org.codehaus.groovy.grails.commons',
+            ]
+            all additivity: false, grailsWeb_log: [
+                    'org.codehaus.groovy.grails.web'
+            ]
+            all additivity: false, dev_log: [
+                    'eu.artofcoding.odisee',
+                    'grails.app.controllers',
+                    'grails.app.domain',
+                    'grails.app.services',
+                    'grails.app.taglib',
+                    'grails.app.conf',
+                    'grails.app.filters'
+            ]
+        }
     }
     test {
         grails.serverURL = "http://localhost:8080/${appName}"
+        log4j = {
+            def logLayoutPattern = new PatternLayout('%d{HH:mm:ss,SSS} %p %t %c{4} %m%n')
+            appenders {
+                file name: 'root_log',          file: "${ODISEE_HOME}/var/log/odisee_root.log",           layout: logLayoutPattern
+                file name: 'dev_log',           file: "${ODISEE_HOME}/var/log/odisee_dev.log",            layout: logLayoutPattern
+                file name: 'grailsCommons_log', file: "${ODISEE_HOME}/var/log/odisee_grails_commons.log", layout: logLayoutPattern
+                file name: 'grailsWeb_log',     file: "${ODISEE_HOME}/var/log/odisee_grails_web.log",     layout: logLayoutPattern
+            }
+            root {
+                error 'stdout', 'root_log'
+            }
+            all additivity: false, grailsCommons_log: [
+                    'org.codehaus.groovy.grails.commons',
+            ]
+            all additivity: false, grailsWeb_log: [
+                    'org.codehaus.groovy.grails.web'
+            ]
+            all additivity: false, dev_log: [
+                    'eu.artofcoding.odisee',
+                    'grails.app.controllers',
+                    'grails.app.domain',
+                    'grails.app.services',
+                    'grails.app.taglib',
+                    'grails.app.conf',
+                    'grails.app.filters'
+            ]
+        }
     }
 }
-
-log4j = {
-    appenders {
-        console name: 'stdout', layout: pattern(conversionPattern: '%d{dd.MM. HH:mm:ss,SSS} %t[%X{user}] %p %c %m%n')
-        //file name: 'file', file: 'odisee.log', layout: pattern(conversionPattern: '%d{dd MMM HH:mm:ss,SSS} %p %t %c{4} %m%n')
-    }
-    //info stdout: 'grails.app'
-    //warn stdout: 'grails.app'
-    //error stdout: 'grails.app'
-    //debug stdout: 'grails.app'
-    //trace stdout: 'grails.app'
-    debug console: 'org.codehaus.groovy.grails.web.servlet',
-            'grails.app.controller',
-            'grails.app.service'
-    trace console: 'grails.app.controller',
-            'grails.app.service'
-}
-log4j.additivity.default = false
