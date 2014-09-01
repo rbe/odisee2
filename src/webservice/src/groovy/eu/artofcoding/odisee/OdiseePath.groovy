@@ -44,16 +44,16 @@ public class OdiseePath {
     public static final Path ODISEE_HOME
 
     /**
-     * Deployment directory for Odisee, contains additional files.
-     */
-    public static final Path ODISEE_DEPLOY
-
-    /**
      * Variable data directory for Odisee.
      */
     public static final Path ODISEE_VAR
     public static final Path ODISEE_USER
     public static final Path ODISEE_TMP
+
+    /**
+     * Deployment directory for Odisee, contains additional files.
+     */
+    public static final Path ODISEE_DEPLOY
 
     static {
         // ODISEE_HOME
@@ -107,10 +107,8 @@ public class OdiseePath {
         // Dump environment to stdout
         println 'Odisee environment variables:'
         println "  ODISEE_HOME   =${ODISEE_HOME}"
-        println "  ODISEE_DEPLOY =${ODISEE_DEPLOY}"
         println "  ODISEE_VAR    =${ODISEE_VAR}"
         println "  ODISEE_USER   =${ODISEE_USER}"
-        println "  ODISEE_TMP    =${ODISEE_TMP}"
         if (ODISEE_DEBUG) {
             println "  ODISEE_DEBUG  =${ODISEE_DEBUG}"
         }
