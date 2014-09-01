@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Server address="127.0.0.1" port="8005" shutdown="SHUTDOWN">
+<Server address="127.0.0.1" port="9005" shutdown="SHUTDOWN">
     <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener"/>
     <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener"/>
     <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener"/>
@@ -22,7 +22,7 @@
                    maxConnections="1000" minSpareThreads="4" maxThreads="128"
                    xpoweredBy="false"/>
         <Connector protocol="org.apache.coyote.http11.Http11NioProtocol"
-                   address="0.0.0.0" port="8080"
+                   address="0.0.0.0" port="9080"
                    connectionTimeout="5000"
                    keepAliveTimeout="2500" maxKeepAliveRequests="128"
                    maxConnections="1000" minSpareThreads="4" maxThreads="128"
