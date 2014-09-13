@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<odisee>
+<odisee xmlns="http://xmlns.odisee.de/server/request">
     <request name="HalloOdisee">
         <!-- Odisee server group, fixed value is group0 -->
         <group name="group0"/>

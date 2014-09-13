@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ns:odisee xmlns:ns="http://xml.odisee.de/server/request">
-    <ns:request name="HalloOdisee">
-        <!-- Odisee server group, fixed value is group0 -->
-        <ns:group name="group0"/>
+<odisee:odisee xmlns:odisee="http://xmlns.odisee.de/server/request">
+    <odisee:request name="HalloOdisee">
         <!-- Template: name and desired output format -->
-        <ns:template name="HalloOdisee" outputFormat="odt"/>
+        <odisee:template name="HalloOdisee" outputFormat="odt"/>
         <!-- Archive generated files? Useful for debugging -->
-        <ns:archive files="false"/>
+        <odisee:archive files="false"/>
         <!-- Instructions executed against the template, order does matter! -->
-        <ns:instructions>
+        <odisee:instructions>
             <!-- Set userfield 'Hallo' -->
-            <ns:userfield name="Hallo">art of coding UG (haftungsbeschränkt)</ns:userfield>
+            <odisee:userfield name="Hallo">art of coding UG (haftungsbeschränkt)</odisee:userfield>
             <!-- Set table cell 'A4' in table 'Tabelle1' -->
-            <ns:userfield name="Tabelle1!A4">support@odisee.de</ns:userfield>
-        </ns:instructions>
-    </ns:request>
-</ns:odisee>
+            <odisee:userfield name="Tabelle1!A4">support@odisee.de</odisee:userfield>
+        </odisee:instructions>
+    </odisee:request>
+</odisee:odisee>

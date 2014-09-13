@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<odisee>
+<odisee xmlns="http://xmlns.odisee.de/server/request">
     <!--
         First request.
     -->
     <request name="HalloOdisee1">
-        <!-- Odisee server group, fixed value is group0 -->
-        <ooo group="group0"/>
         <!-- Template: name and desired output format -->
         <template name="HalloOdisee" outputFormat="pdf"/>
         <!-- Archive generated files? Useful for debugging -->
@@ -22,7 +20,6 @@
         Second request.
     -->
     <request name="HalloOdisee2">
-        <ooo group="group0"/>
         <template name="HalloOdisee" outputFormat="pdf"/>
         <archive files="false"/>
         <instructions>
@@ -34,7 +31,6 @@
         Third request.
     -->
     <request name="HalloOdisee3">
-        <ooo group="group0"/>
         <template name="HalloOdisee" outputFormat="pdf"/>
         <archive files="false"/>
         <instructions>

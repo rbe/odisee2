@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<odisee>
+<odisee xmlns="http://xmlns.odisee.de/server/request">
     <!--
         First request.
     -->
     <request name="HalloOdisee1">
-        <!-- Odisee server group, fixed value is group0 -->
-        <ooo group="group0"/>
         <!-- Template: name and desired output format -->
         <template name="HalloOdisee" outputFormat="pdf"/>
         <!-- Archive generated files? Useful for debugging -->
@@ -22,7 +20,6 @@
         Second request.
     -->
     <request name="HalloOdisee2">
-        <ooo group="group0"/>
         <template name="HalloOdisee" outputFormat="pdf"/>
         <archive files="false"/>
         <instructions>
@@ -34,7 +31,6 @@
         Third request with merging a PDF.
     -->
     <request name="HalloOdisee3">
-        <ooo group="group0"/>
         <template name="HalloOdisee" outputFormat="pdf"/>
         <archive files="false"/>
         <instructions>
@@ -42,20 +38,18 @@
             <userfield name="Tabelle1!A4">support@odisee.de</userfield>
         </instructions>
         <!-- The generated document is post-processed -->
-        <post-process>
-            <instructions>
-                <!-- The action is 'merge document with...' -->
-                <action type="merge-with">
-                    <!--
-                        When merging documents we need to know the order:
-                        'result-placeholder' refers to the previously generated document,
-                        'input file' refers to a document to include.
-                    -->
-                    <result-placeholder/>
-                    <!-- A relative path is interpreted as $ODISEE_HOME/var/deploy -->
-                    <input file="pdf/AGB.pdf"/>
-                </action>
-            </instructions>
-        </post-process>
+        <post-process-request>
+            <!-- The action is 'merge document with...' -->
+            <post-process-request-action type="merge-with">
+                <!--
+                    When merging documents we need to know the order:
+                    'result-placeholder' refers to the previously generated document,
+                    'input filename' refers to an existing document (filesystem) to include.
+                -->
+                <result-placeholder/>
+                <!-- A relative path is interpreted as $ODISEE_HOME/var/deploy -->
+                <input filename="pdf/AGB.pdf"/>
+            </post-process-request-action>
+        </post-process-request>
     </request>
 </odisee>
