@@ -129,6 +129,21 @@ class OdiseeXmlCategory {
     }
 
     /**
+     * Set values in texttables.
+     */
+    static void processTexttable(XComponent template, texttable) {
+        String ttName = texttable.'@name'.toString()
+        Profile.time "OOoTextTableCategory.processTexttable(${ttName})", {
+            OdiseeXmlCategory.processInstruction template, { t ->
+                String ttContent = texttable.text()?.toString() ?: ''
+                use(OOoTextTableCategory) {
+                    t[ttName] = ttContent
+                }
+            }, [post: [name: texttable.'@post-macro'.toString()]]
+        }
+    }
+
+    /**
      * Set text at bookmark.
      */
     static void processBookmark(XComponent template, bookmark) {
