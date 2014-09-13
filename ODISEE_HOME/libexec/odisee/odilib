@@ -958,6 +958,6 @@ show_copyr() {
     echo ""
     echo "Alle Rechte vorbehalten. Nutzung unterliegt Lizenzbedingungen."
     echo "All rights reserved. Use is subject to license terms."
-    echo "Licenses for other software see \$ODISEE_HOME/LICENSE directory."
+    echo "Licenses for included software see \$ODISEE_HOME/LICENSE directory."
     echo ""
 }
