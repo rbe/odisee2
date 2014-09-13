@@ -38,7 +38,6 @@ class DocumentController {
      * Generate d document with values from XML request and an OpenOffice template.
      */
     def generate() {
-        Map error = [:]
         try {
             GPathResult xml = request.XML
             if (xml) {
@@ -52,11 +51,7 @@ class DocumentController {
                     Map result = oooService.generateDocument(principal: request.userPrincipal, xml: documentElement)
                     streamRequestedDocument(params, result)
                 } catch (e) {
-                    if (log.debugEnabled) {
-                        log.debug e
-                    }
-                    error.message = "ODI-xxxx: Document generation failed: ${e.message}"
-                    error.exception = e
+                    ControllerHelper.sendNothing(log: log, response: response, message: "ODI-xxxx: Document generation failed: ${e.message}", exception: e)
                 } finally {
                     if (OdiseePath.ODISEE_PROFILE) {
                         wallTime.stop()
@@ -67,12 +62,7 @@ class DocumentController {
                 ControllerHelper.sendNothing(log: log, response: response, message: 'ODI-xxxx: No request found')
             }
         } catch (e) {
-            error.message = 'ODI-xxxx: Cannot fulfill request'
-            error.exception = e
-        }
-        // Stream data
-        if (error.message) {
-            ControllerHelper.sendNothing(log: log, response: response, message: error.message, exception: error.exception)
+            ControllerHelper.sendNothing(log: log, response: response, message: 'ODI-xxxx: Cannot fulfill request', exception: e)
         }
         // Prevent Grails from rendering generate.gsp (it does not exist)
         response.outputStream.close()
