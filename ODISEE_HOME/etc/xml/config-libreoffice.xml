@@ -1,0 +1,12 @@
+<odisee:config xmlns:odisee="http://xml.odisee.de/server/config">
+    <odisee:libreoffice>
+        <odisee:group>
+            <odisee:name>group0</odisee:name>
+        </odisee:group>
+        <odisee:home>/usr/lib/libreoffice</odisee:home>
+        <odisee:host>
+            <odisee:name>127.0.0.1</odisee:name>
+            <odisee:port>2001</odisee:port>
+        </odisee:host>
+    </odisee:libreoffice>
+</odisee:config>
