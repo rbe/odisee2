@@ -178,9 +178,9 @@ class OdiseeXmlCategory {
     }
 
     /**
-     *
+     * Insert an image.
      */
-    static void processGraphic(XComponent template, graphic) {
+    static void processImage(XComponent template, image) {
     }
 
     /**
