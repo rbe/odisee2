@@ -9,6 +9,7 @@
 package eu.artofcoding.odisee.document
 
 import eu.artofcoding.grails.helper.ControllerHelper
+import eu.artofcoding.grails.helper.WallTime
 import eu.artofcoding.grails.helper.XmlHelper
 import eu.artofcoding.odisee.OdiseeException
 import eu.artofcoding.odisee.OdiseePath
@@ -38,10 +39,10 @@ class DocumentController {
     def generate() {
         Map error = [:]
         try {
-            // Generate document using posted XML request for Odisee
-            if (request.XML) {
-                // Stop processing time
-                long startWallTime = System.currentTimeMillis()
+                WallTime wallTime = new WallTime()
+                if (OdiseePath.ODISEE_PROFILE) {
+                    wallTime.start()
+                }
                 try {
                     // Build Odisee XML request using StreamingMarkupBuilder
                     Element documentElement = XmlHelper.asElement(request.XML)
@@ -54,10 +55,9 @@ class DocumentController {
                     error.message = "ODI-xxxx: Document generation failed: ${e.message}"
                     error.exception = e
                 } finally {
-                    // Stop processing time
-                    long stopWallTime = System.currentTimeMillis()
                     if (OdiseePath.ODISEE_PROFILE) {
-                        log.info "ODI-xxxx: Document processing took ${stopWallTime - startWallTime} ms (wall clock)"
+                        wallTime.stop()
+                        log.info "ODI-xxxx: Document processing took ${wallTime.diff()} ms (wall clock)"
                     }
                 }
             }
