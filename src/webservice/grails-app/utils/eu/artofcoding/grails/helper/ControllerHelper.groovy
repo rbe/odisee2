@@ -33,67 +33,78 @@ class ControllerHelper {
         }
     }
 
+    private static String guessContentType(String contentName, String contentType) {
+        switch (contentName) {
+            case { it.endsWith('.odt') }:
+                contentType = MIME_TYPE_ODT
+                break
+            case { it.endsWith('.pdf') }:
+                contentType = MIME_TYPE_PDF
+                break
+        }
+        contentType
+    }
+
+    private static List byteArray(byte[] document) {
+        def contentLength = document.length
+        def random = new SecureRandom().nextInt((int) System.currentTimeMillis())
+        def contentName = "Document_${random}"
+        def bytes = document
+        [bytes, contentName, contentLength]
+    }
+
+    private static List oooDocument(OooDocument document) {
+        def bytes = document.bytes
+        def contentLength = document.size
+        def contentName = document.filename
+        if (document.data) {
+            bytes = document.data?.getBytes(1L, document.data?.length()?.toInteger())
+        } else if (document.bytes) {
+            bytes = document.bytes
+        }
+        [bytes, contentName, contentLength]
+    }
+
+    private static List listOooDocument(List<OooDocument> document) {
+        OooDocument d = (OooDocument) document[-1]
+        def (bytes, contentName, contentLength) = oooDocument(d)
+        [bytes, contentName, contentLength]
+    }
+
     /**
      * Stream a OooDocument or just bytes to client.
      * @param arg
      */
     static void stream(arg) {
-        byte[] bytes = null
         HttpServletResponse response = arg.response
-        def document = arg.document
-        String contentType
-        long contentLength
-        String contentName
         // OooDocument
+        def document = arg.document
+        byte[] bytes = null
+        String contentType = MIME_TYPE_OCTET_STREAM
+        long contentLength = 0L
+        String contentFilename = null
         if (document instanceof OooDocument) {
-            //contentType = document.mimeType.browser ?: OdiseeConstant.MIME_TYPE_OCTET_STREAM
-            contentLength = document.data?.length() ?: document.bytes?.length
-            contentName = document.filename
-            if (document.data) {
-                bytes = document.data?.getBytes(1L, document.data?.length().toInteger())
-            } else if (document.bytes) {
-                bytes = document.bytes
-            }
-        } else if (document instanceof byte[]) { // byte[]
-            //contentType = OdiseeConstant.MIME_TYPE_OCTET_STREAM
-            contentLength = document.length
-            contentName = "file_${new SecureRandom().nextInt(System.currentTimeMillis())}"
-            bytes = document
-        } else if (document instanceof List) { // List of documents
-            // Find document to stream by request parameter 'type'
-            def d = document.find {
-                it.mimeType?.name == arg.params.streamtype || it.filename.endsWith(arg.params.streamtype)
-            }
-            //contentType = d.mimeType.browser
-            bytes = d.toByteArray()
-            contentLength = bytes.length
-            contentName = d.filename ?: d.name
-        } else { // No data message
-            contentType = 'text/plain'
-            bytes = 'No data'.bytes
-            contentLength = bytes.length
+            (bytes, contentFilename, contentLength) = oooDocument(document)
+        } else if (document instanceof byte[]) {
+            (bytes, contentFilename, contentLength) = byteArray(document)
+        } else if (document instanceof List) {
+            (bytes, contentFilename, contentLength) = listOooDocument(document)
         }
         // Stream to client
         if (bytes) {
-            switch (contentName) {
-                case { it.endsWith('.odt') }:
-                    contentType = MIME_TYPE_ODT
-                    break
-                case { it.endsWith('.pdf') }:
-                    contentType = MIME_TYPE_PDF
-                    break
-                default:
-                    contentType = MIME_TYPE_OCTET_STREAM
-            }
+            contentType = guessContentType(contentFilename, contentType)
             // Content type and length
             response.contentType = contentType
             if (contentLength) {
                 response.contentLength = contentLength
             }
             // Content disposition
-            if (contentName) {
-                String cd = arg.contentDisposition ?: 'inline'
-                response.setHeader('Content-disposition', "${cd}; filename=${contentName}")
+            if (contentFilename) {
+                String contentDisposition = arg.contentDisposition ?: 'inline'
+                response.setHeader('Content-disposition', "${contentDisposition}; filename=${contentFilename}")
+            }
+            if (arg.log.debugEnabled) {
+                arg.log.debug "ODI-xxxx: streaming document id=${arg.document.id} name=${arg.document.filename}"
             }
             // Append bytes to output stream
             response.outputStream << bytes
