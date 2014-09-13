@@ -18,20 +18,9 @@ import java.nio.file.Paths
 import static eu.artofcoding.odisee.OdiseePath.ODISEE_USER
 import static eu.artofcoding.odisee.server.OdiseeConstant.S_PDF
 
-/**
- *
- */
 class PostProcessService {
 
-    /**
-     *
-     */
     static transactional = false
-
-    /**
-     * The image service.
-     ImageMagickService imageMagickService
-     */
 
     /**
      * The storage service.

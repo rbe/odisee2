@@ -346,8 +346,6 @@ class OdiseeXmlCategory {
         List<File> output = null
         // Our return value is a map with timing and output information
         Map result = [output: [], retries: 0, wallTime: -1]
-        // Try until: we got a result or have it tried some times
-//        while (!output && result.retries < 3) {
         try {
             // Get connection to OpenOffice
             String group = 'group0' // TODO request.ooo.'@group'.toString()
@@ -371,23 +369,13 @@ class OdiseeXmlCategory {
                 throw new OdiseeException('No document')
             }
         } catch (e) {
-            throw e //new OdiseeException('No document', e)
-            /*
-            // Increase retry counter
-            result.retries++
-            // No result? Spin... try again.
-            try {
-                Thread.sleep(OdiseeConstant.SPIN_TIMEOUT)
-            } catch (e2) {
-            }
-            */
+            throw e
         } finally {
             // Release connection to pool
             if (oooConnection) {
                 officeConnectionFactory.repositConnection(oooConnection)
             }
         }
-//        }
         result
     }
 

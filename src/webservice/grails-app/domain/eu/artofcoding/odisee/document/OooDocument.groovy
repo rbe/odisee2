@@ -89,9 +89,6 @@ class OooDocument {
         throw new IllegalStateException('Updates prohibited')
     }
 
-    /**
-     *
-     */
     private void check() {
         // Revision
         if (!revision) {
