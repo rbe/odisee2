@@ -166,19 +166,4 @@ class OooDocument {
         table 'T2_DOC'
     }
 
-    /**
-     * Glue constraints.
-     */
-    static glueConstraints = {
-        glue {
-            property(name: 'mimeType') {
-                widget {
-                    component test: 'lessThan', value: 10, type: 'radioGroup'
-                    component test: 'moreThan', value: 10, type: 'list'
-                }
-                autoComplete true
-            }
-        }
-    }
-
 }
