@@ -17,8 +17,6 @@ import groovy.util.slurpersupport.GPathResult
 import groovy.xml.dom.DOMCategory
 import org.w3c.dom.Element
 
-import static eu.artofcoding.odisee.server.OdiseeConstant.*
-
 class DocumentController {
 
     /**
