@@ -107,7 +107,7 @@ class StorageService {
             document.odiseeRequest = arg.odiseeRequest
             document.bytes = arg.bytes
         } else {
-            log.error "ODI-xxxx: createDocument(${arg.inspect()}): Failed to create instance of OOoDocument, no data: ${arg}"
+            log.error "ODI-xxxx: Failed to create instance of OOoDocument, got no bytes"
         }
         document
     }
