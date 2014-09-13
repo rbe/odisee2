@@ -115,13 +115,15 @@ class OooDocument {
                 return
             }
         }
-        // Convert bytes property to BLOB
-        if (bytes) {
-            data = Hibernate.createBlob(bytes)
-        }
-        // Create CLOB from odiseeRequest
+        /* TODO Create CLOB from odiseeRequest
         if (odiseeRequest) {
             odiseeXmlRequest = Hibernate.createClob(odiseeRequest)
+        }
+        */
+        // Convert bytes property to BLOB
+        if (bytes) {
+            size = bytes.length
+            // TODO data = Hibernate.createBlob(bytes)
         }
     }
 
