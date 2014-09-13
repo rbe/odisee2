@@ -125,6 +125,10 @@ class OooDocument {
         }
     }
 
+    def getBytes() {
+        bytes
+    }
+    
     def getSize() {
         size
     }
