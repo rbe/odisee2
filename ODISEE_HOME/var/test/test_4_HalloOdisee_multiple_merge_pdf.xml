@@ -40,7 +40,7 @@
         <!-- The generated document is post-processed -->
         <post-process-request>
             <!-- The action is 'merge document with...' -->
-            <post-process-request-action type="merge-with">
+            <action type="merge-with">
                 <!--
                     When merging documents we need to know the order:
                     'result-placeholder' refers to the previously generated document,
@@ -49,7 +49,7 @@
                 <result-placeholder/>
                 <!-- A relative path is interpreted as $ODISEE_HOME/var/deploy -->
                 <input filename="pdf/AGB.pdf"/>
-            </post-process-request-action>
+            </action>
         </post-process-request>
     </request>
 </odisee>
