@@ -2,7 +2,7 @@
 <odisee>
     <request name="HalloOdisee">
         <!-- Odisee server group, fixed value is group0 -->
-        <ooo group="group0"/>
+        <group name="group0"/>
         <!-- Template: name and desired output format -->
         <template name="HalloOdisee" outputFormat="odt"/>
         <!-- Archive generated files? Useful for debugging -->
