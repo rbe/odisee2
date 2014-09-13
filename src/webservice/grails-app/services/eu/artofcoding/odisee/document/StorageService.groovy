@@ -105,7 +105,6 @@ class StorageService {
             document.instanceOfName = arg.instanceOf?.name
             document.instanceOfRevision = arg.instanceOf?.revision?.toLong()
             document.odiseeRequest = arg.odiseeRequest
-            //document.data = Hibernate.createBlob(arg.bytes)
             document.bytes = arg.bytes
         } else {
             log.error "ODI-xxxx: createDocument(${arg.inspect()}): Failed to create instance of OOoDocument, no data: ${arg}"
