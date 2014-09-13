@@ -13,6 +13,7 @@ import eu.artofcoding.grails.helper.WallTime
 import eu.artofcoding.grails.helper.XmlHelper
 import eu.artofcoding.odisee.OdiseeException
 import eu.artofcoding.odisee.OdiseePath
+import groovy.util.slurpersupport.GPathResult
 import groovy.xml.dom.DOMCategory
 import org.w3c.dom.Element
 
@@ -39,13 +40,15 @@ class DocumentController {
     def generate() {
         Map error = [:]
         try {
+            GPathResult xml = request.XML
+            if (xml) {
                 WallTime wallTime = new WallTime()
                 if (OdiseePath.ODISEE_PROFILE) {
                     wallTime.start()
                 }
                 try {
                     // Build Odisee XML request using StreamingMarkupBuilder
-                    Element documentElement = XmlHelper.asElement(request.XML)
+                    Element documentElement = XmlHelper.asElement(xml)
                     Map result = oooService.generateDocument(principal: request.userPrincipal, xml: documentElement)
                     streamRequestedDocument(params, result)
                 } catch (e) {
@@ -60,6 +63,8 @@ class DocumentController {
                         log.info "ODI-xxxx: Document processing took ${wallTime.diff()} ms (wall clock)"
                     }
                 }
+            } else {
+                ControllerHelper.sendNothing(log: log, response: response, message: 'ODI-xxxx: No request found')
             }
         } catch (e) {
             error.message = 'ODI-xxxx: Cannot fulfill request'
