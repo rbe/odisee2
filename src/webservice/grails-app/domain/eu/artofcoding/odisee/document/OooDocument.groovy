@@ -85,11 +85,8 @@ class OooDocument {
         check()
     }
 
-    /**
-     * TODO There should never be an update...
-     */
     def beforeUpdate = {
-        check()
+        throw new IllegalStateException('Updates prohibited')
     }
 
     /**
