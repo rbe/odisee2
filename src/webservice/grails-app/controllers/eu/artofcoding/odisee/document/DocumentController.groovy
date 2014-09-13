@@ -49,7 +49,7 @@ class DocumentController {
                     // Build Odisee XML request using StreamingMarkupBuilder
                     Element documentElement = XmlHelper.asElement(xml)
                     Map result = oooService.generateDocument(principal: request.userPrincipal, xml: documentElement)
-                    streamRequestedDocument(params, result)
+                    streamRequestedDocument(result)
                 } catch (e) {
                     ControllerHelper.sendNothing(log: log, response: response, message: "ODI-xxxx: Document generation failed: ${e.message}", exception: e)
                 } finally {
@@ -73,10 +73,7 @@ class DocumentController {
      * @param params Request parameter
      * @param document Result from oooService.generateWithProperties()
      */
-    private void streamRequestedDocument(params, result) {
-        // Should we stream the result back to client? Default is yes, but user can choose to not get a stream.
-        boolean shouldStream = !Boolean.valueOf(params.remove(S_NOSTREAM) ?: S_FALSE)
-        // Get XML request element
+    private void streamRequestedDocument(result) {
         String outputFormat = ''
         use(DOMCategory) {
             def request = result.arg.xml.request[result.arg.activeIndex]
@@ -89,43 +86,17 @@ class DocumentController {
             }
             return
         }
-        // Check parameter: document type defaults to PDF.
-        params.outputFormat = /*params.*/ outputFormat ?: S_PDF
-        ////params.streamtype = params.streamtype ?: params.outputFormat
-        /*
-        // TODO Multiple requests... watch for tag post-process.
-        // Set stream type for streamRequestedDocument() by content of XML attribute template/@outputFormat
-        String xmlOutputFormat = request.XML.request.template.'@outputFormat'?.text()
-        if (xmlOutputFormat) {
-            // Multiple output formats can be requested, e,g, odt,pdf
-            // Stream back last one
-            params.streamtype = xmlOutputFormat.split(',')[-1]
-        }
-        */
-        // Stream document
-        OooDocument oooDocument = null
         try {
-            // Send answer
-            if (shouldStream) {
-                // Find document to stream
-                // TODO stream-by-name (e.g. for merged documents or multiple-requests), use <stream/> in request XML to mark resulting document as stream-it-back
-                if (result.document instanceof List && result.document.size() > 0) {
-                    /*
-                    // Find document by 'outputFormat'
-                    oooDocument = result.document.find {
-                        it.mimeType?.name == params.outputFormat || it.filename?.endsWith(params.outputFormat)
-                    } as OooDocument
-                    */
-                    oooDocument = result.document.last()
-                }
-                if (null != oooDocument) {
-                    if (log.debugEnabled) {
-                        log.debug "ODI-xxxx: streaming document id=${oooDocument.id} name=${oooDocument.filename}"
-                    }
-                    ControllerHelper.stream(log: log, response: response, document: oooDocument)
-                } else {
-                    throw new OdiseeException('ODI-xxxx: Cannot send stream, no document generated')
-                }
+            // Stream document
+            OooDocument oooDocument = null
+            // Find document to stream
+            if (result.document instanceof List && result.document.size() > 0) {
+                oooDocument = result.document.last()
+            }
+            if (null != oooDocument) {
+                ControllerHelper.stream(log: log, response: response, document: oooDocument)
+            } else {
+                throw new OdiseeException('ODI-xxxx: Cannot send stream, no document generated')
             }
         } catch (e) {
             ControllerHelper.sendNothing(log: log, response: response, message: e.message, exception: e)
