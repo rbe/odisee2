@@ -35,7 +35,7 @@ class DocumentController {
     }
 
     /**
-     * Generate d document with values from XML request and an OpenOffice template.
+     * Generate document with values from XML request and an OpenOffice template.
      */
     def generate() {
         try {
