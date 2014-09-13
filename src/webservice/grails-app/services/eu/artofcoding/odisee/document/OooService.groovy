@@ -201,7 +201,7 @@ class OooService implements InitializingBean {
         use(DOMCategory) {
             def postProcess = arg.xml.request[arg.activeIndex].'post-process'
             String methodName = null
-            postProcess.instructions.'*'.eachWithIndex { instr, idx ->
+            postProcess.'*'.eachWithIndex { instr, idx ->
                 // Construct method name from element name
                 methodName = instr.'@type'[0].toUpperCase() + NameHelper.mapDashToCamelCase(instr.'@type')[1..-1]
                 postProcessService."process${methodName}"(arg, instr)
@@ -217,7 +217,7 @@ class OooService implements InitializingBean {
         use(DOMCategory) {
             def postProcess = arg.xml.'post-process'
             String methodName = null
-            postProcess.instructions.'*'.eachWithIndex { instr, idx ->
+            postProcess.'*'.eachWithIndex { instr, idx ->
                 // Construct method name from element name
                 methodName = instr.'@type'[0].toUpperCase() + NameHelper.mapDashToCamelCase(instr.'@type')[1..-1]
                 postProcessService."process${methodName}"(arg, instr)
