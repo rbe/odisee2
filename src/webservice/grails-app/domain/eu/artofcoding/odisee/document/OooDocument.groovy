@@ -134,8 +134,8 @@ class OooDocument {
      * Transient properties.
      */
     static transients = [
-            'odiseeRequest',
-            'bytes'
+        'odiseeRequest',
+        'bytes'
     ]
 
     /**
