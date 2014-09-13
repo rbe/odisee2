@@ -79,8 +79,10 @@ class OooDocument {
     Blob data
 
     /**
-     *
+     * Size of data.
      */
+    int size
+
     def beforeInsert = {
         check()
     }
@@ -123,6 +125,10 @@ class OooDocument {
         }
     }
 
+    def getSize() {
+        size
+    }
+    
     /**
      * TODO: java.lang.UnsupportedOperationException: Blob may not be manipulated from creating session
      */
