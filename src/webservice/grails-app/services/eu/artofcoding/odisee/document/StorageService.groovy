@@ -40,7 +40,7 @@ class StorageService {
     def grailsApplication
 
     /**
-     *
+     * Get name of document w/o extension.
      * @param filename
      * @return
      */
