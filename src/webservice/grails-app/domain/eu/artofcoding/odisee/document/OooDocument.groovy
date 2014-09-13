@@ -9,7 +9,7 @@
 package eu.artofcoding.odisee.document
 
 import java.sql.Blob
-import org.hibernate.Hibernate
+import java.sql.Clob
 
 /**
  * A document.
@@ -70,7 +70,7 @@ class OooDocument {
      * The Odisee request.
      */
     String odiseeRequest
-    java.sql.Clob odiseeXmlRequest
+    Clob odiseeXmlRequest
 
     /**
      * The binary data.
