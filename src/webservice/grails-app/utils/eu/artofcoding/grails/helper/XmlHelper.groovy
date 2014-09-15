@@ -64,7 +64,15 @@ class XmlHelper {
                 mkp.yieldUnescaped arg
             }.toString()
             DOMBuilder.parse(new StringReader(xmlString)).documentElement
-        }
+    }
+
+    /**
+     * Convert XML string to object implementing DeferredNode.
+     * @param xml String
+     * @return org.w3c.dom.Element The document element.
+     */
+    static Element asElement(List<String> xml) {
+        asElement(xml.join(''))
     }
 
     /**
@@ -114,7 +122,7 @@ class XmlHelper {
      */
     static String asString(DeferredNode requestXML) {
         //String h = XmlUtil.serialize(requestXML).split(S_NEWLINE)[0..-1].join(S_NEWLINE)
-        String h = XmlUtil.serialize(requestXML) -~ '<\\?xml.*?>'
+        String h = XmlUtil.serialize(requestXML) - ~'<\\?xml.*?>'
         def builder = new StreamingMarkupBuilder()
         //builder.encoding = 'UTF-8'
         String xml = builder.bind {
