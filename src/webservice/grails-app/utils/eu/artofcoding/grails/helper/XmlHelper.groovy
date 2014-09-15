@@ -58,12 +58,14 @@ class XmlHelper {
      * @return org.w3c.dom.Element The document element.
      */
     static Element asElement(Object arg) {
-        String xmlString = null
         if (arg instanceof String || arg instanceof GString) {
-            xmlString = new StreamingMarkupBuilder().bind {
+            String xmlString = new StreamingMarkupBuilder().bind {
                 mkp.yieldUnescaped arg
             }.toString()
             DOMBuilder.parse(new StringReader(xmlString)).documentElement
+        } else {
+            null
+        }
     }
 
     /**
