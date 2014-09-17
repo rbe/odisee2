@@ -8,7 +8,9 @@
  */
 package eu.artofcoding.grails.helper
 
+import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
 
 final class FileHelper {
 
@@ -59,6 +61,15 @@ final class FileHelper {
         Map<String, String> decomp2 = FileHelper.decomposeFilename(file2)
         // Extensions different?
         decomp1.ext.toLowerCase() != decomp2.ext.toLowerCase()
+    }
+
+    static byte[] fromFile(path) {
+        Path f = path instanceof Path ? path : Paths.get(path)
+        if (Files.exists(f) && Files.isReadable(f)) {
+            f.readBytes()
+        } else {
+            null
+        }
     }
 
     /**

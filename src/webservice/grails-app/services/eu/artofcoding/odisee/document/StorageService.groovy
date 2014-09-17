@@ -8,19 +8,14 @@
  */
 package eu.artofcoding.odisee.document
 
-import com.sun.org.apache.xerces.internal.dom.DeferredNode
 import eu.artofcoding.grails.helper.FileHelper
-import eu.artofcoding.grails.helper.XmlHelper
-import eu.artofcoding.odisee.OdiseeException
-import groovy.xml.XmlUtil
+import eu.artofcoding.grails.helper.NameHelper
+import grails.transaction.Transactional
 
-import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
-import static eu.artofcoding.odisee.OdiseePath.ODISEE_USER
-import static eu.artofcoding.odisee.server.OdiseeConstant.*
-
+@Transactional
 class StorageService {
 
     /**
@@ -30,48 +25,12 @@ class StorageService {
     def scope = 'prototype'
 
     /**
-     * Transactional?
-     */
-    boolean transactional = true
-
-    /**
-     * GrailsApplication.
-     */
-    def grailsApplication
-
-    /**
-     * Get name of document w/o extension.
-     * @param filename
-     * @return
-     */
-    private String getName(String filename) {
-        String[] s = filename.split('\\.')
-        s[0..s.length - 2].join(S_DOT)
-    }
-
-    /**
-     * Read a file and save its content.
-     */
-    private Object fromFile(path) {
-        Path f = path instanceof Path ? path : Paths.get(path)
-        if (Files.exists(f) && Files.isReadable(f)) {
-            f.readBytes()
-        } else {
-            log.error "ODI-xxxx: Can't find or read file ${path}"
-            null
-        }
-    }
-
-    /**
      * Create a document with 'name' from path. If the document does not exist, revision 1 is created
      * otherwise the revision is incremented by 1.
      * @param arg A map
-     * @return Instance of domain class OooDocument
+     * @return Instance of domain class Document
      */
-    OooDocument createDocument(Map arg) {
-        if (log.traceEnabled) {
-            log.trace "ODI-xxxx: createDocument(${arg.inspect()})"
-        }
+    Document createDocument(Map arg) {
         // Got filename?
         if (!arg.filename) {
             if (arg.data instanceof Path) {
@@ -87,94 +46,35 @@ class StorageService {
         // Load data depending on type?
         if (!arg.bytes) {
             if (arg.data instanceof String || arg.data instanceof Path) {
-                arg.bytes = fromFile(arg.data)
+                arg.bytes = FileHelper.fromFile(arg.data)
             } else if (arg.data instanceof InputStream) {
                 arg.bytes = arg.data.readBytes()
             } else if (arg.data instanceof byte[]) {
                 arg.bytes = arg.data
             }
         }
-        // Create new OooDocument
-        OooDocument document = null
+        // Create new Document
         if (arg.bytes) {
-            document = new OooDocument()
-            // Set names
-            document.name = getName(arg.filename)
+            Document document = new Document()
+            document.name = NameHelper.getName(arg.filename)
             document.filename = arg.filename
-            // Instance of...
             document.instanceOfName = arg.instanceOf?.name
-            document.instanceOfRevision = arg.instanceOf?.revision?.toLong()
-            document.odiseeRequest = arg.odiseeRequest
+            //document.instanceOfRevision = arg.instanceOf?.revision?.toLong()
+            document.odiseeXmlRequest = arg.odiseeRequest
             document.bytes = arg.bytes
+            document
         } else {
-            log.error "ODI-xxxx: Failed to create instance of OOoDocument, got no bytes"
+            log.error 'ODI-xxxx: Failed to create instance of Document, got no bytes'
+            null
         }
+    }
+
+    Document createDocument(String documentName, String odiseeXmlRequest, byte[] documentData) {
+        Document document = new Document()
+        document.name = documentName
+        document.odiseeXmlRequest = odiseeXmlRequest
+        document.bytes = documentData
         document
-    }
-
-    /**
-     * Remove a document.
-     * @param arg
-     */
-    void remove(Map arg) {
-        OooDocument.findById(arg.id)?.delete()
-    }
-
-    /**
-     * Save XML request to file.
-     * @param arg
-     * @param requestNumber Request# to work with, -1 is the whole file.
-     * @return File Reference to generated XML file.
-     */
-    Path saveRequestToDisk(Map arg, int requestNumber) {
-        Path requestXMLFile = null
-        String xmlString = null
-        // Make XML string
-        if (requestNumber == MINUS_ONE) {
-            Path requestDir = (Path) arg.requestDir
-            requestXMLFile = requestDir.resolve("${arg.uniqueRequestId}.xml" as String)
-            xmlString = XmlUtil.serialize(arg.xml)
-        } else {
-            // Just save active request including <odisee> element
-            String filename = String.format('%s_%04d.xml', arg.uniqueRequestId, requestNumber)
-            Path documentDir = (Path) arg.documentDir
-            requestXMLFile = documentDir.resolve(filename as String)
-            DeferredNode deferredNode = (DeferredNode) arg.xml.request[requestNumber]
-            xmlString = XmlHelper.asString(deferredNode)
-        }
-        // Write XML file
-        Files.createDirectories(requestXMLFile.parent)
-        FileHelper.writeUTF8(requestXMLFile, xmlString)
-        requestXMLFile
-    }
-
-    /**
-     * Find template in template directory or get it from storage service
-     * and save it to disk (needed for OOo/LO).
-     * @param arg
-     */
-    void saveTemplate(Map arg) {
-        // Set document directory (same as request's working directory)
-        arg.documentDir = arg.requestDir
-        // Set template directory (same as request's working directory)
-        arg.templateDir = Paths.get("${ODISEE_USER}/${arg.principal.name}", S_TEMPLATE)
-        // Template
-        arg.revision = 1
-        // Check local template directory for latest revision of template
-        Path localTemplate = arg.templateDir.resolve("${arg.template}.ott")
-        if (!Files.exists(localTemplate)) {
-            localTemplate = arg.templateDir.resolve("${arg.template}_rev${arg.revision}.ott")
-        }
-        boolean templateExists = Files.exists(localTemplate)
-        if (log.isDebugEnabled()) {
-            log.debug "ODI-xxxx: ${arg.principal.name} tries to access template ${localTemplate}, exists=${templateExists}"
-        }
-        if (templateExists) {
-            // Point template for this request to local template
-            arg.templateFile = localTemplate
-        } else {
-            throw new OdiseeException("ODI-xxxx: Template '${arg.template}' does not exist for user '${arg.principal.name}'")
-        }
     }
 
 }

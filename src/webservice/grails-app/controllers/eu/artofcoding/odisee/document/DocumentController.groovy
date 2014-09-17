@@ -8,13 +8,12 @@
  */
 package eu.artofcoding.odisee.document
 
-import eu.artofcoding.grails.helper.ControllerHelper
+import eu.artofcoding.grails.helper.Compression
+import eu.artofcoding.grails.helper.DocumentStreamer
 import eu.artofcoding.grails.helper.WallTime
 import eu.artofcoding.grails.helper.XmlHelper
 import eu.artofcoding.odisee.OdiseeException
 import eu.artofcoding.odisee.OdiseePath
-import groovy.util.slurpersupport.GPathResult
-import groovy.xml.dom.DOMCategory
 import org.w3c.dom.Element
 
 class DocumentController {
@@ -22,82 +21,88 @@ class DocumentController {
     /**
      * The Odisee service.
      */
-    OooService oooService
+    OdiseeService odiseeService
 
     /**
-     * The before-request-interceptor.
+     * The before-request-interceptor:
+     * Don't cache our response.
      */
     def beforeInterceptor = {
-        // Don't cache our response.
         response.setHeader('Cache-Control', 'no-cache,no-store,must-revalidate,max-age=0')
     }
 
-    /**
-     * Generate document with values from XML request and an OpenOffice template.
-     */
     def generate() {
+        WallTime wallTime = new WallTime()
+        if (OdiseePath.ODISEE_PROFILE) {
+            wallTime.start()
+        }
         try {
-            GPathResult xml = request.XML
-            if (xml) {
-                WallTime wallTime = new WallTime()
-                if (OdiseePath.ODISEE_PROFILE) {
-                    wallTime.start()
-                }
-                try {
-                    // Build Odisee XML request using StreamingMarkupBuilder
-                    Element documentElement = XmlHelper.asElement(xml)
-                    Map result = oooService.generateDocument(principal: request.userPrincipal, xml: documentElement)
-                    streamRequestedDocument(result)
-                } catch (e) {
-                    ControllerHelper.sendNothing(log: log, response: response, message: "ODI-xxxx: Document generation failed: ${e.message}", exception: e)
-                } finally {
-                    if (OdiseePath.ODISEE_PROFILE) {
-                        wallTime.stop()
-                        log.info "ODI-xxxx: Document processing took ${wallTime.diff()} ms (wall clock)"
-                    }
+            Element xml = postBodyToXml()
+            if (null != xml) {
+                Document document = processXmlRequest(xml)
+                if (null == document) {
+                    throw new OdiseeException('ODI-xxxx: Cannot send stream, no document')
+                } else {
+                    DocumentStreamer.stream(response, document)
                 }
             } else {
-                ControllerHelper.sendNothing(log: log, response: response, message: 'ODI-xxxx: No request found')
+                throw new OdiseeException('ODI-xxxx: Invalid or missing XML request')
             }
         } catch (e) {
-            ControllerHelper.sendNothing(log: log, response: response, message: 'ODI-xxxx: Cannot fulfill request', exception: e)
+            processThrowable(e)
+        } finally {
+            // Prevent Grails from rendering generate.gsp (it does not exist)
+            response.outputStream.close()
+            if (OdiseePath.ODISEE_PROFILE) {
+                wallTime.stop()
+                log.info "ODI-xxxx: Document processing took ${wallTime.diff()} ms (wall clock)"
+            }
         }
-        // Prevent Grails from rendering generate.gsp (it does not exist)
-        response.outputStream.close()
     }
 
     /**
-     * Stream a certain document depending on request parameters.
-     * @param params Request parameter
-     * @param document Result from oooService.generateWithProperties()
+     * Parse POST body: can be just text or gzip'ed stream.
+     * Does not use request.XML as it relies on HTTP request headers.
      */
-    private void streamRequestedDocument(result) {
-        String outputFormat = ''
-        use(DOMCategory) {
-            def request = result.arg.xml.request[result.arg.activeIndex]
-            def template = request.template[0]
-            outputFormat = template.'@outputFormat'?.toString()?.split(',')?.first()
-        }
-        if (!outputFormat || outputFormat.length() == 0) {
-            if (log.warnEnabled) {
-                log.warn "ODI-xxxx: No outputFormat defined, not sending anything"
-            }
-            return
-        }
+    private Element postBodyToXml() {
+        InputStream postBody = Compression.decompressStream(request.inputStream)
+        List<String> lines = postBody.readLines('UTF-8')
+        Element xml = XmlHelper.asElement(lines)
+        xml
+    }
+
+    private Document processXmlRequest(Element xml) {
         try {
-            // Stream document
-            OooDocument oooDocument = null
-            // Find document to stream
-            if (result.document instanceof List && result.document.size() > 0) {
-                oooDocument = result.document.last()
-            }
-            if (null != oooDocument) {
-                ControllerHelper.stream(log: log, response: response, document: oooDocument)
+            List<Document> documents = odiseeService.generateDocument(request.userPrincipal, xml)
+            if (null != documents && documents.size() > 0) {
+                Document document = documents.last()
+                return document
             } else {
-                throw new OdiseeException('ODI-xxxx: Cannot send stream, no document generated')
+                throw new OdiseeException('ODI-xxxx: Document generation failed')
             }
         } catch (e) {
-            ControllerHelper.sendNothing(log: log, response: response, message: e.message, exception: e)
+            throw new OdiseeException("ODI-xxxx: Document generation failed, got ${e.getCause().getClass().getSimpleName()}")
+        }
+    }
+
+    /**
+     * Handle an exception: extract message and write response to client.
+     * @param throwable The exception to handle.
+     */
+    private void processThrowable(Throwable throwable) {
+        try {
+            String msg
+            if (null != throwable) {
+                msg = throwable.message
+                log.error msg, throwable
+            }
+            response.reset()
+            if (null != msg) {
+                response.outputStream << String.format('%s%n', msg)
+            }
+            response.outputStream.flush()
+        } catch (e) {
+            log.error 'ODI-xxxx: Could not send error message to client', e
         }
     }
 
