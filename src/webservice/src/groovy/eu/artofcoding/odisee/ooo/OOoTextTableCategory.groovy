@@ -20,10 +20,10 @@ import com.sun.star.table.XTableRows
 import com.sun.star.text.XText
 import com.sun.star.text.XTextTable
 import com.sun.star.text.XTextTablesSupplier
+import com.sun.star.uno.Any
 import eu.artofcoding.odisee.OdiseeException
 import eu.artofcoding.odisee.helper.Coordinate
 import eu.artofcoding.odisee.helper.Profile
-import com.sun.star.uno.Any
 
 /**
  * Work with Writer's text tables.
@@ -257,7 +257,7 @@ class OOoTextTableCategory {
     static Map getInfo(XTextTable textTable) {
         use(UnoCategory) {
             [
-                    name: ((XNamed) textTable.uno(XNamed)).name,
+                    name     : ((XNamed) textTable.uno(XNamed)).name,
                     cellNames: textTable.cellNames //getCellNames()
             ]
         }
@@ -333,15 +333,8 @@ class OOoTextTableCategory {
     static void set(XComponent component, String name, Object value) {
         Profile.time "OOoTextTableCategory.set(component=$component, name=$name, value=$value)", {
             Map m = Coordinate.parseCoordinate(name)
-            //try {
-                XTextTable xTextTable = getTextTable(component, m.table)
-                set(xTextTable, name, value)
-            /*
-            } catch (e) {
-                // Ignore
-                e.printStackTrace()
-            }
-            */
+            XTextTable xTextTable = getTextTable(component, m.table)
+            set(xTextTable, name, value)
         }
     }
 
