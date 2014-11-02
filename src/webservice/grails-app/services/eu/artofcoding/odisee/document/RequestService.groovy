@@ -47,20 +47,20 @@ class RequestService implements InitializingBean {
      * @param requestNumber Request# to work with, -1 is the whole file.
      * @return File Reference to generated XML file.
      */
-    Path saveRequestToDisk(Map arg, int requestNumber) {
-        Path requestXMLFile
-        String xmlString
+    Path saveRequestToDisk(final Map arg, final int requestNumber) {
+        final Path requestXMLFile
+        final String xmlString
         // Make XML string
         if (requestNumber == MINUS_ONE) {
-            Path requestDir = (Path) arg.requestDir
+            final Path requestDir = (Path) arg.requestDir
             requestXMLFile = requestDir.resolve("${arg.uniqueRequestId}.xml" as String)
             xmlString = XmlUtil.serialize(arg.xml)
         } else {
             // Just save active request including <odisee> element
-            String filename = String.format('%s_%04d.xml', arg.uniqueRequestId, requestNumber)
-            Path documentDir = (Path) arg.documentDir
+            final String filename = String.format('%s_%04d.xml', arg.uniqueRequestId, requestNumber)
+            final Path documentDir = (Path) arg.documentDir
             requestXMLFile = documentDir.resolve(filename)
-            DeferredNode deferredNode = (DeferredNode) arg.xml.request[requestNumber]
+            final DeferredNode deferredNode = (DeferredNode) arg.xml.request[requestNumber]
             xmlString = XmlHelper.asString(deferredNode)
         }
         Files.createDirectories(requestXMLFile.parent)
@@ -71,13 +71,13 @@ class RequestService implements InitializingBean {
     /**
      * Save XML request to disk, process request and set arg.result.
      */
-    void processSingleRequest(Map arg) {
-        Path requestXMLFile = saveRequestToDisk(arg, arg.activeIndex)
+    void processSingleRequest(final Map arg) {
+        final Path requestXMLFile = saveRequestToDisk(arg, arg.activeIndex)
         use(OdiseeXmlCategory) {
             // requestNumber = 0 as file contains only one request
             arg.result = requestXMLFile.toDocument(officeConnectionFactory, 0)
             if (!arg.result) {
-                String group = 'group0'
+                final String group = 'group0'
                 log.error "ODI-xxxx: ${requestXMLFile.fileName.toString()}/${arg.activeIndex}: Got no result, maybe all instances in group '${group}' are unwilling to perform?"
             }
         }

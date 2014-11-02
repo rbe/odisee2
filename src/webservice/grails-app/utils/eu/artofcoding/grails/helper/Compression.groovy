@@ -21,7 +21,7 @@ class Compression {
      * Check if InputStream is gzip'ed by looking at the first two bytes (magic number)
      * and if it is, return a GZIPInputStream wrapped stream.
      * @param input An input stream.
-     * @return The input or GZIIPInputStream(input).
+     * @return The input or GZIPInputStream(input).
      */
     public static InputStream decompressStream(InputStream input) {
         PushbackInputStream pushbackInputStream = new PushbackInputStream(input, 2);
@@ -42,7 +42,7 @@ class Compression {
      * @params base64 Encode bytes as base64?
      * @return byte[]
      */
-    static byte[] zip(byte[] b, boolean base64 = false) {
+    public static byte[] zip(byte[] b, boolean base64 = false) {
         ByteArrayOutputStream targetStream = new ByteArrayOutputStream()
         GZIPOutputStream zipStream = new GZIPOutputStream(targetStream)
         zipStream.write(b)
@@ -64,7 +64,7 @@ class Compression {
      * @param str The string to compress using gzip.
      * @return byte[]
      */
-    static byte[] zip(String str) {
+    public static byte[] zip(String str) {
         return zip(str.bytes)
     }
 

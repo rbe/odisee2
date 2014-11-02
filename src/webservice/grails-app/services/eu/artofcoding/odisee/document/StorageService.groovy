@@ -30,7 +30,7 @@ class StorageService {
      * @param arg A map
      * @return Instance of domain class Document
      */
-    Document createDocument(Map arg) {
+    Document createDocument(final Map arg) {
         // Got filename?
         if (!arg.filename) {
             if (arg.data instanceof Path) {
@@ -55,7 +55,7 @@ class StorageService {
         }
         // Create new Document
         if (arg.bytes) {
-            Document document = new Document()
+            final Document document = new Document()
             document.name = NameHelper.getName(arg.filename)
             document.filename = arg.filename
             document.instanceOfName = arg.instanceOf?.name
@@ -69,8 +69,8 @@ class StorageService {
         }
     }
 
-    Document createDocument(String documentName, String odiseeXmlRequest, byte[] documentData) {
-        Document document = new Document()
+    Document createDocument(final String documentName, final String odiseeXmlRequest, final byte[] documentData) {
+        final Document document = new Document()
         document.name = documentName
         document.odiseeXmlRequest = odiseeXmlRequest
         document.bytes = documentData

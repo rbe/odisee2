@@ -15,7 +15,9 @@ import java.nio.file.Paths
 final class FileHelper {
 
     private static final String S_UTF8 = 'UTF-8'
+
     private static final String S_NAME = 'name'
+
     private static final String S_EXT = 'ext'
 
     /**

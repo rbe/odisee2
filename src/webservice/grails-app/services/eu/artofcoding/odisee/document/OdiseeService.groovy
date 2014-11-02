@@ -36,7 +36,7 @@ class OdiseeService {
 
     PostProcessService postProcessService
 
-    private static void resetRequest(arg) {
+    private static void resetRequest(final Map arg) {
         [
                 S_ID, S_TEMPLATE, S_REVISION,
                 'documentName',
@@ -53,7 +53,7 @@ class OdiseeService {
      * @param arg Map: xml: an XML request (see request.xsd in Odisee).
      * @return List with generated OooDocument instance(s).
      */
-    List<Document> generateDocument(Principal principal, Element xml) {
+    List<Document> generateDocument(final Principal principal, final Element xml) {
         Map arg = [
                 principal      : principal,
                 xml            : xml,
