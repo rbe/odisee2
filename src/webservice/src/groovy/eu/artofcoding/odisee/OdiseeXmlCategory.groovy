@@ -298,7 +298,7 @@ class OdiseeXmlCategory {
             if (preSaveMacro) {
                 xComponent.executeMacro(preSaveMacro)
             }
-            // Create File references for outputFormats from XML
+            // Create Path references for outputFormats from XML
             String outputPath = template.'@outputPath'.toString()
             Path outputDir = Paths.get(outputPath)
             template.'@outputFormat'?.toString()?.split(',')?.each { format ->
@@ -343,7 +343,7 @@ class OdiseeXmlCategory {
         }
         // The connection
         OfficeConnection oooConnection = null
-        List<File> output = null
+        List<Path> output = null
         // Our return value is a map with timing and output information
         Map result = [output: [], retries: 0, wallTime: -1]
         try {
