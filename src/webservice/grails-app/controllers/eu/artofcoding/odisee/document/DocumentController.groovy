@@ -16,6 +16,8 @@ import eu.artofcoding.odisee.OdiseeException
 import eu.artofcoding.odisee.OdiseePath
 import org.w3c.dom.Element
 
+import java.security.Principal
+
 class DocumentController {
 
     /**
@@ -37,9 +39,9 @@ class DocumentController {
             wallTime.start()
         }
         try {
-            Element xml = postBodyToXml()
+            final Element xml = convertToXmlElement(request.inputStream)
             if (null != xml) {
-                Document document = processXmlRequest(xml)
+                final Document document = processXmlRequest(request.userPrincipal, xml)
                 if (null == document) {
                     throw new OdiseeException('ODI-xxxx: Cannot send stream, no document')
                 } else {
@@ -64,18 +66,18 @@ class DocumentController {
      * Parse POST body: can be just text or gzip'ed stream.
      * Does not use request.XML as it relies on HTTP request headers.
      */
-    private Element postBodyToXml() {
-        InputStream postBody = Compression.decompressStream(request.inputStream)
-        List<String> lines = postBody.readLines('UTF-8')
-        Element xml = XmlHelper.asElement(lines)
+    private static Element convertToXmlElement(final InputStream inputStream) {
+        final InputStream postBody = Compression.decompressStream(inputStream)
+        final List<String> lines = postBody.readLines('UTF-8')
+        final Element xml = XmlHelper.asElement(lines)
         xml
     }
 
-    private Document processXmlRequest(Element xml) {
+    private Document processXmlRequest(final Principal principal, final Element xml) {
         try {
-            List<Document> documents = odiseeService.generateDocument(request.userPrincipal, xml)
+            final List<Document> documents = odiseeService.generateDocument(principal, xml)
             if (null != documents && documents.size() > 0) {
-                Document document = documents.last()
+                final Document document = documents.last()
                 return document
             } else {
                 throw new OdiseeException('ODI-xxxx: Document generation failed')
