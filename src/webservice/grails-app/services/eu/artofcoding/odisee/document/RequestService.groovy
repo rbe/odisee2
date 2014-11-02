@@ -31,11 +31,10 @@ class RequestService implements InitializingBean {
 
     @Override
     void afterPropertiesSet() {
-        OdiseeInstance odiseeInstance = new OdiseeInstance()
-        List<String> odiinst = odiseeInstance.readOdiinst()
+        final List<String> odiinst = OdiseeInstance.instance.readOdiinst()
         try {
-            String localhost = odiinst[0][1]
-            int portbase = 2001
+            final String localhost = odiinst[0][1]
+            final int portbase = 2001
             officeConnectionFactory = OfficeConnectionFactory.getInstance(S_GROUP0, localhost, portbase, odiinst.size())
         } catch (e) {
             throw new IllegalStateException('Cannot setup Office connection factory, please check instance configuration', e)
