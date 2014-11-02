@@ -165,9 +165,8 @@
         <!-- Clean lib directory -->
         <delete verbose="${buildprop.odisee.build.verbose}" dir="${webservice.lib.dir}"/>
         <mkdir dir="${webservice.lib.dir}"/>
+        <copy verbose="${buildprop.odisee.build.verbose}" file="${odisee.pdfbox-app.library.jar}" todir="${webservice.lib.dir}" overwrite="true"/>
         <copy verbose="${buildprop.odisee.build.verbose}" todir="${webservice.lib.dir}" overwrite="true">
-            <!-- Copy PDFbox library -->
-            <file name="${odisee.pdfbox-app.library.jar}"/>
             <!-- Copy OpenOffice/LibreOffice libraries -->
             <fileset dir="${odisee.ooo.jar.dir}"/>
         </copy>
