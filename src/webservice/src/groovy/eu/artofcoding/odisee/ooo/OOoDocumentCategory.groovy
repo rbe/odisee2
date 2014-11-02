@@ -161,10 +161,12 @@ class OOoDocumentCategory {
             // Refresh
             refresh(component)
             */
+/*
             // Refresh text fields
             use(OOoFieldCategory) {
                 component.refreshTextFields()
             }
+*/
             // Save document
             String fileURL = getFileURL(file)
             try {

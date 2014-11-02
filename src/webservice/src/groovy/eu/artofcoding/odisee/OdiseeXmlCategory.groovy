@@ -292,7 +292,10 @@ class OdiseeXmlCategory {
                     }
                 }
             }
-            // TODO Refresh document before executing macro? template.refresh()
+            // Refresh text fields
+            use(OOoFieldCategory) {
+                xComponent.refreshTextFields()
+            }
             // Execute pre-save macro
             String preSaveMacro = template.'@pre-save-macro'.toString()
             if (preSaveMacro) {
