@@ -309,9 +309,12 @@ class OdiseeXmlCategory {
             }
             // Save document to disk
             output.each { Path file ->
-                // Ensure existance of directory for document
                 Files.createDirectories(file.parent)
+                if (file.toString().endsWith('.pdfa')) {
+                    xComponent.saveAsPDF_A(file)
+                } else {
                 xComponent.saveAs(file)
+            }
             }
             // Execute post-save macro
             String postSaveMacro = template.'@post-save-macro'.toString()

@@ -179,6 +179,102 @@ class OOoDocumentCategory {
     }
 
     /**
+     * Save an OpenOffice.org document to an alternate URL or format.
+     * @param component com.sun.star.lang.XComponent
+     */
+    static saveAsPDF_A(XComponent component, Path file) {
+/*
+        // Refresh text fields
+        use(OOoFieldCategory) {
+            component.refreshTextFields()
+        }
+*/
+        List<com.sun.star.beans.PropertyValue> pdfFilterData = new LinkedList<>();
+
+        // Specify that PDF related permissions of this file must be
+        // restricted. It is meaningfull only if the “PermissionPassword”
+        // property is not empty
+        pdfFilterData << makePropertyValue("RestrictPermissions", Boolean.TRUE);
+
+        // Set the password that a user will need to change the permissions
+        // of the exported PDF. The password should be in clear text.
+        // Must be used with the “RestrictPermissions” property
+        pdfFilterData << makePropertyValue("PermissionPassword", "nopermission");
+
+        // Specifies printing of the document:
+        //   0: PDF document cannot be printed
+        //   1: PDF document can be printed at low resolution only
+        //   2: PDF document can be printed at maximum resolution.
+        pdfFilterData << makePropertyValue("Printing", 2);
+
+        // Specifies the changes allowed to the document:
+        //   0: PDF document cannot be changed
+        //   1: Inserting, deleting and rotating pages is allowed
+        //   2: Filling of form field is allowed
+        //   3: Filling of form field and commenting is allowed
+        //   4: All the changes of the previous selections are permitted,
+        //      with the only exclusion of page extraction
+        pdfFilterData << makePropertyValue("Changes", 0);
+
+        // Specifies that the pages and the PDF document content can be
+        // extracted to be used in other documents: Copy from the PDF
+        // document and paste eleswhere
+        pdfFilterData << makePropertyValue("EnableCopyingOfContent", Boolean.FALSE);
+
+        // Specifies that the PDF document content can be extracted to
+        // be used in accessibility applications
+        pdfFilterData << makePropertyValue("EnableTextAccessForAccessibilityTools", Boolean.FALSE);
+
+        // Specifies if graphics are exported to PDF using a
+        // lossless compression. If this property is set to true,
+        // it overwrites the "Quality" property
+        pdfFilterData << makePropertyValue("UseLosslessCompression", Boolean.TRUE);
+
+        // Specifies whether form fields are exported as widgets or
+        // only their fixed print representation is exported
+        pdfFilterData << makePropertyValue("ExportFormFields", Boolean.FALSE);
+
+        // Specifies the action to be performed when the PDF document
+        // is opened:
+        //   0: Opens with default zoom magnification
+        //   1: Opens magnified to fit the entire page within the window
+        //   2: Opens magnified to fit the entire page width within
+        //      the window
+        //   3: Opens magnified to fit the entire width of its boundig
+        //      box within the window (cuts out margins)
+        //   4: Opens with a zoom level given in the “Zoom” property
+        pdfFilterData << makePropertyValue("Magnification", 1);
+
+        // Specifies that automatically inserted empty pages are
+        // suppressed. This option only applies for storing Writer
+        // documents.
+        pdfFilterData << makePropertyValue("IsSkipEmptyPages", Boolean.TRUE);
+
+        // Specifies the PDF version that should be generated:
+        //   0: PDF 1.4 (default selection)
+        //   1: PDF/A-1 (ISO 19005-1:2005)
+        pdfFilterData << makePropertyValue("SelectPdfVersion", 1);
+
+        com.sun.star.beans.PropertyValue[] pfdArray = pdfFilterData.toArray(new com.sun.star.beans.PropertyValue[pdfFilterData.size()])
+
+        List<com.sun.star.beans.PropertyValue> conversionProperties = new LinkedList<>();
+        conversionProperties << makePropertyValue("FilterName", "writer_pdf_Export");
+        conversionProperties << makePropertyValue("Overwrite", Boolean.TRUE);
+        conversionProperties << makePropertyValue("FilterData", pfdArray);
+        com.sun.star.beans.PropertyValue[] cpArray = conversionProperties.toArray(new com.sun.star.beans.PropertyValue[conversionProperties.size()])
+
+        use(UnoCategory) {
+            String fileURL = getFileURL(file)
+            try {
+                XStorable xStorable = (XStorable) component.uno(XStorable)
+                xStorable.storeToURL(fileURL, cpArray)
+            } catch (e) {
+                throw new OdiseeException("Could not save document at ${fileURL}", e)
+            }
+        }
+    }
+
+    /**
      * Close a document.
      * http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Closing_Documents
      */
