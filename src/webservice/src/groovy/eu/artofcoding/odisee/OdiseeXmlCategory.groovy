@@ -181,6 +181,21 @@ class OdiseeXmlCategory {
      * Insert an image.
      */
     static void processImage(XComponent template, image) {
+        //
+        String imageName = image.'@name'.toString()
+        String imageAtBookmark = image.'@bookmark'.toString()
+        //
+        OdiseeXmlCategory.processInstruction template, { t ->
+            use(OOoImageCategory) {
+                /*
+                if (imageAtBookmark) {
+                    t.insertImageAtBookmark()
+                } else if (atend) {
+                    t.insertImageAtEnd()
+                }
+                */
+            }
+        }, [post: [name: image.'@post-macro'.toString()]]
     }
 
     /**
@@ -313,8 +328,8 @@ class OdiseeXmlCategory {
                 if (file.toString().endsWith('.pdfa')) {
                     xComponent.saveAsPDF_A(file)
                 } else {
-                xComponent.saveAs(file)
-            }
+                    xComponent.saveAs(file)
+                }
             }
             // Execute post-save macro
             String postSaveMacro = template.'@post-save-macro'.toString()
