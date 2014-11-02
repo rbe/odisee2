@@ -17,6 +17,14 @@ import java.util.zip.GZIPOutputStream
 
 class Compression {
 
+    public static isCompressed(InputStream input) {
+        PushbackInputStream pushbackInputStream = new PushbackInputStream(input, 2);
+        byte[] signature = new byte[2];
+        pushbackInputStream.read(signature);
+        pushbackInputStream.unread(signature);
+        return signature[0] == (byte) 0x1f && signature[1] == (byte) 0x8b;
+    }
+
     /**
      * Check if InputStream is gzip'ed by looking at the first two bytes (magic number)
      * and if it is, return a GZIPInputStream wrapped stream.
