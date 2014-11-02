@@ -511,6 +511,7 @@
             <env key="PATH" path="${env.GRAILS_HOME}/bin:${env.GROOVY_HOME}/bin:${env.PATH}"/>
             <arg value="${grails.home}/bin/grails"/>
             <arg value="run-app"/>
+            <arg value="-Dserver.port=9080"/>
         </exec>
     </target>
     <!--
@@ -525,6 +526,7 @@
             <env key="PATH" path="${env.GRAILS_HOME}/bin:${env.GROOVY_HOME}/bin:${env.PATH}"/>
             <arg value="${grails.home}/bin/grails"/>
             <arg value="run-app"/>
+            <arg value="-Dserver.port=9080"/>
             <arg value="-debug"/>
         </exec>
     </target>
