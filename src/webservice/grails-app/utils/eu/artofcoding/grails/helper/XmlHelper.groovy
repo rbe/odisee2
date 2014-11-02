@@ -145,4 +145,15 @@ class XmlHelper {
         }.toString()
     }
 
+    /**
+     * Parse POST body: can be just text or gzip'ed stream.
+     * Does not use request.XML as it relies on HTTP request headers.
+     */
+    static Element convertToXmlElement(final InputStream inputStream) {
+        final InputStream postBody = Compression.decompressStream(inputStream)
+        final List<String> lines = postBody.readLines('UTF-8')
+        final Element xml = XmlHelper.asElement(lines)
+        xml
+    }
+
 }

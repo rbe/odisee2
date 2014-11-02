@@ -6,9 +6,9 @@
  * Alle Rechte vorbehalten. Nutzung unterliegt Lizenzbedingungen.
  * All rights reserved. Use is subject to license terms.
  */
+
 package eu.artofcoding.odisee.document
 
-import eu.artofcoding.grails.helper.Compression
 import eu.artofcoding.grails.helper.DocumentStreamer
 import eu.artofcoding.grails.helper.WallTime
 import eu.artofcoding.grails.helper.XmlHelper
@@ -39,7 +39,7 @@ class DocumentController {
             wallTime.start()
         }
         try {
-            final Element xml = convertToXmlElement(request.inputStream)
+            final Element xml = XmlHelper.convertToXmlElement(request.inputStream)
             if (null != xml) {
                 final Document document = processXmlRequest(request.userPrincipal, xml)
                 if (null == document) {
@@ -60,17 +60,6 @@ class DocumentController {
                 log.info "ODI-xxxx: Document processing took ${wallTime.diff()} ms (wall clock)"
             }
         }
-    }
-
-    /**
-     * Parse POST body: can be just text or gzip'ed stream.
-     * Does not use request.XML as it relies on HTTP request headers.
-     */
-    private static Element convertToXmlElement(final InputStream inputStream) {
-        final InputStream postBody = Compression.decompressStream(inputStream)
-        final List<String> lines = postBody.readLines('UTF-8')
-        final Element xml = XmlHelper.asElement(lines)
-        xml
     }
 
     private Document processXmlRequest(final Principal principal, final Element xml) {
