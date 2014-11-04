@@ -274,7 +274,7 @@
             <fileset dir="${ant_world}/manual"/>
         </delete>
         <!-- Apache Tomcat 7 -->
-        <property name="tomcat7_version" value="7.0.55"/>
+        <property name="tomcat7_version" value="${buildprop.odisee.thirdparty.tomcat.version}"/>
         <property name="tomcat7_url"
                   value="http://ftp.halifax.rwth-aachen.de/apache/tomcat/tomcat-7/v${tomcat7_version}/bin/apache-tomcat-${tomcat7_version}.zip"/>
         <property name="tomcat7_filename" value="apache-tomcat-${tomcat7_version}.zip"/>
