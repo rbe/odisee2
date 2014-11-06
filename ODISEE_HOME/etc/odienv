@@ -167,4 +167,4 @@ PATH=${ODISEE_HOME}/bin:${ODISEE_HOME}/libexec/${ODISEE_OS}/${ODISEE_ARCH}/bin:$
 export PATH
 
 # Include local configuration
-. ${ODISEE_ETC}/local.odienv
+[ -f ${ODISEE_ETC}/local.odienv ] && . ${ODISEE_ETC}/local.odienv
