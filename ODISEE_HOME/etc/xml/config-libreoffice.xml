@@ -1,4 +1,5 @@
-<odisee:config xmlns:odisee="http://xml.odisee.de/server/config">
+<?xml version="1.0" encoding="UTF-8"?>
+<odisee:config xmlns:odisee="http://xmlns.odisee.de/3/config">
     <odisee:libreoffice>
         <odisee:group>
             <odisee:name>group0</odisee:name>
