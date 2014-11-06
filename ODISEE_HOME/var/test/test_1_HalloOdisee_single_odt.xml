@@ -11,6 +11,7 @@
             <userfield name="Hallo">art of coding UG (haftungsbeschränkt)</userfield>
             <!-- Set table cell 'A4' in table 'Tabelle1' -->
             <userfield name="Tabelle1!A4">support@odisee.de</userfield>
+            <userfield name="Tabelle1$1$4">support@odisee.de</userfield>
         </instructions>
     </request>
 </odisee>
