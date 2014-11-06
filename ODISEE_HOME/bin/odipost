@@ -31,7 +31,7 @@ declare port
 declare user
 declare trace
 
-odi_post() {
+_odipost_do() {
     # curl options
     local curlopts
     curlopts="-s"
@@ -42,11 +42,25 @@ odi_post() {
         curlopts="${curlopts} --trace-ascii ${tracefile}"
     fi
     # Request XML file
-    [ -n "${requestfile}" ] && curlopts="${curlopts} -d @${requestfile}"
+    if [ -n "${requestfile}" ];
+    then
+        local rf
+        if [ "${requestfile}" = ^/* ]
+        then
+            rf=${ODISEE_HOME}/var/test/${requestfile}
+        else
+            rf=${requestfile}
+        fi
+        curlopts="${curlopts} -d @${rf}"
+    fi
     # Output
     [ -n "${outputfile}" ] && curlopts="${curlopts} -o ${outputfile}"
     # Host, port, URL, authentication
-    [ -n "${user}" ] && curlopts="${curlopts} --digest -u \"${user}\""
+    if [ -n "${user}" ];
+    then
+        [ "${authtype}" = "basic"  ] && curlopts="${curlopts} --basic -u \"${user}\""
+        [ "${authtype}" = "digest" ] && curlopts="${curlopts} --digest -u \"${user}\""
+    fi
     local url="${host}:${port}/odisee/document/generate/1"
     curlopts="${curlopts} -H \"Content-Type: text/xml\" -X POST ${url}"
     # Execute curl
@@ -54,19 +68,35 @@ odi_post() {
     curlrv=$?
 }
 
+_odipost_usage() {
+    echo "usage: $0 [-h <host>] [-p <port>] [-t] [-a <basic|digest>] [-u <user:password>] -f <requestfile.xml> [-o <outputfile>]"
+    echo ""
+    echo "       defaults:"
+    echo "       -a authtype = basic"
+    echo "       -f uses file from \$ODISEE_HOME/var/test when path does not start with slash"
+    echo "       -h host = 127.0.0.1"
+    echo "       -p port = 9080"
+    echo "       -u user = odisee:odisee"
+    echo "       -t trace = false"
+    echo "       -o outputfile = <resultfile.xml>.bin"
+    exit 1
+}
+
 # Defaults
 trace=false
 host=127.0.0.1
-port=80
+port=9080
+authtype=basic
 user="odisee:odisee"
 requestfile=
 outputfile=
 tracefile=
 
 # Parse command line options
-while getopts ":f:h:o:p:t:u:" opt
+while getopts "a:f:h:o:p:t:u:" opt
 do
     case "$opt" in
+        a) authtype=${OPTARG} ;;
         f) requestfile=${OPTARG} ;;
         h) host=${OPTARG} ;;
         o) outputfile=${OPTARG} ;;
@@ -77,19 +107,12 @@ do
 done
 
 #
-if [ -n "${host}" -a -n "${requestfile}" ]
+if [ -n "${requestfile}" ]
 then
     # Output file
     [ -z "${outputfile}" ] && outputfile="${requestfile}.bin"
-    odi_post
+    _odipost_do
     exit ${curlrv}
 else
-    echo "usage: $0 [-h <host>] [-p <port>] [-t] [-u <user:password>] -f <requestfile.xml> [-o <outputfile>]"
-    echo "       defaults:"
-    echo "       -h host = 127.0.0.1"
-    echo "       -p port = 80"
-    echo "       -u user = odisee:odisee"
-    echo "       -t trace = false"
-    echo "       -o outputfile = <resultfile.xml>.bin"
-    exit 1
+    _odipost_usage
 fi
