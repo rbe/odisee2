@@ -8,9 +8,11 @@
   ~ All rights reserved. Use is subject to license terms.
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           xmlns="http://xmlns.odisee.de/server/request"
-           targetNamespace="http://xmlns.odisee.de/server/request"
-           elementFormDefault="qualified">
+    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
+    xmlns:odisee="http://xmlns.odisee.de/2/request"
+    targetNamespace="http://xmlns.odisee.de/2/request"
+    elementFormDefault="qualified"
+    vc:maxVersion="1.1" vc:minVersion="1.0">
     <xs:element name="odisee">
         <xs:annotation>
             <xs:documentation>
@@ -19,15 +21,16 @@
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="request" minOccurs="1" maxOccurs="unbounded"/>
-                <xs:element name="post-process" type="postProcessType" minOccurs="0" maxOccurs="1">
+                <xs:element ref="odisee:request" minOccurs="1" maxOccurs="unbounded"/>
+                <xs:element name="post-process" type="odisee:postProcessType" minOccurs="0"
+                    maxOccurs="1">
                     <xs:annotation>
                         <xs:documentation>
                             Process result of all request(s): this are one or more generated documents.
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element ref="response" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="odisee:response" minOccurs="0" maxOccurs="1"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -37,22 +40,22 @@
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="group" minOccurs="0" maxOccurs="1"/>
-                <xs:element ref="template" minOccurs="1" maxOccurs="1"/>
-                <xs:element ref="archive" minOccurs="0" maxOccurs="1"/>
-                <xs:element ref="instructions" minOccurs="1" maxOccurs="unbounded"/>
+                <xs:element ref="odisee:group" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="odisee:template" minOccurs="1" maxOccurs="1"/>
+                <xs:element ref="odisee:archive" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="odisee:instructions" minOccurs="1" maxOccurs="unbounded"/>
                 <xs:element name="post-process" minOccurs="0" maxOccurs="1">
                     <xs:annotation>
                         <xs:documentation>Process result/the generated document.</xs:documentation>
                     </xs:annotation>
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element name="action" type="actionType" minOccurs="1" maxOccurs="unbounded"/>
+                            <xs:element name="action" type="odisee:actionType" minOccurs="1" maxOccurs="unbounded"/>
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
             </xs:sequence>
-            <xs:attribute name="name" use="optional" type="xs:string">
+            <xs:attribute name="name" use="optional" type="odisee:name">
                 <xs:annotation>
                     <xs:documentation>
                         Name of request, used as filename when sending result back through HTTP.
@@ -66,7 +69,7 @@
             <xs:documentation>Odisee server group.</xs:documentation>
         </xs:annotation>
         <xs:complexType>
-            <xs:attribute name="name" type="xs:string">
+            <xs:attribute name="name" type="odisee:name">
                 <xs:annotation>
                     <xs:documentation>Name of group as defined in config.xml.</xs:documentation>
                 </xs:annotation>
@@ -98,7 +101,7 @@
             <xs:documentation>Specify template to use.</xs:documentation>
         </xs:annotation>
         <xs:complexType>
-            <xs:attribute name="name" use="required" type="xs:string">
+            <xs:attribute name="name" use="required" type="odisee:name">
                 <xs:annotation>
                     <xs:documentation>Its filename w/o extension (.ott).</xs:documentation>
                 </xs:annotation>
@@ -126,12 +129,12 @@
         </xs:annotation>
         <xs:complexType>
             <xs:sequence minOccurs="1" maxOccurs="unbounded">
-                <xs:element ref="image" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element ref="autotext" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element ref="bookmark" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element ref="macro" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element ref="userfield" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element ref="texttable" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="odisee:image" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="odisee:autotext" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="odisee:bookmark" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="odisee:macro" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="odisee:userfield" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="odisee:texttable" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -140,7 +143,7 @@
             <xs:documentation>Set value of userfield.</xs:documentation>
         </xs:annotation>
         <xs:complexType mixed="true">
-            <xs:attribute name="name" use="required" type="xs:string">
+            <xs:attribute name="name" use="required" type="odisee:name">
                 <xs:annotation>
                     <xs:documentation>Name of userfield.</xs:documentation>
                 </xs:annotation>
@@ -157,10 +160,31 @@
             <xs:documentation>Insert text at table coordinate.</xs:documentation>
         </xs:annotation>
         <xs:complexType mixed="true">
-            <xs:attribute name="coordinate" use="required" type="xs:string">
+            <xs:attribute name="name" use="required" type="odisee:name">
+                <xs:annotation>
+                    <xs:documentation>
+                        Name of table.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="coordinate" use="optional" type="xs:string">
                 <xs:annotation>
                     <xs:documentation>
                         Name of table and position of cell: tablename!ColumnRow, e.g. tablename!A1.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="cell-align" use="optional" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>
+                        Set table cell alignments.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="cell-width" use="optional" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>
+                        Set table cell widths.
                     </xs:documentation>
                 </xs:annotation>
             </xs:attribute>
@@ -176,7 +200,7 @@
             <xs:documentation>Insert image at bookmark. The image muste be encoded as base64.</xs:documentation>
         </xs:annotation>
         <xs:complexType mixed="true">
-            <xs:attribute name="name" use="required" type="xs:string">
+            <xs:attribute name="name" use="required" type="odisee:name">
                 <xs:annotation>
                     <xs:documentation>Name of image.</xs:documentation>
                 </xs:annotation>
@@ -191,6 +215,16 @@
                     <xs:documentation>Name of bookmark.</xs:documentation>
                 </xs:annotation>
             </xs:attribute>
+            <xs:attribute name="url" use="optional" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>Fetch image from this URL.</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="post-macro" use="optional" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>Execute macro after value was set.</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
         </xs:complexType>
     </xs:element>
     <xs:element name="autotext">
@@ -203,7 +237,7 @@
                     <xs:documentation>Name of autotext group, the autotext container.</xs:documentation>
                 </xs:annotation>
             </xs:attribute>
-            <xs:attribute name="name" use="required" type="xs:string">
+            <xs:attribute name="name" use="required" type="odisee:name">
                 <xs:annotation>
                     <xs:documentation>Name of autotext</xs:documentation>
                 </xs:annotation>
@@ -225,7 +259,7 @@
             <xs:documentation>Insert text at bookmark.</xs:documentation>
         </xs:annotation>
         <xs:complexType mixed="true">
-            <xs:attribute name="name" use="required" type="xs:string">
+            <xs:attribute name="name" use="required" type="odisee:name">
                 <xs:annotation>
                     <xs:documentation>Name of bookmark.</xs:documentation>
                 </xs:annotation>
@@ -243,7 +277,7 @@
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="parameter" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="odisee:parameter" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
             <xs:attribute name="name" use="required" type="xs:string">
                 <xs:annotation>
@@ -288,7 +322,8 @@
         <xs:complexType>
             <xs:attribute name="filename" use="required" type="xs:string">
                 <xs:annotation>
-                    <xs:documentation>A relative path, interpreted as $ODISEE_HOME/var/USERNAME/pdf/FILENAME
+                    <xs:documentation>
+                        A relative path, interpreted as $ODISEE_HOME/var/USERNAME/pdf/FILENAME
                     </xs:documentation>
                 </xs:annotation>
             </xs:attribute>
@@ -300,7 +335,8 @@
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="base64" type="xs:boolean" default="false" minOccurs="0" maxOccurs="1">
+                <xs:element name="base64" type="xs:boolean" default="false" minOccurs="0"
+                    maxOccurs="1">
                     <xs:annotation>
                         <xs:documentation>
                             Should the response be encoded as base64? Default is false.
@@ -311,13 +347,18 @@
             </xs:sequence>
         </xs:complexType>
     </xs:element>
+    <!--
+
+        Complex Types.
+
+    -->
     <xs:complexType name="actionType">
         <xs:annotation>
             <xs:documentation>An action to perform.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element ref="result-placeholder" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element ref="input"              minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="odisee:result-placeholder" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="odisee:input" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="type" use="required" type="xs:string">
             <xs:annotation>
@@ -330,7 +371,18 @@
     </xs:complexType>
     <xs:complexType name="postProcessType">
         <xs:sequence>
-            <xs:element name="action" type="actionType" minOccurs="1" maxOccurs="unbounded"/>
+            <xs:element name="action" type="odisee:actionType" minOccurs="1" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
+    <!--
+
+        Simple Types.
+
+    -->
+    <xs:simpleType name="name">
+        <xs:annotation>
+            <xs:documentation>Name</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
 </xs:schema>

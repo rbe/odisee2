@@ -8,8 +8,8 @@
   ~ All rights reserved. Use is subject to license terms.
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           xmlns="http://xml.odisee.de/server/config"
-           targetNamespace="http://xml.odisee.de/server/config"
+           xmlns="http://xmlns.odisee.de/3/config"
+           targetNamespace="http://xmlns.odisee.de/3/config"
            elementFormDefault="qualified">
     <xs:element name="config">
         <xs:annotation>
