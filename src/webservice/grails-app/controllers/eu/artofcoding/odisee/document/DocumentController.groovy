@@ -53,7 +53,6 @@ class DocumentController {
                 throw new OdiseeException('ODI-xxxx: Invalid or missing XML request')
             }
         } catch (e) {
-            e.printStackTrace()
             processThrowable(e)
         } finally {
             // Prevent Grails from rendering generate.gsp (it does not exist)
