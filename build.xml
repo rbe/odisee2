@@ -57,8 +57,8 @@
     <!-- Apache PDFbox -->
     <property name="odisee.pdfbox-app.library.jar" value="${ODISEE_HOME}/lib/pdfbox/${buildprop.odisee.thirdparty.pdfbox.version}/pdfbox-app-${buildprop.odisee.thirdparty.pdfbox.version}.jar"/>
     <!-- Groovy, Grails -->
-    <property name="groovy.version"                value="${buildprop.odisee.groovy.version}"/>
-    <property name="grails.version"                value="${buildprop.odisee.grails.version}"/>
+    <property name="groovy.version"                value="${buildprop.odisee.thirdparty.groovy.version}"/>
+    <property name="grails.version"                value="${buildprop.odisee.thirdparty.grails.version}"/>
     <property name="groovy.home"                   value="${local.libexec.dir}/groovy/${groovy.version}"/>
     <property name="grails.home"                   value="${local.libexec.dir}/grails/${grails.version}"/>
     <!--
@@ -258,7 +258,7 @@
     <target name="download-thirdparty">
         <mkdir dir="${thirdparty.dir}"/>
         <!-- Apache Ant -->
-        <property name="ant_version" value="1.9.4"/>
+        <property name="ant_version" value="${buildprop.odisee.thirdparty.ant.version}"/>
         <property name="ant_url"
                   value="http://ftp.halifax.rwth-aachen.de/apache/ant/binaries/apache-ant-${ant_version}-bin.zip"/>
         <property name="ant_filename" value="apache-ant-${ant_version}.zip"/>
