@@ -91,7 +91,7 @@ grails.enable.native2ascii = true
 // whether to install the java.util.logging bridge for sl4j. Disable for AppEngine!
 grails.logging.jul.usebridge = true
 // Our own stacktrace filterer
-grails.logging.stackTraceFiltererClass = 'eu.artofcoding.odisee.helper.StacktraceFilterer'
+// TODO grails.logging.stackTraceFiltererClass = 'eu.artofcoding.odisee.helper.StacktraceFilterer'
 // packages to include in Spring bean scanning
 grails.spring.bean.packages = []
 
