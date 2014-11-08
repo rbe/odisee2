@@ -40,7 +40,7 @@ class DocumentController {
             wallTime.start()
         }
         try {
-            final InputStream decompressedInputStream = Compression.decompress(request.inputStream.bytes)
+            final InputStream decompressedInputStream = Compression.decompress(request.inputStream)
             final Element xml = XmlHelper.convertToXmlElement(decompressedInputStream)
             if (null != xml) {
                 final Document document = processXmlRequest(request.userPrincipal, xml)
