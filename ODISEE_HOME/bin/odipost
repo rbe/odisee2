@@ -45,11 +45,16 @@ _odipost_do() {
     if [ -n "${requestfile}" ];
     then
         local rf
-        if [ "${requestfile}" = ^/* ]
+        if [ "${requestfile}" != ^/* ]
         then
             rf=${ODISEE_HOME}/var/test/${requestfile}
         else
             rf=${requestfile}
+        fi
+        if [ "${compress}" = "true" ]
+        then
+            gzip -9c ${rf} > ${rf}.gz
+            rf=${rf}.gz
         fi
         curlopts="${curlopts} -d @${rf}"
     fi
@@ -69,7 +74,7 @@ _odipost_do() {
 }
 
 _odipost_usage() {
-    echo "usage: $0 [-h <host>] [-p <port>] [-t] [-a <basic|digest>] [-u <user:password>] -f <requestfile.xml> [-o <outputfile>]"
+    echo "usage: $0 [-h <host>] [-p <port>] [-t] [-a <basic|digest>] [-u <user:password>] -f <requestfile.xml> [-o <outputfile>] [-z]"
     echo ""
     echo "       defaults:"
     echo "       -a authtype = basic"
@@ -79,10 +84,12 @@ _odipost_usage() {
     echo "       -u user = odisee:odisee"
     echo "       -t trace = false"
     echo "       -o outputfile = <resultfile.xml>.bin"
+    echo "       -z compress = false"
     exit 1
 }
 
 # Defaults
+compress=false
 trace=false
 host=127.0.0.1
 port=9080
@@ -93,7 +100,7 @@ outputfile=
 tracefile=
 
 # Parse command line options
-while getopts "a:f:h:o:p:t:u:" opt
+while getopts "a:f:h:o:p:t:u:z" opt
 do
     case "$opt" in
         a) authtype=${OPTARG} ;;
@@ -103,6 +110,7 @@ do
         p) port=${OPTARG} ;;
         t) trace=true ;;
         u) user=${OPTARG} ;;
+        z) compress=true ;;
     esac
 done
 
