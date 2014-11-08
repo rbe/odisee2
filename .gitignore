@@ -21,6 +21,7 @@ target/
 .fonts
 src/webservice/lib
 ODISEE_HOME/var/user/odisee/document
+test_*.gz
 
 # install4j
 distrib/install4j/output.txt
