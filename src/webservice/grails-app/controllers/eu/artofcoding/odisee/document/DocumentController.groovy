@@ -9,6 +9,7 @@
 
 package eu.artofcoding.odisee.document
 
+import eu.artofcoding.grails.helper.Compression
 import eu.artofcoding.grails.helper.DocumentStreamer
 import eu.artofcoding.grails.helper.WallTime
 import eu.artofcoding.grails.helper.XmlHelper
@@ -39,7 +40,8 @@ class DocumentController {
             wallTime.start()
         }
         try {
-            final Element xml = XmlHelper.convertToXmlElement(request.inputStream)
+            final InputStream decompressedInputStream = Compression.decompress(request.inputStream.bytes)
+            final Element xml = XmlHelper.convertToXmlElement(decompressedInputStream)
             if (null != xml) {
                 final Document document = processXmlRequest(request.userPrincipal, xml)
                 if (null == document) {
@@ -51,6 +53,7 @@ class DocumentController {
                 throw new OdiseeException('ODI-xxxx: Invalid or missing XML request')
             }
         } catch (e) {
+            e.printStackTrace()
             processThrowable(e)
         } finally {
             // Prevent Grails from rendering generate.gsp (it does not exist)

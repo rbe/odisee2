@@ -17,12 +17,16 @@ import java.util.zip.GZIPOutputStream
 
 class Compression {
 
-    public static isCompressed(InputStream input) {
+    public static isCompressedSignature(final byte[] bytes) {
+        return bytes[0] == (byte) 0x1f && bytes[1] == (byte) 0x8b;
+    }
+
+    public static isCompressed(final InputStream input) {
         PushbackInputStream pushbackInputStream = new PushbackInputStream(input, 2);
         byte[] signature = new byte[2];
         pushbackInputStream.read(signature);
         pushbackInputStream.unread(signature);
-        return signature[0] == (byte) 0x1f && signature[1] == (byte) 0x8b;
+        return isCompressedSignature(signature);
     }
 
     /**
@@ -31,7 +35,7 @@ class Compression {
      * @param input An input stream.
      * @return The input or GZIPInputStream(input).
      */
-    public static InputStream decompressStream(InputStream input) {
+    public static InputStream decompress(InputStream input) {
         PushbackInputStream pushbackInputStream = new PushbackInputStream(input, 2);
         byte[] signature = new byte[2];
         pushbackInputStream.read(signature);
@@ -42,6 +46,11 @@ class Compression {
         } else {
             return pushbackInputStream;
         }
+    }
+
+    public static InputStream decompress(final byte[] bytes) {
+        GZIPInputStream stream = new GZIPInputStream(new ByteArrayInputStream(bytes));
+        return stream;
     }
 
     /**
