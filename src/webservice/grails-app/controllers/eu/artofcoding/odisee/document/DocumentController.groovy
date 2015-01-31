@@ -35,7 +35,7 @@ class DocumentController {
     }
 
     def generate() {
-        WallTime wallTime = new WallTime()
+        final WallTime wallTime = new WallTime()
         if (OdiseePath.ODISEE_PROFILE) {
             wallTime.start()
         }
@@ -82,7 +82,7 @@ class DocumentController {
      * Handle an exception: extract message and write response to client.
      * @param throwable The exception to handle.
      */
-    private void processThrowable(Throwable throwable) {
+    private void processThrowable(final Throwable throwable) {
         try {
             String msg
             if (null != throwable) {

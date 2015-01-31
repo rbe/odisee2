@@ -14,9 +14,6 @@ package eu.artofcoding.odisee.server;
 
 public class OdiseeServerException extends Exception {
 
-    public OdiseeServerException() {
-    }
-
     public OdiseeServerException(String message) {
         super(message);
     }
@@ -28,11 +25,5 @@ public class OdiseeServerException extends Exception {
     public OdiseeServerException(Throwable cause) {
         super(cause);
     }
-
-/*
-    public OdiseeServerException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
-*/
 
 }

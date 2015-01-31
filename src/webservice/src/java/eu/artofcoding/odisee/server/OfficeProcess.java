@@ -1,6 +1,5 @@
 /*
- * odisee
- * webservice
+ * Odisee(R)
  * Copyright (C) 2011-2014 art of coding UG, http://www.art-of-coding.eu
  * Copyright (C) 2005-2010 Informationssysteme Ralf Bensmann, http://www.bensmann.com
  *
@@ -22,7 +21,7 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OfficeProcess {
+public final class OfficeProcess {
 
     public String officeProgramPath = "/Applications/LibreOffice.app/Contents/MacOS";
 
@@ -46,8 +45,8 @@ public class OfficeProcess {
         }.start();
     }
 
-    private static List<String> getOptions() {
-        List<String> options = new ArrayList<String>();
+    private static List<String> getHeadlessRunOptions() {
+        final List<String> options = new ArrayList<>();
         options.add("--headless");
         options.add("--nologo");
         options.add("--nodefault");
@@ -56,28 +55,26 @@ public class OfficeProcess {
         return options;
     }
 
-    public Process startOfficeProcess(InetSocketAddress socketAddress) throws OdiseeServerException {
-        String sOffice = System.getProperty("os.name").startsWith("Windows") ? "soffice.exe" : "soffice";
+    public Process startOfficeProcess(final InetSocketAddress socketAddress) throws OdiseeServerException {
+        final String sOffice = System.getProperty("os.name").startsWith("Windows") ? "soffice.exe" : "soffice";
         File officeExecutable;
         try {
-            URL[] oooExecFolderURL = new URL[]{new File(officeProgramPath).toURI().toURL()};
-            URLClassLoader loader = new URLClassLoader(oooExecFolderURL);
+            final URL[] oooExecFolderURL = new URL[]{new File(officeProgramPath).toURI().toURL()};
+            final URLClassLoader loader = new URLClassLoader(oooExecFolderURL);
             officeExecutable = NativeLibraryLoader.getResource(loader, sOffice);
             if (officeExecutable == null) {
                 throw new OdiseeServerException("No office executable found!");
             }
         } catch (MalformedURLException e) {
-            throw new OdiseeServerException("Invalid path (" + officeProgramPath + ") to office executable", e);
+            final String message = String.format("Invalid path (%s) to office executable", officeProgramPath);
+            throw new OdiseeServerException(message, e);
         }
-        File programDir = officeExecutable.getParentFile();
-        // Make UNO url
-        String unoURL = UNOHelper.makeUnoUrl(socketAddress);
-        // Get temporary directory
-        String odisee_tmp = findTemporaryDirectory();
-        // Create call with arguments
-        String[] oooCommand = makeCommandLineOptions(officeExecutable, unoURL, odisee_tmp);
+        final File programDir = officeExecutable.getParentFile();
+        final String unoURL = UnoHelper.makeUnoUrl(socketAddress);
+        final String odiseeTmpDirectory = JvmHelper.findTemporaryDirectory();
+        final String[] oooCommand = makeCommandLineOptions(officeExecutable, unoURL, odiseeTmpDirectory);
         try {
-            Process process = Runtime.getRuntime().exec(oooCommand, null, programDir);
+            final Process process = Runtime.getRuntime().exec(oooCommand, null, programDir);
             pipe(process.getInputStream(), System.out, "CO> ");
             pipe(process.getErrorStream(), System.err, "CE> ");
             return process;
@@ -86,43 +83,23 @@ public class OfficeProcess {
         }
     }
 
-    private String[] makeCommandLineOptions(File officeExecutable, String unoURL, String odisee_tmp) throws OdiseeServerException {
-        List<String> options = new ArrayList<String>();
-        options.add("-env:UserInstallation=\"file:///" + odisee_tmp + "/odisee_port" + UNOHelper.getPort(unoURL) + "\"".replaceAll("//", "/"));
-        options.add("--accept=\"" + unoURL + "\"");
-        options.addAll(getOptions());
-        int arguments = options.size() + 1;
-        String[] cmd = new String[arguments];
-        String prefix = System.getProperty("os.name").startsWith("Windows") ? "" : "./soffice";
+    private String[] makeCommandLineOptions(final File officeExecutable, final String unoURL, final String odisee_tmp) throws OdiseeServerException {
+        final List<String> options = new ArrayList<>();
+        //final String userInstallation = String.format("-env:UserInstallation=\"file:///%s/odisee_port%d\"", odisee_tmp, UnoHelper.getPort(unoURL));
+        options.add("-env:UserInstallation=\"file:///" + odisee_tmp + "/odisee_port" + UnoHelper.getPort(unoURL) + "\"".replaceAll("//", "/"));
+        options.add(String.format("--accept=\"%s\"", unoURL));
+        options.addAll(getHeadlessRunOptions());
+        final int arguments = options.size() + 1;
+        final String[] cmd = new String[arguments];
+        final String prefix = System.getProperty("os.name").startsWith("Windows") ? "" : "./soffice";
         cmd[0] = prefix + officeExecutable.getName();
         for (int i = 0; i < options.size(); i++) {
-            cmd[i + 1] = (String) options.get(i);
+            cmd[i + 1] = options.get(i);
         }
         return cmd;
     }
 
-    private String findTemporaryDirectory() throws OdiseeServerException {
-        String odisee_tmp = System.getenv("ODISEE_TMP");
-        if (null == odisee_tmp) {
-            odisee_tmp = System.getProperty("java.io.tmpdir");
-        }
-        if (null == odisee_tmp) {
-            String[] checkTemp = new String[]{"TMP", "TMPDIR", "TEMP"};
-            for (String t : checkTemp) {
-                if (null == odisee_tmp) {
-                    odisee_tmp = System.getenv("TMP");
-                } else {
-                    break;
-                }
-            }
-        }
-        if (null == odisee_tmp) {
-            throw new OdiseeServerException("Cannot start process, please set ODISEE_TMP");
-        }
-        return odisee_tmp;
-    }
-
-    public static void main(String[] args) throws OdiseeServerException, InterruptedException {
+    public static void main(String[] args) throws Exception {
         final OfficeProcess officeProcess = new OfficeProcess();
         final InetSocketAddress socketAddress = new InetSocketAddress("127.0.0.1", 2001);
         Runnable r = new Runnable() {
@@ -135,7 +112,7 @@ public class OfficeProcess {
                 }
             }
         };
-        Thread t = new Thread(r);
+        final Thread t = new Thread(r);
         t.setDaemon(true);
         t.start();
         Thread.sleep(5 * 1000);

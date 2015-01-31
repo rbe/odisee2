@@ -159,7 +159,7 @@ public class OfficeConnection {
         }
         */
         this.socketAddress = socketAddress;
-        unoURL = UNOHelper.makeUnoUrl(socketAddress);
+        unoURL = UnoHelper.makeUnoUrl(socketAddress);
         // Start a process if address is 127.0.0.1
         if (start && socketAddress.getHostName().equals("127.0.0.1")) {
             OfficeProcess officeProcess = new OfficeProcess();

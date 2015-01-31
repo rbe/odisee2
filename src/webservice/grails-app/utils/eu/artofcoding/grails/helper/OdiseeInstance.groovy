@@ -1,6 +1,5 @@
 /*
- * odisee2
- * webservice
+ * Odisee(R)
  * Copyright (C) 2011-2014 art of coding UG, http://www.art-of-coding.eu
  * Copyright (C) 2005-2010 Informationssysteme Ralf Bensmann, http://www.bensmann.com
  *
@@ -22,9 +21,13 @@ import static eu.artofcoding.odisee.server.OdiseeConstant.*
 
 @Singleton
 @Log
-class OdiseeInstance {
+final class OdiseeInstance {
 
     private final Map oooGroup = [:]
+
+    private OdiseeInstance() {
+        throw new AssertionError();
+    }
 
     List<String> readOdiinst() {
         final Path odiinstPath = ODISEE_HOME.resolve(S_ETC_ODIINST)
@@ -42,7 +45,7 @@ class OdiseeInstance {
             ipPortGroup.eachWithIndex { it, i ->
                 final Map m = [:]
                 m[it.key] = it.value
-                synchronized(oooGroup) {
+                synchronized (oooGroup) {
                     oooGroup[S_GROUP0] = m
                 }
             }

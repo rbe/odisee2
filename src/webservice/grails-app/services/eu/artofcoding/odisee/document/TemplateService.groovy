@@ -22,12 +22,12 @@ import static eu.artofcoding.odisee.server.OdiseeConstant.*
 @Transactional
 class TemplateService {
 
-    void extractTemplateFromRequest(Map arg) {
+    void extractTemplateFromRequest(final Map arg) {
         use(DOMCategory) {
             def request = arg.xml.request[arg.activeIndex]
             def template = request.template[0]
             if (!request.'@id') {
-                String dateBasedId = new Date().format('yyyyMMdd-HHmmss_SSSS')
+                final String dateBasedId = new Date().format('yyyyMMdd-HHmmss_SSSS')
                 request.setAttribute(S_ID, dateBasedId)
             }
             arg.id = request.'@id'.toString()
@@ -40,7 +40,7 @@ class TemplateService {
         }
     }
 
-    void checkPaths(Map arg) {
+    void checkPaths(final Map arg) {
         use(DOMCategory) {
             def request = arg.xml.request[arg.activeIndex]
             def template = request.template[0]
@@ -56,15 +56,15 @@ class TemplateService {
         }
     }
 
-    void copyTemplateToRequest(Map arg) {
+    void copyTemplateToRequest(final Map arg) {
         arg.documentDir = arg.requestDir
         arg.templateDir = Paths.get("${ODISEE_USER}/${arg.principal.name}", S_TEMPLATE)
         arg.revision = 1
-        Path localTemplate = arg.templateDir.resolve("${arg.template}.ott")
+        final Path localTemplate = arg.templateDir.resolve("${arg.template}.ott")
         if (!Files.exists(localTemplate)) {
             localTemplate = arg.templateDir.resolve("${arg.template}_rev${arg.revision}.ott")
         }
-        boolean templateExists = Files.exists(localTemplate)
+        final boolean templateExists = Files.exists(localTemplate)
         if (templateExists) {
             arg.templateFile = localTemplate
         } else {

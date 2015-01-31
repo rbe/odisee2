@@ -14,9 +14,9 @@ package eu.artofcoding.grails.helper
 
 import static eu.artofcoding.odisee.server.OdiseeConstant.*
 
-class DocumentAnalyzer {
+final class DocumentAnalyzer {
 
-    static String guessContentType(String contentName) {
+    static String guessContentType(final String contentName) {
         String contentType
         switch (contentName) {
             case { it.endsWith('.odt') }:

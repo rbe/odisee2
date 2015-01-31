@@ -19,9 +19,13 @@ import org.w3c.dom.Element
 import org.xml.sax.EntityResolver
 import org.xml.sax.InputSource
 
-class XmlHelper {
+final class XmlHelper {
 
     private static final String S_NEWLINE = '\n'
+
+    private XmlHelper() {
+        throw new AssertionError();
+    }
 
     /**
      * Local entity resolver.
@@ -47,8 +51,8 @@ class XmlHelper {
      * @param xml String
      * @return org.w3c.dom.Element The document element.
      */
-    static Element asElement(String xml) {
-        Document document = DOMBuilder.parse(new StringReader(xml))
+    static Element asElement(final String xml) {
+        final Document document = DOMBuilder.parse(new StringReader(xml))
         document.documentElement
     }
 
@@ -57,9 +61,9 @@ class XmlHelper {
      * @param arg
      * @return org.w3c.dom.Element The document element.
      */
-    static Element asElement(Object arg) {
+    static Element asElement(final Object arg) {
         if (arg instanceof String || arg instanceof GString) {
-            String xmlString = new StreamingMarkupBuilder().bind {
+            final String xmlString = new StreamingMarkupBuilder().bind {
                 mkp.yieldUnescaped arg
             }.toString()
             DOMBuilder.parse(new StringReader(xmlString)).documentElement
@@ -73,7 +77,7 @@ class XmlHelper {
      * @param xml String
      * @return org.w3c.dom.Element The document element.
      */
-    static Element asElement(List<String> xml) {
+    static Element asElement(final List<String> xml) {
         asElement(xml.join(''))
     }
 
@@ -82,8 +86,8 @@ class XmlHelper {
      * @param arg
      * @return org.w3c.dom.Element The document element.
      */
-    static Element asElement(NodeChild arg) {
-        String xmlString = new StreamingMarkupBuilder().bind {
+    static Element asElement(final NodeChild arg) {
+        final String xmlString = new StreamingMarkupBuilder().bind {
             mkp.yield arg
         }.toString()
         DOMBuilder.parse(new StringReader(xmlString)).documentElement
@@ -95,12 +99,12 @@ class XmlHelper {
      * @param b
      * @return
      */
-    static String asString(byte[] b) {
-        XmlSlurper parser = new XmlSlurper()
-        Writer writer = new StringWriter()
-        GPathResult root = parser.parse(new ByteArrayInputStream(b))
+    static String asString(final byte[] b) {
+        final XmlSlurper parser = new XmlSlurper()
+        final Writer writer = new StringWriter()
+        final GPathResult root = parser.parse(new ByteArrayInputStream(b))
         new XmlNodePrinter(new PrintWriter(writer)).print(root)
-        String xml = new StreamingMarkupBuilder().bind {
+        final String xml = new StreamingMarkupBuilder().bind {
             odisee { mkp.yieldUnescaped writer.toString() }
         }.toString()
         xml
@@ -112,7 +116,7 @@ class XmlHelper {
      * @param str
      * @return
      */
-    static String asString(String str) {
+    static String asString(final String str) {
         toString(str.bytes)
     }
 
@@ -122,12 +126,12 @@ class XmlHelper {
      * @param requestXML
      * @return
      */
-    static String asString(DeferredNode requestXML) {
+    static String asString(final DeferredNode requestXML) {
         //String h = XmlUtil.serialize(requestXML).split(S_NEWLINE)[0..-1].join(S_NEWLINE)
-        String h = XmlUtil.serialize(requestXML) - ~'<\\?xml.*?>'
+        final String h = XmlUtil.serialize(requestXML) - ~'<\\?xml.*?>'
         def builder = new StreamingMarkupBuilder()
         //builder.encoding = 'UTF-8'
-        String xml = builder.bind {
+        final String xml = builder.bind {
             odisee { mkp.yieldUnescaped h }
         }.toString()
         xml
@@ -137,7 +141,7 @@ class XmlHelper {
      *
      * @param xml
      */
-    static String asString(NodeChild xml) {
+    static String asString(final NodeChild xml) {
         new StreamingMarkupBuilder().bind {
             odisee {
                 mkp.yieldUnescaped xml

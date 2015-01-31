@@ -54,7 +54,7 @@ class OdiseeService {
      * @return List with generated OooDocument instance(s).
      */
     List<Document> generateDocument(final Principal principal, final Element xml) {
-        Map arg = [
+        final Map arg = [
                 principal      : principal,
                 xml            : xml,
                 activeIndex    : -1,

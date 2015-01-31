@@ -35,7 +35,7 @@ final class StringHelper {
      * @param what String to count.
      * @return int Number of leading spaces found.
      */
-    public static int countSpacesAtBeginning(String what) {
+    public static int countSpacesAtBeginning(final String what) {
         boolean charSeen = false
         what.inject 0, { o, n ->
             if (!charSeen) {

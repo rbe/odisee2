@@ -12,7 +12,9 @@
 
 package eu.artofcoding.odisee.server;
 
-public class OdiseeConstant {
+public final class OdiseeConstant {
+
+    public static final String BLANK = "_blank";
 
     public static final String NATIVE_TEMPLATE_REGEX = ".*\\.ot[gpst]";
 
@@ -80,8 +82,6 @@ public class OdiseeConstant {
 
     public static final String S_REVISION = "revision";
 
-    public static final String S_NOSTREAM = "nostream";
-
     public static final String FILE_DATEFORMAT_SSSS = "yyyyMMdd-HHmmss_SSSS";
 
     public static final String MIME_TYPE_OCTET_STREAM = "application/octet-stream";
@@ -89,5 +89,7 @@ public class OdiseeConstant {
     public static final String MIME_TYPE_ODT = "application/vnd.oasis.opendocument.text";
 
     public static final String MIME_TYPE_PDF = "application/pdf";
+
+    public static final String[] TMP_DIR_NAMES = new String[]{"TMP", "TMPDIR", "TEMP"};
 
 }

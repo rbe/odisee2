@@ -10,15 +10,19 @@ package eu.artofcoding.grails.helper
 
 import static eu.artofcoding.odisee.server.OdiseeConstant.S_DOT
 
-class NameHelper {
+final class NameHelper {
+
+    private NameHelper() {
+        throw new AssertionError();
+    }
 
     /**
      * Get name of document w/o extension.
      * @param filename
      * @return
      */
-    static String getName(String filename) {
-        String[] s = filename.split('\\.')
+    static String getName(final String filename) {
+        final String[] s = filename.split('\\.')
         s[0..s.length - 2].join(S_DOT)
     }
 

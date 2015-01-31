@@ -1,6 +1,5 @@
 /*
- * odisee2
- * webservice
+ * Odisee(R)
  * Copyright (C) 2011-2014 art of coding UG, http://www.art-of-coding.eu
  * Copyright (C) 2005-2010 Informationssysteme Ralf Bensmann, http://www.bensmann.com
  *
@@ -15,7 +14,11 @@ package eu.artofcoding.grails.helper
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class HttpStream {
+final class HttpStream {
+
+    private HttpStream() {
+        throw new AssertionError();
+    }
 
     /**
      * Stream content (using gzip compression).
@@ -23,12 +26,12 @@ class HttpStream {
      * @param response
      * @param content
      */
-    static void stream(HttpServletRequest request, HttpServletResponse response, byte[] content) {
+    static void stream(final HttpServletRequest request, final HttpServletResponse response, final byte[] content) {
         // Does user's browser accept gzip encoding?
         boolean gzipCompressionAccepted = request.getHeader('Accept-Encoding').contains('gzip')
         if (content) {
             if (gzipCompressionAccepted) {
-                byte[] z = zip(content)
+                final byte[] z = Compression.zip(content)
                 if (z) {
                     response.setHeader('Content-Encoding', 'gzip')
                     response.contentLength = z.length
@@ -46,10 +49,10 @@ class HttpStream {
      * @param response
      * @param image
      */
-    static void streamImage(HttpServletResponse response, File file) {
+    static void streamImage(final HttpServletResponse response, final File file) {
         try {
             if (file.exists() && file.canRead()) {
-                Map decomposedFilename = FileHelper.decomposeFilename(file)
+                final Map decomposedFilename = FileHelper.decomposeFilename(file)
                 String contentType
                 switch (decomposedFilename.ext) {
                     case 'tif':
@@ -63,7 +66,7 @@ class HttpStream {
                 }
                 response.contentType = "image/${contentType}"
                 // BUG Chrome 16.0.912.75: No comma in filename
-                String fname = decomposedFilename.name.replaceAll(',', '')
+                final String fname = decomposedFilename.name.replaceAll(',', '')
                 response.setHeader("Content-Disposition", "inline; filename=${fname}.${contentType}")
                 response.contentLength = file.size()
                 response.outputStream << file.bytes

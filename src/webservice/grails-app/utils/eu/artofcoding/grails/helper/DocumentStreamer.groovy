@@ -13,13 +13,13 @@ import eu.artofcoding.odisee.document.Document
 import javax.servlet.http.HttpServletResponse
 import java.security.SecureRandom
 
-class DocumentStreamer {
+final class DocumentStreamer {
 
     /**
      * Stream a Document or just bytes to client.
      * @param arg
      */
-    static void stream(HttpServletResponse response, Document document) {
+    static void stream(final HttpServletResponse response, final Document document) {
         String contentFilename = document.filename
         if (contentFilename) {
             response.contentType = DocumentAnalyzer.guessContentType(contentFilename)

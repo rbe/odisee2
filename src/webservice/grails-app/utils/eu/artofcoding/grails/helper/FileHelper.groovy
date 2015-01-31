@@ -12,7 +12,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
-final class FileHelper {
+public final class FileHelper {
 
     private static final String S_UTF8 = 'UTF-8'
 
@@ -25,13 +25,13 @@ final class FileHelper {
      * @param file
      * @return Map Keys: name, ext.
      */
-    static Map decomposeFilename(String filename) {
-        Map map = [:]
+    public static Map decomposeFilename(final String filename) {
+        final Map<String, String> map = [:]
         if (filename) {
             if (filename.contains('.')) {
-                String[] split = filename.split('[.]')
+                final String[] split = filename.split('[.]')
                 map[S_NAME] = split[0..-2].join('')
-                map[S_EXT] = split[-1] //.toLowerCase()
+                map[S_EXT] = split[-1]
             } else {
                 map[S_NAME] = filename
                 map[S_EXT] = 'xxx'
@@ -47,7 +47,7 @@ final class FileHelper {
      * @param file
      * @return Map Keys: name, ext.
      */
-    static Map decomposeFilename(Path file) {
+    public static Map decomposeFilename(final Path file) {
         decomposeFilename(file?.fileName?.toString())
     }
 
@@ -57,16 +57,16 @@ final class FileHelper {
      * @param file2 Right/second file for check.
      * @return boolean
      */
-    static boolean isDifferentFileFormat(File file1, File file2) {
+    public static boolean isDifferentFileFormat(Path file1, Path file2) {
         // Decompose both filenames
-        Map<String, String> decomp1 = FileHelper.decomposeFilename(file1)
-        Map<String, String> decomp2 = FileHelper.decomposeFilename(file2)
+        Map<String, String> decomp1 = decomposeFilename(file1)
+        Map<String, String> decomp2 = decomposeFilename(file2)
         // Extensions different?
         decomp1.ext.toLowerCase() != decomp2.ext.toLowerCase()
     }
 
-    static byte[] fromFile(path) {
-        Path f = path instanceof Path ? path : Paths.get(path)
+    public static byte[] fromFile(path) {
+        final Path f = path instanceof Path ? path : Paths.get(path)
         if (Files.exists(f) && Files.isReadable(f)) {
             f.readBytes()
         } else {
@@ -79,10 +79,15 @@ final class FileHelper {
      * @param file
      * @param str
      */
-    static void writeUTF8(Path file, String str) {
+    public static void writeUTF8(final Path file, final String str) {
         file.withWriter S_UTF8, { writer ->
             writer.write(str)
         }
+    }
+
+    public static String getPlainName(String filename) {
+        String[] s = filename.split('\\.')
+        s[0..s.length - 2].join(OdiseeConstant.S_DOT)
     }
 
 }

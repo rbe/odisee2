@@ -1,6 +1,5 @@
 /*
- * odisee
- * webservice
+ * Odisee(R)
  * Copyright (C) 2011-2014 art of coding UG, http://www.art-of-coding.eu
  * Copyright (C) 2005-2010 Informationssysteme Ralf Bensmann, http://www.bensmann.com
  *
@@ -19,8 +18,6 @@ import com.sun.star.frame.XController;
 import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XStorable;
-import com.sun.star.io.IOException;
-import com.sun.star.lang.DisposedException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.text.XTextFieldsSupplier;
 import com.sun.star.util.CloseVetoException;
@@ -29,23 +26,17 @@ import com.sun.star.util.XModifiable;
 import com.sun.star.util.XRefreshable;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.sun.star.uno.UnoRuntime.queryInterface;
+import static eu.artofcoding.odisee.server.UnoHelper.makePropertyValue;
 
 public class OfficeDocument {
-
-    private static final Logger logger = Logger.getLogger(OfficeDocument.class.getName());
-
-    static {
-        logger.setLevel(Level.OFF);
-    }
 
     /**
      * The connection to use for dealing with the document.
@@ -63,11 +54,19 @@ public class OfficeDocument {
     private XComponent xComponent;
 
     /**
-     * Constructor.
+     * Constructor, checks state of connection and throws {@link OdiseeServerRuntimeException} when connection is not initialized.
      * @param officeConnection A previously created connection to an running Office.
      */
-    public OfficeDocument(OfficeConnection officeConnection) {
+    public OfficeDocument(final OfficeConnection officeConnection) {
+        checkState(officeConnection);
         this.officeConnection = officeConnection;
+    }
+
+    // TODO Do not check in every method of this class
+    private void checkState(final OfficeConnection officeConnection) {
+        if (!officeConnection.initializationCompleted()) {
+            throw new OdiseeServerRuntimeException("Not initialized");
+        }
     }
 
     /**
@@ -84,26 +83,14 @@ public class OfficeDocument {
      * @return A newly created XComponent.
      * @throws OdiseeServerException
      */
-    public XComponent newDocument(OfficeDocumentType officeDocumentType) throws OdiseeServerException {
-        logger.info("officeDocumentType=" + officeDocumentType);
-        // Check state
-        if (!officeConnection.initializationCompleted()) {
-            throw new OdiseeServerRuntimeException("Not initialized");
-        }
-        // URL
-        String loadUrl = "private:factory/" + officeDocumentType.getInternalType();
-        // Empty properties
-        PropertyValue[] loadProps = new PropertyValue[0];
+    public XComponent newDocument(final OfficeDocumentType officeDocumentType) throws OdiseeServerException {
+        final String loadUrl = String.format("private:factory/%s", officeDocumentType.getInternalType());
+        final PropertyValue[] loadProps = new PropertyValue[0];
         try {
-            // Create new document
-            xComponent = officeConnection.getXComponentLoader().loadComponentFromURL(loadUrl, "_blank", 0, loadProps);
-            // Remember officeDocumentType
+            xComponent = officeConnection.getXComponentLoader().loadComponentFromURL(loadUrl, OdiseeConstant.BLANK, 0, loadProps);
             this.officeDocumentType = officeDocumentType;
-            // Return XComponent
             return xComponent;
-        } catch (com.sun.star.io.IOException e) {
-            throw new OdiseeServerException(e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
+        } catch (com.sun.star.io.IOException | com.sun.star.lang.IllegalArgumentException e) {
             throw new OdiseeServerException(e);
         }
     }
@@ -115,63 +102,47 @@ public class OfficeDocument {
      * @return A newly created XComponent.
      * @throws OdiseeServerException
      */
-    public XComponent newDocument(URL url) throws OdiseeServerException {
-        logger.info("newDocument(URL=" + url + ")");
-        // Check state
-        if (!officeConnection.initializationCompleted()) {
-            throw new OdiseeServerException("Not initialized");
-        }
-        // Define load properties according to com.sun.star.document.MediaDescriptor
-        // The boolean property AsTemplate tells the office to create a new document from the given file
-        List<PropertyValue> loadProps = new ArrayList<PropertyValue>();
-        PropertyValue p;
-        // Open as template?
-        if (url.toString().matches(OdiseeConstant.NATIVE_TEMPLATE_REGEX)) {
-            logger.info("Set AsTemplate for url=" + url);
-            p = new PropertyValue();
-            p.Name = "AsTemplate";
-            p.Value = Boolean.TRUE;
-            loadProps.add(p);
-        }
-        // TODO ODISEE_DEBUG
-        p = new PropertyValue();
-        p.Name = "Hidden";
-        p.Value = Boolean.FALSE;
-        loadProps.add(p);
-        // Always execute macros
-        p = new PropertyValue();
-        p.Name = "MacroExecutionMode";
-        p.Value = com.sun.star.document.MacroExecMode.ALWAYS_EXECUTE_NO_WARN;
-        loadProps.add(p);
+    public XComponent newDocument(final URL url) throws OdiseeServerException {
+        final List<PropertyValue> loadProps = makeTemplateLoadProperties(url);
         // Load template
         try {
-            // Check URL
-            StringBuilder templateUrl = new StringBuilder();
-            // Correct file: URL
-            if (url.getProtocol().equals("file")) {
-                File file = new File(url.toURI());
-                templateUrl.append("file:///").append(file.getCanonicalPath().replace('\\', '/'));
-            } else {
-                templateUrl.append(url.toString());
-            }
-            logger.info("newDocument(URL=" + url + ") templateUrl=" + templateUrl.toString());
+            final String templateUrl = makeTemplateUrl(url);
             // Open template
-            PropertyValue[] propertyValues = loadProps.toArray(new PropertyValue[loadProps.size()]);
-            xComponent = officeConnection.getXComponentLoader().loadComponentFromURL(templateUrl.toString(), "_blank", 0, propertyValues);
+            final PropertyValue[] propertyValues = loadProps.toArray(new PropertyValue[loadProps.size()]);
+            xComponent = officeConnection.getXComponentLoader().loadComponentFromURL(templateUrl, OdiseeConstant.BLANK, 0, propertyValues);
             // Remember document type
-            int len = templateUrl.length();
+            final int len = templateUrl.length();
             this.officeDocumentType = OfficeDocumentType.find(templateUrl.substring(len - 3));
-            // Return XComponent
             return xComponent;
-        } catch (URISyntaxException e) {
-            throw new OdiseeServerException(e);
-        } catch (java.io.IOException e) {
-            throw new OdiseeServerException(e);
-        } catch (com.sun.star.io.IOException e) {
-            throw new OdiseeServerException(e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
+        } catch (URISyntaxException | java.io.IOException | com.sun.star.io.IOException | com.sun.star.lang.IllegalArgumentException e) {
             throw new OdiseeServerException(e);
         }
+    }
+
+    private List<PropertyValue> makeTemplateLoadProperties(final URL url) {
+        // Define load properties according to com.sun.star.document.MediaDescriptor
+        // The boolean property AsTemplate tells the office to create a new document from the given file
+        final List<PropertyValue> loadProps = new ArrayList<>();
+        // Open as template?
+        if (url.toString().matches(OdiseeConstant.NATIVE_TEMPLATE_REGEX)) {
+            loadProps.add(makePropertyValue("AsTemplate", Boolean.TRUE));
+        }
+        // TODO ODISEE_DEBUG
+        loadProps.add(makePropertyValue("Hidden", Boolean.TRUE));
+        // Always execute macros w/o warning
+        loadProps.add(makePropertyValue("MacroExecutionMode", com.sun.star.document.MacroExecMode.ALWAYS_EXECUTE_NO_WARN));
+        return loadProps;
+    }
+
+    private String makeTemplateUrl(final URL url) throws URISyntaxException, IOException {
+        final StringBuilder templateUrl = new StringBuilder();
+        if (url.getProtocol().equals("file")) {
+            final File file = new File(url.toURI());
+            templateUrl.append("file:///").append(file.getCanonicalPath().replace('\\', '/'));
+        } else {
+            templateUrl.append(url.toString());
+        }
+        return templateUrl.toString();
     }
 
     /**
@@ -180,7 +151,7 @@ public class OfficeDocument {
      * @return A document.
      * @throws OdiseeServerException
      */
-    public XComponent newDocument(File file) throws OdiseeServerException {
+    public XComponent newDocument(final File file) throws OdiseeServerException {
         try {
             return newDocument(file.toURI().toURL());
         } catch (MalformedURLException e) {
@@ -189,19 +160,11 @@ public class OfficeDocument {
     }
 
     public XComponent getXComponent() throws OdiseeServerException {
-        // Check state
-        if (!officeConnection.initializationCompleted()) {
-            throw new OdiseeServerException("Not initialized");
-        }
         return xComponent;
     }
 
     public XController getXController() throws OdiseeServerException {
-        // Check state
-        if (!officeConnection.initializationCompleted()) {
-            throw new OdiseeServerException("Not initialized");
-        }
-        XController xController = queryInterface(XController.class, xComponent);
+        final XController xController = queryInterface(XController.class, xComponent);
         if (null == xController) {
             throw new OdiseeServerException("No XController available");
         }
@@ -209,12 +172,8 @@ public class OfficeDocument {
     }
 
     public XFrame getXFrame() throws OdiseeServerException {
-        // Check state
-        if (!officeConnection.initializationCompleted()) {
-            throw new OdiseeServerException("Not initialized");
-        }
         XFrame xFrame = null;
-        XController xController = queryInterface(XController.class, xComponent);
+        final XController xController = queryInterface(XController.class, xComponent);
         if (null != xController) {
             if (xController.suspend(true)) {
                 xFrame = xController.getFrame();
@@ -227,98 +186,66 @@ public class OfficeDocument {
     }
 
     public void refreshAll() throws OdiseeServerException {
-        // Check state
-        if (!officeConnection.initializationCompleted()) {
-            throw new OdiseeServerException("Not initialized");
-        }
         refreshTextFields();
         refreshDocument();
     }
 
     public void refreshTextFields() throws OdiseeServerException {
-        // Check state
-        if (!officeConnection.initializationCompleted()) {
-            throw new OdiseeServerException("Not initialized");
-        }
-        // Get textfields supplier
-        XTextFieldsSupplier xTextFieldsSupplier = queryInterface(XTextFieldsSupplier.class, xComponent);
-        XEnumerationAccess xEnumeratedFields = xTextFieldsSupplier.getTextFields();
-        XRefreshable xRefreshable = queryInterface(XRefreshable.class, xEnumeratedFields);
+        final XTextFieldsSupplier xTextFieldsSupplier = queryInterface(XTextFieldsSupplier.class, xComponent);
+        final XEnumerationAccess xEnumeratedFields = xTextFieldsSupplier.getTextFields();
+        final XRefreshable xRefreshable = queryInterface(XRefreshable.class, xEnumeratedFields);
         xRefreshable.refresh();
     }
 
     public void refreshDocument() throws OdiseeServerException {
-        // Check state
-        if (!officeConnection.initializationCompleted()) {
-            throw new OdiseeServerException("Not initialized");
-        }
-        XRefreshable xRefresh = queryInterface(XRefreshable.class, xComponent);
+        final XRefreshable xRefresh = queryInterface(XRefreshable.class, xComponent);
         xRefresh.refresh();
     }
 
     public void save() throws OdiseeServerException {
-        // Check state
-        if (!officeConnection.initializationCompleted()) {
-            throw new OdiseeServerException("Not initialized");
-        }
-        // Save
         try {
-            XStorable xStorable = queryInterface(XStorable.class, xComponent);
+            final XStorable xStorable = queryInterface(XStorable.class, xComponent);
             xStorable.store();
-        } catch (IOException e) {
+        } catch (com.sun.star.io.IOException e) {
             throw new OdiseeServerException("Cannot save document", e);
         }
     }
 
-    public void saveAs(URL url) throws OdiseeServerException {
-        // Check state
-        if (!officeConnection.initializationCompleted()) {
-            throw new OdiseeServerException("Not initialized");
-        }
-        StringBuilder builder = new StringBuilder();
+    public void saveAs(final URL url) throws OdiseeServerException {
+        final StringBuilder builder = new StringBuilder();
         if (url.getProtocol().equals("file")) {
             try {
-                File file = new File(url.toURI());
-                builder.append("file:///").append(file.getCanonicalPath().replace('\\', '/'));
-            } catch (URISyntaxException e) {
-                throw new OdiseeServerException("Cannot convert file: URL to save document as " + url.toString(), e);
-            } catch (java.io.IOException e) {
+                final File file = new File(url.toURI());
+                final String fileWoBackslashes = file.getCanonicalPath().replace('\\', '/');
+                builder.append("file:///").append(fileWoBackslashes);
+            } catch (URISyntaxException | java.io.IOException e) {
                 throw new OdiseeServerException("Cannot convert file: URL to save document as " + url.toString(), e);
             }
         } else {
             builder.append(url.toString());
         }
-        String saveAsUrl = builder.toString();
-        // Properties
-        List<PropertyValue> saveProps = new ArrayList<PropertyValue>();
-        PropertyValue p;
+        final String saveAsUrl = builder.toString();
+        final List<PropertyValue> saveProps = new ArrayList<>();
         // When not saving in native format apply filter, e.g. export as PDF
         if (!saveAsUrl.matches(OdiseeConstant.NATIVE_DOCUMENT_REGEX)) {
-            p = new PropertyValue();
-            p.Name = "FilterName";
-            p.Value = officeDocumentType.getPdfExportFilter();
-            saveProps.add(p);
+            saveProps.add(makePropertyValue("FilterName", officeDocumentType.getPdfExportFilter()));
         }
         // Save as
         try {
-            XStorable xStorable = queryInterface(XStorable.class, xComponent);
-            PropertyValue[] propertyValues = saveProps.toArray(new PropertyValue[saveProps.size()]);
+            final XStorable xStorable = queryInterface(XStorable.class, xComponent);
+            final PropertyValue[] propertyValues = saveProps.toArray(new PropertyValue[saveProps.size()]);
             xStorable.storeToURL(saveAsUrl, propertyValues);
-        } catch (IOException e) {
+        } catch (com.sun.star.io.IOException e) {
             throw new OdiseeServerException("Cannot save document as " + saveAsUrl, e);
         }
     }
 
-    public boolean setModified(boolean modified) throws OdiseeServerException {
-        // Check state
-        if (!officeConnection.initializationCompleted()) {
-            throw new OdiseeServerException("Not initialized");
-        }
+    public boolean setModified(final boolean modified) throws OdiseeServerException {
         boolean bModified = false;
         // Check supported functionality of the document (model or controller).
-        XModel xModel = queryInterface(XModel.class, xComponent);
+        final XModel xModel = queryInterface(XModel.class, xComponent);
         if (null != xModel) {
-            XModifiable xModify = queryInterface(XModifiable.class, xModel);
+            final XModifiable xModify = queryInterface(XModifiable.class, xModel);
             try {
                 xModify.setModified(modified);
             } catch (PropertyVetoException e) {
@@ -338,10 +265,6 @@ public class OfficeDocument {
      * @throws OdiseeServerException
      */
     public boolean closeDocument(boolean force) throws OdiseeServerException {
-        // Check state
-        if (!officeConnection.initializationCompleted()) {
-            throw new OdiseeServerException("Not initialized");
-        }
         boolean bClosed = false;
         try {
             // Set modified flag in case we should forcibly close the document
@@ -351,9 +274,9 @@ public class OfficeDocument {
             //
             // Try 1: Close document though XModel/XCloseable
             // Get XModel
-            XModel xModel = queryInterface(XModel.class, xComponent);
+            final XModel xModel = queryInterface(XModel.class, xComponent);
             if (null != xModel) {
-                XCloseable xCloseable = queryInterface(XCloseable.class, xModel);
+                final XCloseable xCloseable = queryInterface(XCloseable.class, xModel);
                 try {
                     xCloseable.close(true);
                     // Calling xModel.dispose(); results in com.sun.star.lang.DisposedException
@@ -366,11 +289,11 @@ public class OfficeDocument {
             if (!bClosed) {
                 // Try 2: Close document though XFrame/XCloseable
                 // Get XFrame
-                XFrame xFrame = getXFrame();
+                final XFrame xFrame = getXFrame();
                 if (null != xFrame) {
                     // First try the new way: use new interface XCloseable
                     // It replaced the deprecated XTask::close() and should be preferred ... if it can be queried.
-                    XCloseable xCloseable = queryInterface(XCloseable.class, xFrame);
+                    final XCloseable xCloseable = queryInterface(XCloseable.class, xFrame);
                     if (xCloseable != null) {
                         // We deliver the owner ship of this frame not to the (possible) source which throw a CloseVetoException.
                         // We whishto have it under our own control.
@@ -389,24 +312,24 @@ public class OfficeDocument {
                 try {
                     // It's a document which supports a controller .. or may by a pure window only.
                     // If it's at least a controller - we can try to suspend it. But - it can disagree with that!
-                    XController xController = queryInterface(XController.class, xComponent);
+                    final XController xController = queryInterface(XController.class, xComponent);
                     if (xController != null) {
                         if (xController.suspend(true)) {
                             // Note: Don't dispose the controller - destroy the frame to make it right!
                             // Get XFrame
-                            XFrame xFrame = getXFrame();
+                            final XFrame xFrame = getXFrame();
                             if (null != xFrame) {
                                 xFrame.dispose();
                                 bClosed = true;
                             }
                         }
                     }
-                } catch (DisposedException e) {
+                } catch (com.sun.star.uno.RuntimeException e) {
+                    // DisposedException
                     // If an UNO object was already disposed before - he throw this special runtime exception.
                     // Of course every UNO call must be look for that - but it's a question of error handling.
                     // For demonstration this exception is handled here.
-                    throw new OdiseeServerException(e);
-                } catch (com.sun.star.uno.RuntimeException e) {
+                    // RuntimeException
                     // Every UNO call can throw that.
                     // Do nothing - closing failed - that's it.
                     throw new OdiseeServerException(e);
@@ -415,11 +338,6 @@ public class OfficeDocument {
         } catch (com.sun.star.uno.RuntimeException e) {
             throw new OdiseeServerException("Could not close document", e);
         }
-        /*
-        XComponent xComponent = officeDocument.getXComponent();
-        XTextDocument xTextDocument = queryInterface(XTextDocument.class, xComponent);
-        xTextDocument.dispose();
-        */
         // Return
         return bClosed;
     }
