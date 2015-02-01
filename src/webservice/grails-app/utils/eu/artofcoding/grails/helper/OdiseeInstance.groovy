@@ -25,10 +25,6 @@ final class OdiseeInstance {
 
     private final Map oooGroup = [:]
 
-    private OdiseeInstance() {
-        throw new AssertionError();
-    }
-
     List<String> readOdiinst() {
         final Path odiinstPath = ODISEE_HOME.resolve(S_ETC_ODIINST)
         final List<String> odiinst = []
