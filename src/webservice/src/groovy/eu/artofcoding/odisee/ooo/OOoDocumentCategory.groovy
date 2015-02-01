@@ -48,8 +48,11 @@ class OOoDocumentCategory {
     ]
 
     private static final String PRIVATE_URL_REGEX = /private.*/
+
     private static final String TEMPLATE_EXT_REGEX = /ot[gpst]/
+
     private static final List<Integer> TWO_ZERO = [0, 0]
+
     private static final List TWO_NULL = [null, null]
 
     /**
@@ -183,12 +186,6 @@ class OOoDocumentCategory {
      * @param component com.sun.star.lang.XComponent
      */
     static saveAsPDF_A(XComponent component, Path file) {
-/*
-        // Refresh text fields
-        use(OOoFieldCategory) {
-            component.refreshTextFields()
-        }
-*/
         List<com.sun.star.beans.PropertyValue> pdfFilterData = new LinkedList<>();
 
         // Specify that PDF related permissions of this file must be

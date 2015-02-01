@@ -68,7 +68,6 @@ class OOoFieldCategory {
      * Get reference to a userfield (prefix com.sun.star.text.FieldMaster.User)
      */
     static com.sun.star.beans.XPropertySet getUserField(com.sun.star.lang.XComponent component, String name) {
-//		if (component.hasUserField(name)) {
         name = toFqufn(name)
         // Get userfield from XTextFieldMasters
         // com.sun.star.uno.Any
@@ -79,7 +78,6 @@ class OOoFieldCategory {
         } catch (com.sun.star.container.NoSuchElementException e) {
             return null
         }
-//		}
     }
 
     /**
@@ -88,7 +86,7 @@ class OOoFieldCategory {
     static String getUserFieldContent(com.sun.star.lang.XComponent component, String name) {
         name = toFqufn(name)
         use(UnoCategory) {
-            component.getUserField(name)?.getPropertyValue("Content")/*.uno(com.sun.star.beans.XPropertySet)?*/
+            component.getUserField(name)?.getPropertyValue("Content")
         }
     }
 

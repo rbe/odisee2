@@ -30,8 +30,6 @@ class OOoBookmarkCategory {
         use(UnoCategory) {
             def bm = component.uno(com.sun.star.text.XBookmarksSupplier).getBookmarks().getByName(bookmark)
             bm.uno(com.sun.star.text.XTextContent).getAnchor().setString(text)
-            // TODO Throws com.sun.star.lang.DisposedException:
-            // component.executeOdiseeMacro("WriterBookmark.setTextAtBookmarkThis2", [bookmark, text])
         }
     }
 
@@ -42,14 +40,9 @@ class OOoBookmarkCategory {
         use(UnoCategory) {
             def bm = component.uno(com.sun.star.text.XBookmarksSupplier).getBookmarks().getByName(bookmark)
             bm.uno(com.sun.star.text.XTextContent).getAnchor().getString()
-            // TODO Throws com.sun.star.lang.DisposedException:
-            // component.executeOdiseeMacro("WriterBookmark.getParagraphAtBookmarkThis", [bookmark])
         }
     }
 
-    /**
-     *
-     */
     def static get(com.sun.star.lang.XComponent component, String name) {
         component.getParagraphAtBookmark(name)
     }

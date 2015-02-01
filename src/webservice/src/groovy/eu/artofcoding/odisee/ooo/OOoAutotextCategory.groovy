@@ -23,15 +23,12 @@ class OOoAutotextCategory {
      */
     static com.sun.star.text.XAutoTextEntry getAutotext(com.sun.star.lang.XComponent component, String autotextGroup, String autotext) {
         use(UnoCategory) {
-            //println "${this}.getAutotext: autotextGroup=${autotextGroup} autotext=${autotext} bookmark=${bookmark} component.oooConnection=${component.oooConnection}"
             // Create service
             def oAutotextContainer = component.oooConnection.xMultiComponentFactory.createInstanceWithContext('com.sun.star.text.AutoTextContainer', component.oooConnection.xOfficeComponentContext)
-            //println "${this}.getAutotext: oAutotextContainer=${oAutotextContainer}"
             // Get autotext group: com.sun.star.text.XAutoTextGroup
             def xAutotextGroup = null
             try {
                 xAutotextGroup = oAutotextContainer.uno(com.sun.star.container.XNameAccess).getByName(autotextGroup)
-                //println "${this}.getAutotext: xAutotextGroup=${xAutotextGroup}"
             } catch (com.sun.star.container.NoSuchElementException e) {
                 println "ODI-xxxx: Could not find autotext group ${autotextGroup}"
             }
@@ -39,7 +36,6 @@ class OOoAutotextCategory {
                 try {
                     // Get autotext entry: com.sun.star.text.XAutoTextEntry
                     def theAutotext = xAutotextGroup.uno(com.sun.star.container.XNameAccess).getByName(autotext).uno(com.sun.star.text.XAutoTextEntry)
-                    //println "${this}.getAutotext: theAutotext=${theAutotext}"
                     return theAutotext
                 } catch (e) {
                     throw new OdiseeException("Cannot find autotext ${autotextGroup}.${autotext}", e)
@@ -69,7 +65,6 @@ class OOoAutotextCategory {
                 try {
                     // Goto bookmark and insert text
                     def bm = component.uno(com.sun.star.text.XBookmarksSupplier).bookmarks.getByName(bookmark).uno(com.sun.star.text.XTextContent)
-                    //println "${this}.insertAutotextAtBookmark: bm=${bm}"
                     // Apply autotext at cursor position
                     def anchor = bm.anchor
                     theAutotext.applyTo(anchor)

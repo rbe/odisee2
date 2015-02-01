@@ -31,6 +31,7 @@ import eu.artofcoding.odisee.helper.Profile
 class OOoTextTableCategory {
 
     private static final String EXCLAMATION_MARK = '!'
+
     private static final String DOLLAR_SIGN = '$'
 
     /**
@@ -59,17 +60,10 @@ class OOoTextTableCategory {
      */
     static XTextTable getTextTable(XComponent component, String name) {
         Profile.time "OOoTextTableCategory.getTextTable(name=$name)", {
-//            if (component.hasTextTable(name)) {
             use(UnoCategory) {
                 XTextTablesSupplier xTextTablesSupplier = (XTextTablesSupplier) component.uno(XTextTablesSupplier)
                 Any any = xTextTablesSupplier?.textTables?.getByName(name)
                 (XTextTable) any.object
-                /*
-                // com.sun.star.uno.Any
-                def any = component.textTablesSupplier()?.textTables?.getByName(name) ?: null
-                any ? (XTextTable) any.object : null
-                */
-//            }
             }
         }
     }
