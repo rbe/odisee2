@@ -12,7 +12,7 @@
 package eu.artofcoding.odisee.ooo.server
 
 import eu.artofcoding.odisee.OdiseePath
-import eu.artofcoding.odisee.helper.JvmHelper
+import eu.artofcoding.odisee.helper.GroovyJvmHelper
 
 import java.nio.file.Files
 import java.nio.file.Path
@@ -50,7 +50,7 @@ class OOoInstallation {
             switch (OS_NAME) {
             // MacOS X: Don't use program link
             // http://www.openoffice.org/issues/show_bug.cgi?id=101203
-                case { it ==~ JvmHelper.OS_DARWIN }:
+                case { it ==~ GroovyJvmHelper.OS_DARWIN }:
                     Path file = Paths.get(OdiseePath.OOO_HOME, OS_MAC_OS)
                     if (Files.exists(file)) {
                         result = [file]
@@ -84,7 +84,7 @@ class OOoInstallation {
                     }
                     break
             // UNIX: look in /usr/lib and /opt folders
-                case { it in [JvmHelper.OS_LINUX, JvmHelper.OS_SUNOS] || it ==~ JvmHelper.OS_BSD }:
+                case { it in [GroovyJvmHelper.OS_LINUX, GroovyJvmHelper.OS_SUNOS] || it ==~ GroovyJvmHelper.OS_BSD }:
                     result = ['/usr/lib', '/opt'].collectMany { folder ->
                         look(SOFFICE_BIN, new File('/', folder))
                     }

@@ -12,7 +12,7 @@
 
 package eu.artofcoding.odisee.helper
 
-public final class JvmHelper {
+public final class GroovyJvmHelper {
 
     /**
      * Name of operating system.

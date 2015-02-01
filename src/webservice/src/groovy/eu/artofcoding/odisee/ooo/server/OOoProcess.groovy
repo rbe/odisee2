@@ -14,7 +14,7 @@ package eu.artofcoding.odisee.ooo.server
 import com.sun.star.lib.uno.helper.UnoUrl
 import com.sun.star.lib.util.NativeLibraryLoader
 import eu.artofcoding.odisee.OdiseeException
-import eu.artofcoding.odisee.helper.JvmHelper
+import eu.artofcoding.odisee.helper.GroovyJvmHelper
 
 /*
 // Try to find an OOo installation if oooProgram is not set
@@ -153,7 +153,7 @@ class OOoProcess {
         URL[] oooProgramURL = [new File(oooProgram).toURI().toURL()] //as URL[]
         URLClassLoader loader = new URLClassLoader(oooProgramURL)
         // Find OpenOffice executable
-        String sofficeCmd = JvmHelper.OS_NAME ==~ JvmHelper.OS_WINDOWS ? 'soffice.exe' : SOFFICE
+        String sofficeCmd = GroovyJvmHelper.OS_NAME ==~ GroovyJvmHelper.OS_WINDOWS ? 'soffice.exe' : SOFFICE
         File soffice = NativeLibraryLoader.getResource(loader, sofficeCmd)
         if (!soffice) {
             throw new OdiseeException("Cannot find executable ${sofficeCmd}")
@@ -184,8 +184,8 @@ class OOoProcess {
         }
         // Process id
         List pid = []
-        switch (JvmHelper.OS_NAME) {
-            case { it ==~ JvmHelper.OS_DARWIN || it == JvmHelper.OS_LINUX || it == JvmHelper.OS_SUNOS || it ==~ JvmHelper.OS_BSD }:
+        switch (GroovyJvmHelper.OS_NAME) {
+            case { it ==~ GroovyJvmHelper.OS_DARWIN || it == GroovyJvmHelper.OS_LINUX || it == GroovyJvmHelper.OS_SUNOS || it ==~ GroovyJvmHelper.OS_BSD }:
                 Process pse = ['/bin/sh', '-c', 'ps', '-e'].execute()
                 Process grepv1 = [GREP, OPTION_V, GREP].execute()
                 Process grepv2 = [GREP, OPTION_V, 'PID'].execute()
@@ -203,7 +203,7 @@ class OOoProcess {
                 List lines = grepv2.text?.trim()?.split('\n')
                 pid = lines.collect { it.split(ONE_SPACE)[0] }
                 break
-            case { it ==~ JvmHelper.OS_WINDOWS }:
+            case { it ==~ GroovyJvmHelper.OS_WINDOWS }:
                 Process taskkill = 'tasklist /nh /fi \'IMAGENAME eq soffice.bin\''.execute()
                 taskkill.waitFor()
                 List lines = taskkill.text.trim().split('\r\n')
@@ -236,13 +236,13 @@ class OOoProcess {
         // Get process id and kill it
         pid = pid ?: processId
         if (pid && !pid.empty) {
-            switch (JvmHelper.OS_NAME) {
-                case { it ==~ JvmHelper.OS_DARWIN || it == JvmHelper.OS_LINUX || it == JvmHelper.OS_SUNOS || it ==~ JvmHelper.OS_BSD }:
+            switch (GroovyJvmHelper.OS_NAME) {
+                case { it ==~ GroovyJvmHelper.OS_DARWIN || it == GroovyJvmHelper.OS_LINUX || it == GroovyJvmHelper.OS_SUNOS || it ==~ GroovyJvmHelper.OS_BSD }:
                     pid.each {
                         "kill ${it}".execute()
                     }
                     break
-                case { it ==~ JvmHelper.OS_WINDOWS }:
+                case { it ==~ GroovyJvmHelper.OS_WINDOWS }:
                     'taskkill /f /im soffice*'.execute()
                     break
             }
