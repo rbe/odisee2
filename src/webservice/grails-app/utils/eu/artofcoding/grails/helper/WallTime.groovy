@@ -15,10 +15,6 @@ final class WallTime {
 
     private long stopMilliseconds
 
-    private WallTime() {
-        throw new AssertionError();
-    }
-
     def start() {
         startMilliseconds = System.currentTimeMillis()
     }
