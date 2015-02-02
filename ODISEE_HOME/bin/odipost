@@ -103,7 +103,7 @@ outputfile=
 tracefile=
 
 # Parse command line options
-while getopts "a:f:h:o:p:t:u:z" opt
+while getopts "a:f:h:o:p:tu:z" opt
 do
     case "$opt" in
         a) authtype=${OPTARG} ;;
