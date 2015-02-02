@@ -74,9 +74,10 @@ class OdiseeService {
                 filename       : null,
                 result         : []
         ]
-        arg.requestDir = Paths.get("${ODISEE_USER}/${arg.principal.name}/${S_DOCUMENT}", arg.uniqueRequestId.toString())
+        final GString userDocumentDir = "${ODISEE_USER}/${arg.principal.name}/${S_DOCUMENT}"
+        arg.requestDir = Paths.get(userDocumentDir, arg.uniqueRequestId.toString())
         Files.createDirectories(arg.requestDir)
-        requestService.saveRequestToDisk(arg, MINUS_ONE)
+        requestService.extractRequestAndSaveToDisk(arg, MINUS_ONE)
         use(DOMCategory) {
             arg.xml.request.eachWithIndex { request, i ->
                 arg.activeIndex = i

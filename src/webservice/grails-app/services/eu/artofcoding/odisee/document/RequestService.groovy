@@ -42,11 +42,11 @@ class RequestService implements InitializingBean {
     }
 
     /**
-     * Save XML request to file.
+     * Extract a single XML request and save it to file (a Odisee XML request can contain more than one request).
      * @param requestNumber Request# to work with, -1 is the whole file.
      * @return File Reference to generated XML file.
      */
-    Path saveRequestToDisk(final Map arg, final int requestNumber) {
+    Path extractRequestAndSaveToDisk(final Map arg, final int requestNumber) {
         final Path requestXMLFile
         final String xmlString
         // Make XML string
@@ -71,7 +71,7 @@ class RequestService implements InitializingBean {
      * Save XML request to disk, process request and set arg.result.
      */
     void processSingleRequest(final Map arg) {
-        final Path requestXMLFile = saveRequestToDisk(arg, arg.activeIndex)
+        final Path requestXMLFile = extractRequestAndSaveToDisk(arg, arg.activeIndex)
         use(OdiseeXmlCategory) {
             // requestNumber = 0 as file contains only one request
             arg.result = requestXMLFile.toDocument(officeConnectionFactory, 0)
