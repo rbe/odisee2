@@ -10,21 +10,26 @@
  * rbe, 15.11.12 12:08
  */
 package eu.artofcoding.odisee
-
+import antlr.collections.List
 import com.sun.star.lang.XComponent
 import eu.artofcoding.odisee.helper.Profile
 import eu.artofcoding.odisee.ooo.*
+import eu.artofcoding.odisee.server.OdiseeServerRuntimeException
 import eu.artofcoding.odisee.server.OfficeConnection
 import eu.artofcoding.odisee.server.OfficeConnectionFactory
 
+import javax.xml.bind.DatatypeConverter
 import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.nio.file.StandardOpenOption
+import java.nio.file.attribute.FileAttribute
+import java.nio.file.attribute.PosixFilePermission
+import java.nio.file.attribute.PosixFilePermissions
 import java.util.concurrent.TimeUnit
 
 import static eu.artofcoding.odisee.server.OdiseeConstant.*
-
 /**
  * Apply values and instructions from a simple XML file to generate an OpenOffice document.
  * A document is an instance of a certain revision of a template.
@@ -106,7 +111,7 @@ class OdiseeXmlCategory {
     /**
      * Set values in userfields.
      */
-    static void processUserfield(XComponent template, userfield) {
+    static void processUserfield(XComponent template, Map arg, userfield) {
         String ufName = userfield.'@name'.toString()
         Profile.time "OOoTextTableCategory.processUserfield(${ufName})", {
             OdiseeXmlCategory.processInstruction template, { t ->
@@ -131,7 +136,7 @@ class OdiseeXmlCategory {
     /**
      * Set values in texttables.
      */
-    static void processTexttable(XComponent template, texttable) {
+    static void processTexttable(XComponent template, Map arg, texttable) {
         String ttName = texttable.'@name'.toString()
         Profile.time "OOoTextTableCategory.processTexttable(${ttName})", {
             OdiseeXmlCategory.processInstruction template, { t ->
@@ -146,7 +151,7 @@ class OdiseeXmlCategory {
     /**
      * Set text at bookmark.
      */
-    static void processBookmark(XComponent template, bookmark) {
+    static void processBookmark(XComponent template, Map arg, bookmark) {
         OdiseeXmlCategory.processInstruction template, { t ->
             String bmName = bookmark.'@name'.toString()
             String bmContent = bookmark.text()?.toString() ?: ''
@@ -159,7 +164,7 @@ class OdiseeXmlCategory {
     /**
      * Insert autotext.
      */
-    static void processAutotext(XComponent template, autotext) {
+    static void processAutotext(XComponent template, Map arg, autotext) {
         //
         String autotextGroup = autotext.'@group'.toString() ?: 'Standard'
         String autotextName = autotext.'@name'.toString()
@@ -180,28 +185,48 @@ class OdiseeXmlCategory {
     /**
      * Insert an image.
      */
-    static void processImage(XComponent template, image) {
-        //
-        String imageName = image.'@name'.toString()
-        String imageAtBookmark = image.'@bookmark'.toString()
-        //
+    static void processImage(XComponent template, Map arg, image) {
+        final String imageType = image.'@type'.toString()
+        final String imageUrl = image.'@url'.toString()
+        final String bookmarkName = image.'@bookmark'.toString()
         OdiseeXmlCategory.processInstruction template, { t ->
+            final String imageContent = image.text()?.toString() ?: ''
             use(OOoImageCategory) {
-                /*
-                if (imageAtBookmark) {
-                    t.insertImageAtBookmark()
-                } else if (atend) {
-                    t.insertImageAtEnd()
+                if (imageContent && bookmarkName) {
+                    String _imageUrl = saveImageToFile(arg, imageType, imageContent)
+                    t.insertImageAtBookmark(imageType, bookmarkName, _imageUrl, 0, 0)
+                } else if (imageUrl && bookmarkName) {
+                    t.insertImageAtBookmark(imageType, bookmarkName, imageUrl, 0, 0)
                 }
-                */
             }
         }, [post: [name: image.'@post-macro'.toString()]]
+    }
+
+    private static String saveImageToFile(Map arg, String imageType, String imageContent) {
+        byte[] imageData = DatatypeConverter.parseBase64Binary(imageContent)
+        Path outputPath = Paths.get(arg.outputPath)
+        FileAttribute<Set<PosixFilePermission>> fileAttribute = PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rw-------"))
+        String extension
+        switch (imageType) {
+            case { it =~ /.*png/ }:
+                extension = "png"
+                break
+            case { it =~ /.*jp?g/ }:
+                extension = "jpeg"
+                break
+            default:
+                throw new OdiseeServerRuntimeException("Unsupported image type ${imageType}")
+        }
+        Path tempImage = Files.createTempFile(outputPath, "image", ".${extension}", fileAttribute)
+        Files.write(tempImage, imageData, StandardOpenOption.WRITE)
+        String _imageUrl = tempImage.toAbsolutePath().toUri().toString()
+        _imageUrl
     }
 
     /**
      * Execute a macro.
      */
-    static void processMacro(XComponent template, macro) {
+    static void processMacro(XComponent template, Map arg, macro) {
         // Get name, location and language of macro
         String macroName = macro.'@name'.toString()
         String location = macro.'@location'.toString() ?: 'document'
@@ -241,7 +266,8 @@ class OdiseeXmlCategory {
         // Read XML using locally cached DTDs
         xmlSlurper.setEntityResolver(com.bensmann.griffon.CachedDTD.entityResolver)
         */
-        arg.xml = new XmlSlurper().parseText(file.getText(S_UTF8))
+        final String xmlText = file.getText(S_UTF8)
+        arg.xml = new XmlSlurper().parseText(xmlText)
         //
         def request = arg.xml.request[requestNumber]
         // The ID, if none given use actual date and time
@@ -255,29 +281,27 @@ class OdiseeXmlCategory {
         arg
     }
 
-    /**
-     *
-     * @param request
-     * @param arg
-     * @param oooConnection
-     * @return
-     */
-    static List<Path> processTemplate(Map arg, OfficeConnection oooConnection) {
+    static ArrayList processTemplate(Map arg, OfficeConnection oooConnection) {
         // Result is one or more document(s)
-        List<Path> output = []
+        def output = []
         // Get XML request element
         def request = arg.xml.request[arg.activeRequestIndex]
         def template = request.template[0]
+        final String outputPath = template.'@outputPath'.toString()
+        arg.outputPath = outputPath
         // Set basename for document(s) to generate: dir for template, name of template including revision and ID
         // TODO name must be generated to avoid name clashes with multiple requests
         String documentBasename = null
         if (request.'@name') {
             documentBasename = request.'@name'.toString()
-            Charset utf8 = Charset.forName('UTF-8')
-            byte[] requestNameAsUTF8 = documentBasename.getBytes(utf8)
+            final Charset utf8 = Charset.forName('UTF-8')
+            final byte[] requestNameAsUTF8 = documentBasename.getBytes(utf8)
             documentBasename = new String(requestNameAsUTF8, utf8)
         } else {
-            documentBasename = "${arg.template.fileName.toString().split('\\.')[0..-2].join('.')}-id${arg.id}"
+            final String filename = arg.template.fileName.toString()
+            final List strings = filename.split('\\.')[0..-2]
+            final String join = strings.join('.')
+            documentBasename = "${join}-id${arg.id}"
         }
         use(OOoDocumentCategory) {
             // Should we hide OpenOffice?
@@ -289,21 +313,19 @@ class OdiseeXmlCategory {
                 hidden = !localDebug
             }
             // Create new document from template
-            XComponent xComponent = arg.template.open(oooConnection, [Hidden: hidden])
+            final XComponent xComponent = arg.template.open(oooConnection, [Hidden: hidden])
             // Process all instructions
             String methodName = null
-            Profile.time "OdiseeXmlCategory.toDocument(${request.'@name'})", {
-                request.instructions.'*'.each { instr ->
-                    String tagName = instr.name()
-                    String instruction = instr.'@name'
-                    Profile.time "OdiseeXmlCategory.toDocument(${request.'@name'}, instruction ${instruction})", {
-                        try {
-                            // Construct method name from element name
-                            methodName = tagName[0].toUpperCase() + tagName[1..-1]
-                            OdiseeXmlCategory."process${methodName}"(xComponent, instr)
-                        } catch (e) {
-                            println "ODI-xxxx: Could not execute instruction '${tagName} ${instruction}': ${e}"
-                        }
+            request.instructions.'*'.each { instr ->
+                String tagName = instr.name()
+                String instruction = instr.'@name'
+                Profile.time "OdiseeXmlCategory.toDocument(${request.'@name'}, instruction ${instruction})", {
+                    try {
+                        // Construct method name from element name
+                        methodName = tagName[0].toUpperCase() + tagName[1..-1]
+                        OdiseeXmlCategory."process${methodName}"(xComponent, arg, instr)
+                    } catch (e) {
+                        println "ODI-xxxx: Could not execute instruction '${tagName} ${instruction}': ${e}"
                     }
                 }
             }
@@ -312,27 +334,27 @@ class OdiseeXmlCategory {
                 xComponent.refreshTextFields()
             }
             // Execute pre-save macro
-            String preSaveMacro = template.'@pre-save-macro'.toString()
+            final String preSaveMacro = template.'@pre-save-macro'.toString()
             if (preSaveMacro) {
                 xComponent.executeMacro(preSaveMacro)
             }
             // Create Path references for outputFormats from XML
-            String outputPath = template.'@outputPath'.toString()
-            Path outputDir = Paths.get(outputPath)
+            final Path outputDir = Paths.get(outputPath)
             template.'@outputFormat'?.toString()?.split(',')?.each { format ->
                 output << outputDir.resolve("${documentBasename}.${format}")
             }
             // Save document to disk
             output.each { Path file ->
                 Files.createDirectories(file.parent)
-                if (file.toString().endsWith('.pdfa')) {
+                boolean isPDFA = file.toString().endsWith('.pdfa')
+                if (isPDFA) {
                     xComponent.saveAsPDF_A(file)
                 } else {
                     xComponent.saveAs(file)
                 }
             }
             // Execute post-save macro
-            String postSaveMacro = template.'@post-save-macro'.toString()
+            final String postSaveMacro = template.'@post-save-macro'.toString()
             if (postSaveMacro) {
                 xComponent.executeMacro(postSaveMacro)
             }
@@ -352,42 +374,41 @@ class OdiseeXmlCategory {
      * @return Map
      */
     static Map toDocument(Path file, OfficeConnectionFactory officeConnectionFactory, int requestNumber, requestOverride = null) {
-        long start = System.nanoTime()
+        final long start = System.nanoTime()
         // Read XML from file
-        Map arg = readRequest(file, requestNumber)
+        final Map arg = readRequest(file, requestNumber)
         // The request
         arg.activeRequestIndex = requestNumber
-        def request = arg.xml.request[requestNumber]
         // Add overrides
         if (requestOverride) {
             arg += requestOverride
         }
         // The connection
         OfficeConnection oooConnection = null
-        List<Path> output = null
         // Our return value is a map with timing and output information
-        Map result = [output: [], retries: 0, wallTime: -1]
+        final Map result = [output: [], retries: 0, wallTime: -1]
         try {
             // Get connection to OpenOffice
-            String group = 'group0' // TODO request.ooo.'@group'.toString()
+            final String group = 'group0'
             oooConnection = officeConnectionFactory.fetchConnection(false)
             if (!oooConnection) {
                 throw new OdiseeException("Could not acquire connection from group '${group}'")
-            }
-            // Process template
-            output = OdiseeXmlCategory.processTemplate(arg, oooConnection)
-            if (output) {
-                result.output += output
-            }
-            // Wall clock time
-            result.wallTime += TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start)
-            // Check result
-            if (output?.size() == 0) {
-                // TODO Should this class decide this?
-                if (oooConnection) {
-                    oooConnection.setFaulted(true)
+            } else {
+                // Process template
+                def output = OdiseeXmlCategory.processTemplate(arg, oooConnection)
+                if (output) {
+                    result.output += output
                 }
-                throw new OdiseeException('No document')
+                // Wall clock time
+                result.wallTime += TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start)
+                // Check result
+                if (output?.size() == 0) {
+                    // TODO Should this class decide this?
+                    if (oooConnection) {
+                        oooConnection.setFaulted(true)
+                    }
+                    throw new OdiseeException('No document')
+                }
             }
         } catch (e) {
             throw e

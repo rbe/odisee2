@@ -95,7 +95,7 @@
         </xs:attribute>
         <xs:attribute name="revision" use="optional" type="odisee:revisionType">
             <xs:annotation>
-                <xs:documentation>Use LATEST or certain revision (number).</xs:documentation>
+                <xs:documentation>Use LATEST or certain revision number.</xs:documentation>
             </xs:annotation>
         </xs:attribute>
     </xs:complexType>
@@ -200,11 +200,6 @@
         <xs:annotation>
             <xs:documentation>Insert image at bookmark. The image muste be encoded as base64.</xs:documentation>
         </xs:annotation>
-        <xs:attribute name="name" use="required" type="odisee:nameType">
-            <xs:annotation>
-                <xs:documentation>Name of image.</xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
         <xs:attribute name="type" use="required" type="xs:string">
             <xs:annotation>
                 <xs:documentation>MIME type of image.</xs:documentation>
