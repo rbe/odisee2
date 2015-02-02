@@ -1,13 +1,13 @@
 /*
- * odisee
- * webservice
- * Copyright (C) 2011-2014 art of coding UG, http://www.art-of-coding.eu
+ * Odisee(R)
+ *
+ * Copyright (C) 2011-2015 art of coding UG, http://www.art-of-coding.eu
  * Copyright (C) 2005-2010 Informationssysteme Ralf Bensmann, http://www.bensmann.com
  *
  * Alle Rechte vorbehalten. Nutzung unterliegt Lizenzbedingungen.
  * All rights reserved. Use is subject to license terms.
  *
- * rbe, 13.11.12 16:54
+ * rbe, 02.09.14 08:21
  */
 package eu.artofcoding.odisee
 

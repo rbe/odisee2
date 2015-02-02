@@ -7,7 +7,7 @@
  * Alle Rechte vorbehalten. Nutzung unterliegt Lizenzbedingungen.
  * All rights reserved. Use is subject to license terms.
  *
- * rbe, 01.02.15 18:47
+ * rbe, 02.02.15 18:35
  */
 package eu.artofcoding.odisee.ooo
 
