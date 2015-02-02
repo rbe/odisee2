@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<odisee xmlns="http://xmlns.odisee.de/3/request"
+<odisee xmlns="http://xmlns.odisee.de/v3/request"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://xmlns.odisee.de/3/request request_v3.xsd">
+        xsi:schemaLocation="http://xmlns.odisee.de/v3/request request_v3.xsd">
     <request name="EdhZMPj">
         <template name="MSnpMoD2y9ZKR27v" revision="BLA" />
         <instructions>

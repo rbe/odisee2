@@ -9,8 +9,8 @@
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
-    xmlns:odisee="http://xmlns.odisee.de/2/request"
-    targetNamespace="http://xmlns.odisee.de/2/request"
+    xmlns:odisee="http://xmlns.odisee.de/v2/request"
+    targetNamespace="http://xmlns.odisee.de/v2/request"
     elementFormDefault="qualified"
     vc:maxVersion="1.1" vc:minVersion="1.0">
     <xs:element name="odisee">

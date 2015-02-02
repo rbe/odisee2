@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<odisee:odisee xmlns:odisee="http://xmlns.odisee.de/server/request">
+<odisee:odisee xmlns:odisee="http://xmlns.odisee.de/v2/request">
     <odisee:request name="HalloOdisee">
         <!-- Template: name and desired output format -->
         <odisee:template name="HalloOdisee" outputFormat="odt"/>
