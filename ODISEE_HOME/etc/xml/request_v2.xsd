@@ -215,6 +215,16 @@
                     <xs:documentation>Fetch image from this URL.</xs:documentation>
                 </xs:annotation>
             </xs:attribute>
+            <xs:attribute name="width" use="optional" type="xs:int">
+                <xs:annotation>
+                    <xs:documentation>Desired width of image in document, in 1/100 mm.</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="height" use="optional" type="xs:int">
+                <xs:annotation>
+                    <xs:documentation>Desired height of image in document, in 1/100 mm.</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
             <xs:attribute name="post-macro" use="optional" type="xs:string">
                 <xs:annotation>
                     <xs:documentation>Execute macro after value was set.</xs:documentation>

@@ -188,15 +188,27 @@ class OdiseeXmlCategory {
     static void processImage(XComponent template, Map arg, image) {
         final String imageType = image.'@type'.toString()
         final String imageUrl = image.'@url'.toString()
+        int imageWidth = 0
+        try {
+            imageWidth = image.'@width'?.toString()?.toInteger() ?: 0
+        } catch (NumberFormatException e) {
+            // ignore
+        }
+        int imageHeight = 0
+        try {
+            imageHeight = image.'@height'?.toString()?.toInteger() ?: 0
+        } catch (NumberFormatException e) {
+            // ignore
+        }
         final String bookmarkName = image.'@bookmark'.toString()
         OdiseeXmlCategory.processInstruction template, { t ->
             final String imageContent = image.text()?.toString() ?: ''
             use(OOoImageCategory) {
                 if (imageContent && bookmarkName) {
                     String _imageUrl = saveImageToFile(arg, imageType, imageContent)
-                    t.insertImageAtBookmark(imageType, bookmarkName, _imageUrl, 0, 0)
+                    t.insertImageAtBookmark(imageType, bookmarkName, _imageUrl, imageWidth, imageHeight)
                 } else if (imageUrl && bookmarkName) {
-                    t.insertImageAtBookmark(imageType, bookmarkName, imageUrl, 0, 0)
+                    t.insertImageAtBookmark(imageType, bookmarkName, imageUrl, imageWidth, imageHeight)
                 }
             }
         }, [post: [name: image.'@post-macro'.toString()]]
