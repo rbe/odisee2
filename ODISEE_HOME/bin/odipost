@@ -51,6 +51,11 @@ _odipost_do() {
         else
             rf=${requestfile}
         fi
+        if [ ! -f ${rf} ]
+        then
+            echo "Request file ${rf} does not exist!"
+            exit 1
+        fi
         if [ "${compress}" = "true" ]
         then
             gzip -c ${rf} > ${rf}.gz
