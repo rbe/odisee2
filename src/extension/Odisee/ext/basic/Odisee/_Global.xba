@@ -4,15 +4,15 @@
 &apos; Odisee._Global
 &apos;
 &apos; Copyright (C) 2005-2010 Informationssysteme Ralf Bensmann
-&apos; Copyright (C) 2011 art of coding UG
+&apos; Copyright (C) 2011-2014 art of coding UG
 &apos;
 &apos; ==========================================================
 
 Option Explicit
 
 &apos; Version
-Public Const VERSION = &quot;MAJ.MIN.BUILD&quot;
-Public Const VERSIONSTRING = &quot;Odisee MAJ.MIN.BUILD&quot;
+Public Const VERSION = &quot;3.0&quot;
+Public Const VERSIONSTRING = &quot;Odisee 3.0&quot;
 
 &apos; Platform information
 Public PLATFORM()

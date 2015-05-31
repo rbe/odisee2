@@ -4,14 +4,59 @@
 &apos; Odisee.Dialog
 &apos;
 &apos; Copyright (C) 2005-2010 Informationssysteme Ralf Bensmann
-&apos; Copyright (C) 2011 art of coding UG
+&apos; Copyright (C) 2011-2014 art of coding UG
 &apos;
 &apos; ==========================================================
 
 Option Explicit
 
 &apos;
+&apos; Synchronize content from bag (SQL result) with dialog controls.
+&apos;
+Sub syncBagWithDialog(oDoc As Object, oDlg As Object, oBag As Object, bagPrefix$)
+	Dim aControls() : aControls = oDlg.getControls()
+	Dim i%, j%, s$, oControl As Object, controlName$, v As Variant
+	Dim bagPrefixLen% : bagPrefixLen = Len(bagPrefix)
+	For i = 1 To UBound(aControls)
+		oControl = aControls(i).Model
+		controlName = Mid(oControl.Name, 3) &apos; Prefixed with two chars
+		If Left(controlName, bagPrefixLen) = bagPrefix Then
+			controlName = Odisee.Basic.replace(controlName, bagPrefix, &quot;&quot;)
+			If Odisee.Database.bagHasColumn(oBag, controlName) Then
+				v = Odisee.Database.getValueFromBag(oBag, 0, controlName)
+				Select Case Left(oControl.Name, 2)
+					Case &quot;et&quot;: oControl.Text = v
+					Case &quot;dt&quot;: oControl.Date = v
+				End Select
+			End If
+		End If
+	Next
+	oDoc.Textfields.refresh()
+End Sub
+
+&apos;
+&apos; Synchronize dialog controls with content from bag (SQL result).
+&apos;
+Sub syncDialogWithBag(oDoc As Object, oDlg As Object, oBag As Object, bagPrefix$)
+	Dim aControls() : aControls = oDlg.getControls()
+	Dim i%, j%, s$, oControl As Object, controlName$, v As Variant
+	For i = 1 To UBound(aControls)
+		oControl = aControls(i).Model
+		If Left(oControl.Name, 2) = &quot;et&quot; Then
+			controlName = Mid(oControl.Name, 3)
+			If Left(controlName, 6) = bagPrefix Then
+				controlName = Odisee.Basic.replace(controlName, bagPrefix, &quot;&quot;)
+				v = Odisee.Database.getValueFromBag(oBag, 0, controlName)
+				oControl.Text = v
+			End If
+		End If
+	Next
+	oDoc.Textfields.refresh()
+End Sub
+
+&apos;
 &apos; Alle Controls anhand ihres Namens mit Benutzerfeldern abgleichen oder umgekehrt
+&apos; bWrite: Userfield beschreiben?
 &apos;
 &apos; Labels: la
 &apos; Textfields: et
@@ -42,8 +87,8 @@ Function provideUserfields(oDoc As Object, oDlg As Object, Optional bWrite As Bo
 				oUserfield = oTextFieldMaster.getByName(userfieldName)
 				If bWrite Then
 					Select Case CBool(oControl.State)
-						Case False: oUserfield.Content = False
-						Case True: oUserfield.Content = True
+						Case False: oUserfield.Value = 0
+						Case True: oUserfield.Value = 1
 					End Select
 				Else
 					Select Case CBool(oUserfield.Content)
@@ -89,6 +134,22 @@ Function provideUserfields(oDoc As Object, oDlg As Object, Optional bWrite As Bo
 					oUserfield.Content = oControl.Text
 				Else
 					oControl.Text = oUserfield.Content
+				End If
+			Else
+				MsgBox(&quot;Benutzerfeld nicht gefunden: &quot; &amp; Mid(oControl.Name, 3), Odisee._Global.MSGBOX_OK_BUTTON, &quot;Odisee.Dialog.provideUserfields&quot;)
+			End If
+		&apos; Datefields
+		ElseIf Left(oControl.Name, 2) = &quot;dt&quot; Then
+			If oTextFieldMaster.hasByName(userfieldName) Then
+				oUserfield = oTextFieldMaster.getByName(userfieldName)
+				If bWrite Then
+					If Not IsEmpty(oControl.Date) Then
+						oUserfield.Value = CDateFromUnoDate(oControl.Date)
+					Else
+						oUserfield.Value = 0
+					End If
+				Else
+					oControl.Date = CDateToUnoDate(oUserfield.Value)
 				End If
 			Else
 				MsgBox(&quot;Benutzerfeld nicht gefunden: &quot; &amp; Mid(oControl.Name, 3), Odisee._Global.MSGBOX_OK_BUTTON, &quot;Odisee.Dialog.provideUserfields&quot;)

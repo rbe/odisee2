@@ -34,4 +34,5 @@
  <library:element library:name="WriterForm"/>
  <library:element library:name="WriterSettings"/>
  <library:element library:name="PageSettings"/>
+ <library:element library:name="DateTime"/>
 </library:library>

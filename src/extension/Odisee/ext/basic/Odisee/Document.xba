@@ -4,7 +4,7 @@
 &apos; Odisee.Document
 &apos;
 &apos; Copyright (C) 2005-2010 Informationssysteme Ralf Bensmann
-&apos; Copyright (C) 2011 art of coding UG
+&apos; Copyright (C) 2011-2014 art of coding UG
 &apos;
 &apos; ==========================================================
 
@@ -76,9 +76,9 @@ End Function
 &apos;
 &apos; Save document as PDF
 &apos;	z.B. makePDF(&quot;Rechnung1.ods&quot;)
-&apos;		 makePDF(&quot;Rechnung1.ods&quot;, &quot;/another/path/Rechnung1.pdf&quot;, true)
+&apos;		 makePDF(&quot;Rechnung1.ods&quot;, filterData, &quot;/another/path/Rechnung1.pdf&quot;, true)
 &apos;
-Function makePDF(source As Variant, Optional target$, Optional bClose As Boolean) As String
+Function _makePDF(source As Variant, Optional filterData As Object, Optional target$, Optional bClose As Boolean) As String
 	Dim oDoc As Object
 	If TypeName(source) = &quot;String&quot; Then
 		oDoc = StarDesktop.loadComponentFromUrl(convertToUrl(source), &quot;_blank&quot;, 0, Array())
@@ -86,22 +86,20 @@ Function makePDF(source As Variant, Optional target$, Optional bClose As Boolean
 		oDoc = source
 	End If
 	If Not isNull(oDoc) Then
-		&apos; Save document?
-		&apos;If oDoc.URL = &quot;&quot; Then
-		&apos;	Odisee.UNO.executeDispatch(oDoc, &quot;SaveAs&quot;, Array())
-		&apos;End If
 		&apos; Make properties for PDF export
-		Dim props(2) As New com.sun.star.beans.PropertyValue
-		props(0).Name = &quot;FilterName&quot;
-		props(0).Value = getPdfFilter(oDoc)
-		props(1).Name = &quot;InteractionHandler&quot;
-		props(1).Value = &quot;&quot;
-		props(2).Name = &quot;Overwrite&quot;
-		props(2).Value = True
-		If props(0).Value &lt;&gt; &quot;&quot; Then
+		Dim mediaDesc(3) As New com.sun.star.beans.PropertyValue
+		mediaDesc(0).Name = &quot;FilterName&quot;
+		mediaDesc(0).Value = getPdfFilter(oDoc)
+		mediaDesc(1).Name = &quot;InteractionHandler&quot;
+		mediaDesc(1).Value = &quot;&quot;
+		mediaDesc(2).Name = &quot;Overwrite&quot;
+		mediaDesc(2).Value = True
+		mediaDesc(3).Name = &quot;FilterData&quot;
+		mediaDesc(3).Value = filterData
+		If mediaDesc(0).Value &lt;&gt; &quot;&quot; Then
 			If Not isMissing(target$) Then
-				oDoc.storeToUrl(convertToUrl(target), props)
-				makePDF() = target
+				oDoc.storeToUrl(convertToUrl(target), mediaDesc)
+				_makePDF() = target
 			Else
 				&apos; Get filename: source may be a String or XDocument
 				Dim pdfFilename$
@@ -110,8 +108,8 @@ Function makePDF(source As Variant, Optional target$, Optional bClose As Boolean
 				Else
 					pdfFilename = Left(source.URL, Len(source.URL) - 4) &amp; &quot;.pdf&quot;
 				End If
-				oDoc.storeToUrl(pdfFilename, props)
-				makePDF() = pdfFilename
+				oDoc.storeToUrl(pdfFilename, mediaDesc)
+				_makePDF() = pdfFilename
 			End If
 		End If
 		&apos; Close?
@@ -126,23 +124,58 @@ Function makePDF(source As Variant, Optional target$, Optional bClose As Boolean
 End Function
 
 &apos;
+&apos; Save document as PDF
+&apos;	z.B. makePDF(&quot;Rechnung1.ods&quot;)
+&apos;		 makePDF(&quot;Rechnung1.ods&quot;, &quot;/another/path/Rechnung1.pdf&quot;, true)
+&apos;
+Function makePDF(source As Variant, Optional target$, Optional bClose As Boolean) As String
+	&apos; Make filter data
+	Dim filterData(0) As New com.sun.star.beans.PropertyValue
+	filterData(0).Name = &quot;IsSkipEmptyPages&quot;
+	filterData(0).Value = True
+	&apos; Make PDF
+	makePDF() = _makePDF(source, filterData)
+End Function
+
+&apos;
+&apos; Save document as PDF
+&apos;
+Function makeRestrictedPDF(source As Variant) As String
+	&apos; Make filter data
+	Dim filterData() : filterData = makeRestrictedFilterData()
+	&apos; Make PDF
+	makeRestrictedPDF() = _makePDF(source, filterData)
+End Function
+
+&apos;
+&apos; Save document as PDF
+&apos;
+Function makePDFwFilterData(source As Variant, filterData())
+	makePDFwFilterData() = _makePDF(source, filterData)
+End Function
+
+&apos;
+&apos; Make array of PropertyValue for restricted PDF
+&apos;
+Function makeRestrictedFilterData() As Array
+	&apos; Make filter data
+	Dim filterData(3) As New com.sun.star.beans.PropertyValue
+	filterData(0).Name = &quot;Changes&quot;
+	filterData(0).Value = 0
+	filterData(1).Name = &quot;EnableCopyingOfContent&quot;
+	filterData(1).Value = False
+	filterData(2).Name = &quot;RestrictPermissions&quot;
+	filterData(2).Value = True
+	filterData(3).Name = &quot;PermissionPassword&quot;
+	filterData(3).Value = &quot;Odisee&quot;
+	makeRestrictedFilterData() = filterData
+End Function
+
+&apos;
 &apos; DEPRECATED Use Document.makePDF()
 &apos;
 Function saveAsPdf(oDoc As Object, Optional filename$) As String
 	saveAsPdf() = makePDF(oDoc, filename)
-&apos;&apos;	Dim props(2) As New com.sun.star.beans.PropertyValue
-&apos;&apos;	props(0).Name = &quot;FilterName&quot;
-&apos;&apos;	props(0).Value = &quot;writer_pdf_Export&quot;
-&apos;&apos;	props(1).Name = &quot;InteractionHandler&quot;
-&apos;&apos;	props(1).Value = &quot;&quot;
-&apos;&apos;	props(2).Name = &quot;Overwrite&quot;
-&apos;&apos;	props(2).Value = True
-&apos;&apos;	If Left(filename, 4) &lt;&gt; &quot;file&quot; Then
-&apos;&apos;		filename = convertToUrl(filename)
-&apos;&apos;	End If
-&apos;&apos;	&apos; Possible ErrorCodeIOException if path does not exist
-&apos;&apos;	oDoc.storeToUrl(filename, props)
-&apos;&apos;	saveAsPdf() = filename
 End Function
 
 &apos;
@@ -354,7 +387,7 @@ End Function
 &apos; Open a template: download and open it.
 &apos;
 Function openTemplateFromWeb(httpBase$, tmpl$) As com.sun.star.lang.XComponent
-	On Error Goto ErrorHandler
+	&apos;On Error Goto ErrorHandler
 	&apos; Get user&apos;s working directory
 	Dim oPS As Object : oPS = getProcessServiceManager().createInstance(&quot;com.sun.star.comp.framework.PathSettings&quot;)
 	Dim temp$ : temp = oPS.Temp

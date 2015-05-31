@@ -4,7 +4,7 @@
 &apos; Odisee.DynTmpl
 &apos;
 &apos; Copyright (C) 2005-2010 Informationssysteme Ralf Bensmann
-&apos; Copyright (C) 2011 art of coding UG
+&apos; Copyright (C) 2011-2014 art of coding UG
 &apos;
 &apos; ==========================================================
 
@@ -81,7 +81,11 @@ End Function
 Function downloadTemplate(profile(), n$) As Boolean
 	&apos;On Error Goto ErrorHandler
 	Dim oSFA As Object : oSFA = getProcessServiceManager().createInstance(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
-	oSFA.copy(profile(0) &amp; n, profile(1) &amp; n)
+	Dim source$ : source = profile(0) &amp; n
+	Dim dest$ : dest = profile(1) &amp; n
+	&apos;oSFA.openFileRead(source)
+	&apos;oSFA.openFileWrite(dest)
+	oSFA.copy(source, dest)
 	downloadTemplate() = oSFA.exists(profile(1) &amp; n)
 	&apos; Error handler
 	Exit Function

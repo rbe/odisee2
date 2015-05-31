@@ -4,7 +4,7 @@
 &apos; Odisee.Database
 &apos;
 &apos; Copyright (C) 2005-2010 Informationssysteme Ralf Bensmann
-&apos; Copyright (C) 2011 art of coding UG
+&apos; Copyright (C) 2011-2014 art of coding UG
 &apos;
 &apos; ==========================================================
 
@@ -14,8 +14,9 @@ Option Explicit
 &apos; Connect to a database
 &apos;
 Function connect(odbUrl$, Optional user$, Optional pwd$) As com.sun.star.sdbc.XConnection
-	&apos; Load .odb and connect
-	Dim oDbSource As Object : oDbSource = getProcessServiceManager().createInstance(&quot;com.sun.star.sdb.DatabaseContext&quot;).getByName(odbUrl) &apos;com.sun.star.sdbc.XDataSource
+	On Error Goto ErrorHandler
+	Dim databaseContext As Object : databaseContext = getProcessServiceManager().createInstance(&quot;com.sun.star.sdb.DatabaseContext&quot;)
+	Dim oDbSource As Object : oDbSource = databaseContext.getByName(odbUrl) &apos;com.sun.star.sdbc.XDataSource
 	If Not IsNull(oDbSource) Then
 		If IsMissing(user) Then
 			user = &quot;&quot;
@@ -23,22 +24,19 @@ Function connect(odbUrl$, Optional user$, Optional pwd$) As com.sun.star.sdbc.XC
 		If IsMissing(pwd) Then
 			pwd = &quot;&quot;
 		End If
-		&apos; Connect to database
-		On Error Goto err
 		connect() = oDbSource.getConnection(user, pwd)
 	End If
 	&apos; Error handler
 	Exit Function
-	err:
+	ErrorHandler:
 		connect() = Nothing
-		&apos;MsgBox(&quot;Kann nicht zur Datenbank: &quot; &amp; Chr(13) &amp; odbUrl &amp; Chr(13) &amp; &quot; verbinden&quot;, 0, &quot;Odisee&quot;)
+		MsgBox(&quot;Kann nicht zur Datenbank &quot; &amp; Chr(13) &amp; odbUrl &amp; Chr(13) &amp; &quot; verbinden&quot;, 0, &quot;Odisee&quot;)
 End Function
 
 &apos;
 &apos; Prepare a statement
 &apos;
 Function prepare(oConnection As com.sun.star.sdbc.XConnection, sql$) As com.sun.star.sdbc.XPreparedStatement
-	&apos;
 	On Error Goto ErrorHandler
 	If Not IsNull(oConnection) Then
 		prepare() = oConnection.prepareStatement(sql) &apos;com.sun.star.sdbc.XPreparedStatement
@@ -59,11 +57,26 @@ Function getBagFromResult(oResultSet As com.sun.star.sdbc.XResultSet) As Array
 	&apos;
 	Dim row% : row = 0
 	Dim col%
+	Dim cn$, ct%, val
 	Dim resultBags(0, colCount - 1) As New com.sun.star.beans.PropertyValue
 	While oResultSet.Next()
 		ReDim Preserve resultBags(row, colCount - 1)
 		For col = 1 To colCount
-			resultBags(row, col - 1) = makePropertyValue(oMetaData.getColumnName(col), oResultSet.getObject(col, Null))
+			cn = oMetaData.getColumnName(col)
+			ct = oMetaData.getColumnType(col)
+			Select Case ct
+				Case com.sun.star.sdbc.DataType.NUMERIC
+					val = oResultSet.getInt(col)
+				Case com.sun.star.sdbc.DataType.INTEGER
+					val = oResultSet.getInt(col)
+				Case com.sun.star.sdbc.DataType.VARCHAR
+					val = oResultSet.getString(col)
+				Case com.sun.star.sdbc.DataType.DATE
+					val = oResultSet.getDate(col)
+				Case Else
+					val = oResultSet.getObject(col, Null)
+			End Select
+			resultBags(row, col - 1) = makePropertyValue(cn, val)
 		Next
 		row = row + 1
 	Wend
@@ -86,13 +99,29 @@ Function getRowFromBag(oBag As Array, row%) As Array
 End Function
 
 &apos;
-&apos; Return a column value of a certain row from a bag
+&apos; Has a bag a certain column (referenced by name)?
+&apos;
+Function bagHasColumn(oBag As Array, col$) As Boolean
+	Dim i%, oPV
+	Dim u% : u = UBound(oBag(), 2)
+	For i = 0 To u
+		oPV = oBag(0, i)
+		If UCase(oPV.Name) = UCase(col) Then
+			bagHasColumn() = True
+			Exit Function
+		End If
+	Next
+End Function
+
+&apos;
+&apos; Return a column (referenced by name) value of a certain row from a bag
 &apos;
 Function getValueFromBag(oBag As Array, row%, col$) As Variant
 	Dim i%, oPV
-	For i = 0 To UBound(oBag(), 1)
+	Dim u% : u = UBound(oBag(), 2)
+	For i = 0 To u
 		oPV = oBag(row, i)
-		If oPV.Name = col Then
+		If UCase(oPV.Name) = UCase(col) Then
 			getValueFromBag() = oPV.Value
 			Exit Function
 		End If
@@ -103,6 +132,7 @@ End Function
 &apos; Return a column value of a certain row of a bag, previously got with getRowFromBag()
 &apos;
 Function getValueFromBagRow(oBagRow As Array, col$) As Variant
+	getValueFromBagRow() = Null
 	Dim i%, oPV
 	For i = 0 To UBound(oBagRow())
 		oPV = oBag(i)
@@ -118,9 +148,13 @@ End Function
 &apos;
 Function query(oConnection As com.sun.star.sdbc.XConnection, sql$) As com.sun.star.sdbc.XResultSet
 	If Not IsNull(oConnection) Then
-		Dim oStatement : oStatement = oConnection.createStatement()
-		Dim oResult : oResult = oStatement.executeQuery(sql) &apos;com.sun.star.sdbc.XResultSet
-		query() = oResult
+		If Not oConnection.isClosed() Then
+			Dim oStatement : oStatement = oConnection.createStatement()
+			Dim oResult : oResult = oStatement.executeQuery(sql) &apos;com.sun.star.sdbc.XResultSet
+			query() = oResult
+		Else
+			MsgBox &quot;No connection&quot;
+		End If
 	End If
 End Function
 
@@ -128,18 +162,13 @@ End Function
 &apos; Execute an update/insert/delete
 &apos;
 Function update(oConnection As com.sun.star.sdbc.XConnection, sql$) As Long
-	update() = oConnection.createStatement().executeUpdate(sql)
+	If Not IsNull(oConnection) Then
+		If Not oConnection.isClosed() Then
+			update() = oConnection.createStatement().executeUpdate(sql)
+		Else
+			MsgBox &quot;No connection&quot;
+		End If
+	End If
 End Function
-
-&apos;
-&apos; Some tests, examples
-&apos;
-Sub __testDatabase
-	GlobalScope.BasicLibraries.loadLibrary(&quot;Odisee&quot;)
-	Dim oConn : oConn = Odisee.Database.connect(convertToUrl(&quot;/Users/rbe/Library/Application Support/OpenOffice.org/3/user/database/biblio.odb&quot;))
-	Dim oBag : oBag = Odisee.Database.getBagFromQuery(oConn, &quot;select * from biblio&quot;)
-	oConn.close()
-	msgbox Odisee.Database.getValueFromBag(oBag, 0, &quot;Identifier&quot;)
-End Sub
 
 </script:module>
