@@ -273,21 +273,21 @@
         <delete verbose="${buildprop.odisee.build.verbose}" includeemptydirs="true">
             <fileset dir="${ant_world}/manual"/>
         </delete>
-        <!-- Apache Tomcat 7 -->
-        <property name="tomcat7_version" value="${buildprop.odisee.thirdparty.tomcat.version}"/>
-        <property name="tomcat7_url"
-                  value="http://ftp.halifax.rwth-aachen.de/apache/tomcat/tomcat-7/v${tomcat7_version}/bin/apache-tomcat-${tomcat7_version}.zip"/>
-        <property name="tomcat7_filename" value="apache-tomcat-${tomcat7_version}.zip"/>
-        <property name="tomcat7_download" value="${thirdparty.dir}/${tomcat7_filename}"/>
-        <property name="tomcat7_unzipped" value="apache-tomcat-${tomcat7_version}"/>
-        <property name="tomcat7_world" value="${world.libexec.dir}/tomcat"/>
-        <get src="${tomcat7_url}" dest="${tomcat7_download}" verbose="true" usetimestamp="true"/>
-        <unzip src="${tomcat7_download}" dest="${world.libexec.dir}"/>
+        <!-- Apache Tomcat 8 -->
+        <property name="tomcat8_version" value="${buildprop.odisee.thirdparty.tomcat.version}"/>
+        <property name="tomcat8_url"
+                  value="http://ftp.halifax.rwth-aachen.de/apache/tomcat/tomcat-8/v${tomcat8_version}/bin/apache-tomcat-${tomcat8_version}.zip"/>
+        <property name="tomcat8_filename" value="apache-tomcat-${tomcat8_version}.zip"/>
+        <property name="tomcat8_download" value="${thirdparty.dir}/${tomcat8_filename}"/>
+        <property name="tomcat8_unzipped" value="apache-tomcat-${tomcat8_version}"/>
+        <property name="tomcat8_world" value="${world.libexec.dir}/tomcat"/>
+        <get src="${tomcat8_url}" dest="${tomcat8_download}" verbose="true" usetimestamp="true"/>
+        <unzip src="${tomcat8_download}" dest="${world.libexec.dir}"/>
         <move verbose="${buildprop.odisee.build.verbose}" todir="${world.libexec.dir}/tomcat">
-            <fileset dir="${world.libexec.dir}/${tomcat7_unzipped}"/>
+            <fileset dir="${world.libexec.dir}/${tomcat8_unzipped}"/>
         </move>
         <delete verbose="${buildprop.odisee.build.verbose}" includeemptydirs="true">
-            <fileset dir="${tomcat7_world}/webapps"/>
+            <fileset dir="${tomcat8_world}/webapps"/>
         </delete>
     </target>
     <!--
