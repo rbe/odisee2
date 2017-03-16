@@ -11,7 +11,7 @@
             <userfield name="Hallo">art of coding UG (haftungsbeschränkt)</userfield>
             <!-- Set table cell 'A4' in table 'Tabelle1' -->
             <userfield name="Tabelle1!A4">support@odisee.de</userfield>
-            <image type="image/png" bookmark="OdiseeLogo" height="1000">
+            <image type="image/png" bookmark="HeaderBookmark" height="1000">
                 iVBORw0KGgoAAAANSUhEUgAABwUAAAHfCAYAAACxhgebAAAACXBIWXMAAC4jAAAuIwF4pT92AAAA
                 GXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAwfVJREFUeNrs3ctxG0naNtCcidmL
                 nwXCrLgU2wKhLRB7ywqFIAuasqAhC5qyoKFgQNuhLBjIgqGWWg1kwU9ZMH8lkRAhiheg7lU4J6KC
