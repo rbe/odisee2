@@ -52,6 +52,7 @@
         Third party software
     -->
     <property name="local.libexec.dir"             value="${user.home}/app"/>
+    <property name="sdkman.dir"                    value="${user.home}/.sdkman/candidates"/>
     <!-- OpenOffice/LibreOffice -->
     <property name="odisee.ooo.jar.dir"            value="${ODISEE_HOME}/lib/${buildprop.odisee.thirdparty.ooo.vendor}/${buildprop.odisee.thirdparty.ooo.version}"/>
     <!-- Apache PDFbox -->
@@ -59,8 +60,8 @@
     <!-- Groovy, Grails -->
     <property name="groovy.version"                value="${buildprop.odisee.thirdparty.groovy.version}"/>
     <property name="grails.version"                value="${buildprop.odisee.thirdparty.grails.version}"/>
-    <property name="groovy.home"                   value="${local.libexec.dir}/groovy/${groovy.version}"/>
-    <property name="grails.home"                   value="${local.libexec.dir}/grails/${grails.version}"/>
+    <property name="groovy.home"                   value="${sdkman.dir}/groovy/${groovy.version}"/>
+    <property name="grails.home"                   value="${sdkman.dir}/grails/${grails.version}"/>
     <!--
         Classpaths
     -->
