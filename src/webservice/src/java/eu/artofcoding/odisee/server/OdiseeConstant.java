@@ -88,6 +88,10 @@ public final class OdiseeConstant {
 
     public static final String MIME_TYPE_ODT = "application/vnd.oasis.opendocument.text";
 
+    public static final String MIME_TYPE_WORD97 = "application/vnd.oasis.opendocument.text";
+
+    public static final String MIME_TYPE_WORDXML = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+
     public static final String MIME_TYPE_PDF = "application/pdf";
 
     public static final String[] TMP_DIR_NAMES = new String[]{"TMP", "TMPDIR", "TEMP"};

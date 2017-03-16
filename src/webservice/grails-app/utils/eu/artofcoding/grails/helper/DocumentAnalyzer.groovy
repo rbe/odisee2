@@ -25,6 +25,12 @@ final class DocumentAnalyzer {
             case { it.endsWith('.pdf') }:
                 contentType = MIME_TYPE_PDF
                 break
+            case { it.endsWith('.docx') }:
+                contentType = MIME_TYPE_WORDXML
+                break
+            case { it.endsWith('.doc') }:
+                contentType = MIME_TYPE_WORD97
+                break
             default:
                 contentType = MIME_TYPE_OCTET_STREAM
         }
