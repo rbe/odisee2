@@ -13,7 +13,7 @@ package eu.artofcoding.odisee.document
 
 import com.sun.org.apache.xerces.internal.dom.DeferredNode
 import eu.artofcoding.grails.helper.FileHelper
-import eu.artofcoding.grails.helper.OdiseeInstance
+import eu.artofcoding.odisee.OdiseeInstance
 import eu.artofcoding.grails.helper.XmlHelper
 import eu.artofcoding.odisee.OdiseeXmlCategory
 import eu.artofcoding.odisee.server.OfficeConnectionFactory

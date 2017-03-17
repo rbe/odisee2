@@ -13,7 +13,6 @@
 package eu.artofcoding.odisee.document
 
 import eu.artofcoding.grails.helper.Compression
-import eu.artofcoding.grails.helper.DocumentStreamer
 import eu.artofcoding.grails.helper.WallTime
 import eu.artofcoding.grails.helper.XmlHelper
 import eu.artofcoding.odisee.OdiseeException

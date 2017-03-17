@@ -55,6 +55,8 @@ public class OdiseePath {
      */
     public static final Path ODISEE_DEPLOY
 
+    public static final String S_ETC_ODIINST = "etc/odiinst";
+
     static {
         // ODISEE_HOME
         // Is Odisee home set?

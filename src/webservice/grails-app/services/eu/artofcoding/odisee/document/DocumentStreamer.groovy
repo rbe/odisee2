@@ -1,17 +1,15 @@
 /*
  * Odisee(R)
  *
- * Copyright (C) 2011-2015 art of coding UG, http://www.art-of-coding.eu
+ * Copyright (C) 2011-2017 art of coding UG, http://www.art-of-coding.eu
  * Copyright (C) 2005-2010 Informationssysteme Ralf Bensmann, http://www.bensmann.com
  *
  * Alle Rechte vorbehalten. Nutzung unterliegt Lizenzbedingungen.
  * All rights reserved. Use is subject to license terms.
  *
- * rbe, 09.11.14 11:19
+ * rbe, 02.02.15 18:35
  */
-package eu.artofcoding.grails.helper
-
-import eu.artofcoding.odisee.document.Document
+package eu.artofcoding.odisee.document
 
 import javax.servlet.http.HttpServletResponse
 import java.security.SecureRandom

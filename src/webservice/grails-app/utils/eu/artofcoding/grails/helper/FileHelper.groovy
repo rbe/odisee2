@@ -11,13 +11,13 @@
  */
 package eu.artofcoding.grails.helper
 
-import eu.artofcoding.odisee.server.OdiseeConstant
-
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
-public final class FileHelper {
+final class FileHelper {
+
+    public static final String S_DOT = ".";
 
     private static final String S_UTF8 = 'UTF-8'
 
@@ -92,7 +92,7 @@ public final class FileHelper {
 
     public static String getPlainName(String filename) {
         String[] s = filename.split('\\.')
-        s[0..s.length - 2].join(OdiseeConstant.S_DOT)
+        s[0..s.length - 2].join(S_DOT)
     }
 
 }

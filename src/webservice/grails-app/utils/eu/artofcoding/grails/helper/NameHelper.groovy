@@ -11,9 +11,9 @@
  */
 package eu.artofcoding.grails.helper
 
-import static eu.artofcoding.odisee.server.OdiseeConstant.S_DOT
-
 final class NameHelper {
+
+    public static final String S_DOT = ".";
 
     private NameHelper() {
         throw new AssertionError();
