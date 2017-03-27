@@ -23,6 +23,8 @@ final class OdiseeInstance {
 
     public static final String S_UTF8 = "UTF-8";
 
+    public static final String S_GROUP0 = "group0";
+
     private final Map oooGroup = [:]
 
     List<String> readOdiinst() {
